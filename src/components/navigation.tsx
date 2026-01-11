@@ -85,20 +85,19 @@ export function Navigation() {
               aria-hidden="true"
             />
             {navigation.map((item, idx) => (
-              <Link key={item.name} href={item.href} legacyBehavior>
-                <a
-                  ref={(el) => { linkRefs.current[idx] = el }}
-                  onClick={() => {
-                    setActiveIndex(idx)
-                    // In case the link navigates to an anchor on the same page, keep pill
-                    setTimeout(() => positionPill(idx), 50)
-                  }}
-                  className={item.name === 'Contact' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover'}
-                >
-                  {item.name}
-                  {item.name === 'Contact' ? <span className="shimmer-overlay" aria-hidden="true" /> : null}
-                </a>
-              </Link>
+              <a
+                key={item.name}
+                href={item.href}
+                ref={(el) => { linkRefs.current[idx] = el }}
+                onClick={() => {
+                  setActiveIndex(idx)
+                  setTimeout(() => positionPill(idx), 50)
+                }}
+                className={item.name === 'Contact' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover'}
+              >
+                {item.name}
+                {item.name === 'Contact' ? <span className="shimmer-overlay" aria-hidden="true" /> : null}
+              </a>
             ))}
           </div>
           <ThemeToggle />

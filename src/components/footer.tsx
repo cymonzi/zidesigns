@@ -44,7 +44,7 @@ const navigation = {
 
 export function Footer() {
   return (
-  <footer className="bg-page border-t border-base">
+  <footer className="bg-page/80 backdrop-blur-lg border-t border-base">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-20 lg:px-8">
         <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-4">
           {/* Brand Section */}
