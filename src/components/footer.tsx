@@ -44,15 +44,15 @@ const navigation = {
 
 export function Footer() {
   return (
-    <footer className="bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-700">
-      <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-4">
+  <footer className="bg-page border-t border-base">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-12 sm:py-16 lg:py-20 lg:px-8">
+        <div className="grid grid-cols-1 gap-8 sm:gap-12 lg:grid-cols-4">
           {/* Brand Section */}
           <div className="lg:col-span-2">
             <Link href="#" className="flex items-center">
               <span className="font-stencil text-2xl text-gradient">ZI DESIGNS</span>
             </Link>
-            <p className="mt-6 text-sm leading-6 text-gray-600 dark:text-gray-300 max-w-md">
+            <p className="mt-6 text-sm leading-6 text-muted max-w-md">
               A creative-tech studio led by Musinguzi Simon Peter. We combine design, tech, and AI 
               to create impactful digital experiences that drive results.
             </p>
@@ -74,7 +74,7 @@ export function Footer() {
 
           {/* Navigation */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold leading-6 text-fg">
               Navigation
             </h3>
             <ul role="list" className="mt-6 space-y-4">
@@ -82,7 +82,7 @@ export function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="text-sm leading-6 text-muted hover:text-fg transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -93,7 +93,7 @@ export function Footer() {
 
           {/* Services */}
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold leading-6 text-fg">
               Services
             </h3>
             <ul role="list" className="mt-6 space-y-4">
@@ -101,7 +101,7 @@ export function Footer() {
                 <li key={item.name}>
                   <Link
                     href={item.href}
-                    className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+                    className="text-sm leading-6 text-muted hover:text-fg transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -112,12 +112,12 @@ export function Footer() {
         </div>
 
         {/* Newsletter Section */}
-        <div className="mt-16 border-t border-gray-200 dark:border-gray-700 pt-8 lg:flex lg:items-center lg:justify-between">
+  <div className="mt-16 border-t border-base pt-8 lg:flex lg:items-center lg:justify-between">
           <div>
-            <h3 className="text-sm font-semibold leading-6 text-gray-900 dark:text-white">
+            <h3 className="text-sm font-semibold leading-6 text-fg">
               Subscribe to our newsletter
             </h3>
-            <p className="mt-2 text-sm leading-6 text-gray-600 dark:text-gray-300">
+            <p className="mt-2 text-sm leading-6 text-muted">
               Get the latest design insights, project updates, and industry tips.
             </p>
           </div>
@@ -131,7 +131,7 @@ export function Footer() {
               id="email-address"
               autoComplete="email"
               required
-              className="w-full min-w-0 appearance-none rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 px-3 py-2 text-base text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 shadow-sm focus:border-[var(--primary)] focus:ring-[var(--primary)] sm:w-64 sm:text-sm"
+              className="w-full min-w-0 appearance-none rounded-md border border-base bg-surface px-3 py-2 text-base text-fg placeholder-muted shadow-sm focus:border-[var(--primary)] focus:ring-[var(--primary)] sm:w-64 sm:text-sm"
               placeholder="Enter your email"
             />
             <div className="mt-4 sm:ml-4 sm:mt-0 sm:flex-shrink-0">
@@ -146,22 +146,22 @@ export function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-8 md:flex md:items-center md:justify-between">
+  <div className="mt-8 border-t border-base pt-8 md:flex md:items-center md:justify-between">
           <div className="flex space-x-6 md:order-2">
             <Link
               href="/privacy"
-              className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-sm leading-6 text-muted hover:text-fg transition-colors"
             >
               Privacy Policy
             </Link>
             <Link
               href="/terms"
-              className="text-sm leading-6 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="text-sm leading-6 text-muted hover:text-fg transition-colors"
             >
               Terms of Service
             </Link>
           </div>
-          <p className="mt-8 text-xs leading-5 text-gray-500 dark:text-gray-400 md:order-1 md:mt-0">
+          <p className="mt-8 text-xs leading-5 text-muted md:order-1 md:mt-0">
             &copy; {new Date().getFullYear()} Zi Designs. All rights reserved. Built with ❤️ in Uganda.
           </p>
         </div>

@@ -1,156 +1,155 @@
 # Zi Designs - Creative Tech Studio Website
 
-A modern, responsive website for Zi Designs, a creative-tech studio led by Musinguzi Simon Peter. We combine design, tech, and AI to create impactful digital experiences.
+A modern, responsive website for Zi Designs, a creative-tech studio led by Musinguzi Simon Peter. We combine design, tech, motion, and AI to create impactful digital experiences.
 
 ## 🚀 Features
 
-- **Modern Design**: Clean, professional design with mint aqua and charcoal color scheme
-- **Dark/Light Mode**: Automatic theme switching with manual toggle
-- **Responsive**: Mobile-first design that works on all devices
-- **SEO Optimized**: Proper meta tags and semantic HTML structure
-- **Performance**: Built with Next.js 15 and optimized for speed
-- **Accessibility**: WCAG compliant with proper aria labels and keyboard navigation
+- **Modern Design**: Clean, professional design with mint aqua + charcoal palette
+- **Dark/Light/System Theme**: Flash-safe custom provider (`resolvedTheme`) with animated toggle
+- **3D Motion & Micro‑FX**: Parallax hero, tilt / depth cards, staged entrances (Framer Motion)
+- **Interactive Product Previews**: Feature showcase + animated dashboard mock (flecto‑style)
+- **Pricing Tiers**: Animated pricing grid with popular plan highlight
+- **Semantic Design Tokens**: Surface, foreground, accent, border, glass, orb, gradient utilities
+- **Responsive**: Mobile-first, fluid typography & layout
+- **SEO + A11y**: Semantic landmarks, focus rings, reduced‑motion support
+- **Performance Minded**: Lean components, client boundaries scoped
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: Next.js 15 with App Router
-- **Styling**: Tailwind CSS v4
+- **Framework**: Next.js 15 (App Router)
 - **Language**: TypeScript
+- **Styling**: Tailwind CSS v4 + custom CSS variables
+- **Motion**: Framer Motion 11
 - **Icons**: Lucide React
 - **Fonts**: Inter (body), Orbitron (stencil logo)
-- **Theme**: Custom theme provider with system preference detection
-- **Deployment**: Ready for Vercel deployment
-
-## 📱 Sections
-
-1. **Navigation**: Logo, menu links, and theme toggle with mobile hamburger menu
-2. **Hero Section**: Bold statement with CTAs and animated elements
-3. **What We Build**: Services showcase with icons and statistics
-4. **Design Lessons**: Educational content preview with cards
-5. **Portfolio**: Project showcase with filtering and categories
-6. **Contact**: Multiple contact options and project inquiry form
-7. **Footer**: Links, social media, newsletter signup
 
 ## 🎨 Design System
 
-### Colors
-- Primary: `#40E0D0` (Mint Aqua)
-- Secondary: `#36454F` (Charcoal)
-- Light theme: White background with gray text
-- Dark theme: Slate background with light text
+### Core Semantic Tokens (light/dark)
+Defined in `globals.css` using `:root` + `[data-theme="dark"]`:
 
-### Typography
-- Logo: Orbitron (stencil-style)
-- Body: Inter (clean sans-serif)
-- Letter spacing: 0.1em for logo
+| Token | Purpose |
+|-------|---------|
+| `--bg-page` | App page background |
+| `--bg-surface` / `--bg-surface-alt` | Layered panels |
+| `--fg` / `--fg-muted` | Primary / secondary text |
+| `--border-base` | Subtle hairlines |
+| `--primary` / `--primary-fg` | Accent brand mint + readable fg |
+| `--danger` | Alert / destructive accent |
 
-## 🚀 Getting Started
+Utility classes map to tokens: `bg-page`, `bg-surface`, `text-fg`, `text-muted`, `border-base`, etc.
 
-### Prerequisites
-- Node.js 18+ and npm
+### Visual FX Utilities
+- Glass: `.glass` (frosted translucency)
+- Orbs: `.orb`, `.orb-accent` (mint glow blobs)
+- Gradient border: `.gradient-border` + mask trick
+- Ring glow: `.ring-glow` (accent halo)
+- Depth shadows: `var(--elevate)`, `var(--elevate-strong)`
+- Perspective & Layers: `.perspective`, `.layer-base|mid|front`
+- Motion helpers: `.tilt-card`, `.float-soft`
 
-### Installation
+## 🌗 Theme System
+`src/components/theme-provider.tsx` supplies:
+- `theme`: current user preference (`light | dark | system`)
+- `resolvedTheme`: actual applied mode (`light | dark`)
+- `setTheme(theme)` and `toggleTheme()`
+- Persists to `localStorage (zi-designs-theme)` and responds to OS changes.
 
-1. Clone the repository:
-```bash
-git clone <repository-url>
-cd zidesigns_site
+Usage example:
+```tsx
+import { useTheme } from '@/components/theme-provider'
+
+export function ModeBadge() {
+  const { resolvedTheme, toggleTheme } = useTheme()
+  return (
+    <button onClick={toggleTheme} className="px-3 py-1 rounded-md border text-sm">
+      {resolvedTheme === 'dark' ? '🌙 Dark' : '🌞 Light'}
+    </button>
+  )
+}
 ```
 
-2. Install dependencies:
-```bash
-npm install
+## 🧊 3D / Motion Patterns
+Hero and service cards use Framer Motion for depth + entrance animations:
+```tsx
+<motion.div
+  initial={{ opacity: 0, y: 40, rotateX: 15 }}
+  whileInView={{ opacity: 1, y: 0, rotateX: 0 }}
+  whileHover={{ rotateX: -6, rotateY: 6, translateZ: 12 }}
+  transition={{ duration: 0.65, ease: [0.16,0.84,0.44,1] }}
+  viewport={{ once: true, amount: 0.25 }}
+  className="tilt-card p-6"
+  style={{ transformStyle: 'preserve-3d' }}
+/>
 ```
 
-3. Start the development server:
-```bash
-npm run dev
-```
+### Parallax Tilt (Hero)
+Mouse position maps to `rotateX` / `rotateY` for headline and overlay shine; see `hero-section.tsx`.
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Available Scripts
-
-```bash
-npm run dev          # Start development server
-npm run build        # Build for production
-npm run start        # Start production server
-npm run lint         # Run ESLint
-```
+## 📱 Sections
+1. Navigation
+2. Hero (3D enhanced)
+3. What We Build (tilt service cards)
+4. Feature Showcase (glass feature grid + orbs)
+5. Interactive Dashboard (animated panel tabs)
+6. Pricing Section (tiers with popular highlight)
+7. Design Lessons
+8. Portfolio
+9. Contact
+10. Footer
 
 ## 📁 Project Structure
-
 ```
 src/
 ├── app/
-│   ├── globals.css           # Global styles and CSS variables
-│   ├── layout.tsx           # Root layout with theme provider
-│   └── page.tsx             # Main homepage
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
 ├── components/
-│   ├── contact-section.tsx   # Contact form and options
-│   ├── design-lessons-section.tsx # Educational content
-│   ├── footer.tsx           # Site footer
-│   ├── hero-section.tsx     # Hero banner
-│   ├── navigation.tsx       # Header navigation
-│   ├── portfolio-section.tsx # Project showcase
-│   ├── theme-provider.tsx   # Theme context provider
-│   ├── theme-toggle.tsx     # Dark/light mode toggle
-│   └── what-we-build-section.tsx # Services section
+│   ├── hero-section.tsx
+│   ├── navigation.tsx
+│   ├── what-we-build-section.tsx
+│   ├── feature-showcase.tsx
+│   ├── interactive-dashboard.tsx
+│   ├── pricing-section.tsx
+│   ├── design-lessons-section.tsx
+│   ├── portfolio-section.tsx
+│   ├── contact-section.tsx
+│   ├── footer.tsx
+│   ├── theme-provider.tsx
+│   └── theme-toggle.tsx
 └── lib/
-    └── utils.ts             # Utility functions
+    └── utils.ts
 ```
 
-## 🌐 Deployment
+## 🏗️ Development
+```bash
+npm install
+npm run dev
+```
+Visit: http://localhost:3000
 
-### Vercel (Recommended)
-
-1. Push your code to GitHub
-2. Connect your repository to Vercel
-3. Deploy automatically on every push
-
-### Manual Deployment
-
+## 🔨 Build & Run
 ```bash
 npm run build
-npm run start
+npm start
 ```
 
-## 📝 Content Management
+## ✅ Accessibility & Performance
+- Focus ring utility `.focus-ring`
+- `prefers-reduced-motion` respected (animations minimized)
+- Static prerender for core route
 
-### Updating Services
-Edit the `services` array in `src/components/what-we-build-section.tsx`
+## 🚀 Deployment
+Optimized for Vercel. Push to `main` triggers deployment.
 
-### Adding Design Lessons
-Edit the `lessons` array in `src/components/design-lessons-section.tsx`
-
-### Updating Portfolio
-Edit the `projects` array in `src/components/portfolio-section.tsx`
-
-### Contact Information
-Update contact details in `src/components/contact-section.tsx` and `src/components/footer.tsx`
-
-## 🎯 SEO & Meta Tags
-
-The site includes comprehensive SEO optimization:
-- Open Graph tags for social media
-- Twitter Card meta tags
-- Proper meta descriptions and keywords
-- Structured semantic HTML
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
+## 🧭 Roadmap Ideas
+- Portfolio 3D gallery grid with staggered animation
+- MDX-powered lessons content
+- Shared `useTilt` hook + reduced-motion fallback
+- Theme switcher menu (system / light / dark explicit)
 
 ## 📄 License
+Private – All rights reserved © 2025 Zi Designs.
 
-Copyright © 2025 Zi Designs. All rights reserved.
-
----
-
-**Built with ❤️ in Uganda by Zi Designs**
-
-For more information, visit [zidesigns.com](https://zidesigns.com) or follow [@zidesigns01](https://twitter.com/zidesigns01)
+Built with ❤️ in Uganda.

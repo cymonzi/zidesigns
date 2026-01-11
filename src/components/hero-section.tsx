@@ -2,77 +2,126 @@
 
 import Link from "next/link"
 import { ArrowRight, Play } from "lucide-react"
+import { motion } from "framer-motion"
+import { AntigravityBackground } from "./antigravity-background"
 
 export function HeroSection() {
+  // Removed mouse parallax/tilt — using simple fade animations for headline words
+
   return (
-    <div className="relative isolate px-6 pt-32 lg:px-8 min-h-screen flex items-center">
-      {/* Background gradient */}
-      <div
-        className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-        aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] gradient-primary opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-        />
+    <div className="relative isolate px-4 sm:px-6 pt-24 sm:pt-32 lg:px-8 min-h-screen flex items-center perspective overflow-hidden">
+      {/* Antigravity background effect */}
+      <AntigravityBackground />
+      
+      {/* Ambient gradient blobs (top-left and bottom-right) */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-44 left-12 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle_at_10%_10%,rgba(64,224,208,0.15),transparent_70%)] blur-3xl" />
+        <div className="absolute bottom-8 right-12 h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle_at_90%_90%,rgba(54,69,79,0.12),transparent_70%)] blur-3xl" />
       </div>
 
-      <div className="mx-auto max-w-4xl text-center">
-        <h1 className="text-4xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl lg:text-7xl">
+      <motion.div
+        style={{ transformStyle: "preserve-3d" }}
+        className="mx-auto max-w-5xl w-full text-center relative"
+      >
+        <motion.h1
+          style={{ transformStyle: "preserve-3d" }}
+          className="text-3xl font-bold tracking-tight text-fg sm:text-5xl lg:text-7xl layer-front mx-auto max-w-4xl leading-tight"
+        >
           We build{" "}
-          <span className="text-gradient">smart brands</span>,{" "}
-          <span className="text-gradient">websites</span>, and{" "}
-          <span className="text-gradient">tools</span> that work.
-        </h1>
-        
-        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          From UI/UX to AI tools — we combine design with strategy to create impactful digital experiences that drive results.
-        </p>
-        
-        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+            className="text-gradient inline-block"
+          >
+            smart brands
+          </motion.span>
+          ,{" "}
+          <br className="hidden lg:inline" />
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.28, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+            className="text-gradient inline-block"
+          >
+            websites
+          </motion.span>
+          ,{" "}
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.44, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+            className="text-gradient inline-block"
+          >
+            mobile apps
+          </motion.span>
+          {" "}and{" "}
+          <br className="hidden lg:inline" />
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.60, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+            className="text-gradient inline-flex items-center gap-2"
+          >
+            tools
+          </motion.span>
+          {" "}that work.
+        </motion.h1>
+
+        <motion.p
+          initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.25, duration: 0.7, ease: [0.16,0.84,0.44,1] }}
+          className="mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-muted max-w-2xl mx-auto px-4 sm:px-0"
+        >
+          From UI/UX to AI tools, we combine design with strategy to create impactful digital experiences that drive results.
+        </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.7, ease: [0.16,0.84,0.44,1] }}
+          className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-x-6 px-4 sm:px-0"
+          style={{ transform: 'translateZ(40px)' }}
+        >
           <Link
             href="#contact"
-            className="rounded-lg bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-[var(--primary)]/90 transition-all duration-200 flex items-center gap-2 group"
+            className="w-full sm:w-auto focus-ring relative rounded-lg bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[rgba(64,224,208,0.35)] ring-0 transition-all duration-300 hover:shadow-[rgba(64,224,208,0.55)] text-center"
           >
-            Start a Project
-            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+            <span className="relative z-10 inline-flex items-center gap-2 justify-center">Start a Project <ArrowRight className="h-4 w-4" /></span>
+            <span className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-br from-white/10 to-white/0 opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
-          
           <Link
             href="#design-lessons"
-            className="rounded-lg border border-gray-300 dark:border-gray-600 px-6 py-3 text-sm font-semibold text-gray-900 dark:text-gray-100 hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200 flex items-center gap-2"
+            className="w-full sm:w-auto focus-ring group relative rounded-lg border border-base px-7 py-3.5 text-sm font-semibold text-fg transition-all duration-300 hover:bg-surface-alt text-center"
           >
-            <Play className="h-4 w-4" />
-            Browse Lessons
+            <span className="inline-flex items-center gap-2 justify-center"><Play className="h-4 w-4" /> Explore Services</span>
           </Link>
-        </div>
-        
-        {/* Animated indicator */}
-        <div className="mt-16 flex justify-center">
+        </motion.div>
+
+        {/* Floating feature cards removed */}
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="mt-16 flex justify-center"
+        >
           <div className="animate-bounce">
-            <div className="w-6 h-10 border-2 border-gray-400 dark:border-gray-600 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-gray-400 dark:bg-gray-600 rounded-full mt-2 animate-pulse"></div>
+            <div className="w-6 h-10 border-2 border-base rounded-full flex justify-center">
+              <div className="w-1 h-3 bg-muted-alt rounded-full mt-2 animate-pulse" />
             </div>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      {/* Background gradient bottom */}
+      {/* Overlay shine (subtle) */}
       <div
-        className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"
+        style={{ opacity: 0.25 }}
+        className="pointer-events-none absolute inset-0 -z-20 bg-[radial-gradient(circle_at_60%_40%,rgba(255,255,255,0.12),transparent_60%)] dark:bg-[radial-gradient(circle_at_60%_40%,rgba(255,255,255,0.06),transparent_60%)] mix-blend-overlay"
         aria-hidden="true"
-      >
-        <div
-          className="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 gradient-primary opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]"
-          style={{
-            clipPath:
-              'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
-          }}
-        />
-      </div>
+      />
     </div>
   )
 }

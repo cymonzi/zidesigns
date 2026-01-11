@@ -62,16 +62,16 @@ const lessons = [
 
 export function DesignLessonsSection() {
   return (
-    <div id="design-lessons" className="py-24 sm:py-32">
+  <div id="design-lessons" className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <BookOpen className="h-8 w-8 text-[var(--primary)]" />
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+            <h2 className="text-3xl font-bold tracking-tight text-fg sm:text-4xl">
               Design Lessons
             </h2>
           </div>
-          <p className="text-lg leading-8 text-gray-600 dark:text-gray-300">
+          <p className="text-lg leading-8 text-muted">
             Real-world UI/UX, branding tips, and creative insights — from{" "}
             <span className="text-[var(--primary)] font-semibold">@zidesigns01</span>
           </p>
@@ -81,7 +81,7 @@ export function DesignLessonsSection() {
           {lessons.map((lesson) => (
             <article
               key={lesson.id}
-              className="group flex flex-col items-start bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-gray-200 dark:border-gray-700 overflow-hidden"
+              className="group flex flex-col items-start tilt-card rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border border-base overflow-hidden bg-surface"
             >
               <div className="relative w-full h-48 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--secondary)]/20 overflow-hidden">
                 {/* Placeholder for lesson thumbnail */}
@@ -96,7 +96,7 @@ export function DesignLessonsSection() {
               </div>
               
               <div className="p-6 flex-1 flex flex-col">
-                <div className="flex items-center gap-x-4 text-xs text-gray-500 dark:text-gray-400 mb-3">
+                <div className="flex items-center gap-x-4 text-xs text-muted mb-3">
                   <time dateTime={lesson.date} className="flex items-center gap-1">
                     <Calendar className="h-3 w-3" />
                     {lesson.date}
@@ -107,11 +107,11 @@ export function DesignLessonsSection() {
                   </span>
                 </div>
                 
-                <h3 className="text-lg font-semibold leading-6 text-gray-900 dark:text-white group-hover:text-[var(--primary)] transition-colors">
+                <h3 className="text-lg font-semibold leading-6 text-fg group-hover:text-[var(--primary)] transition-colors">
                   {lesson.title}
                 </h3>
                 
-                <p className="mt-3 text-sm leading-6 text-gray-600 dark:text-gray-300 flex-1">
+                <p className="mt-3 text-sm leading-6 text-muted flex-1">
                   {lesson.description}
                 </p>
                 

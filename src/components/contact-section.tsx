@@ -28,13 +28,13 @@ export function ContactSection() {
   }
 
   return (
-    <div id="contact" className="py-24 sm:py-32">
+  <div id="contact" className="py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+          <h2 className="text-3xl font-bold tracking-tight text-fg sm:text-4xl">
             Let&apos;s Build Something
           </h2>
-          <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+          <p className="mt-6 text-lg leading-8 text-muted">
             Whether it&apos;s a website, AI tool, or template — let&apos;s bring your idea to life.
             We&apos;d love to hear about your project and explore how we can help.
           </p>
@@ -44,7 +44,7 @@ export function ContactSection() {
           {/* Contact Options */}
           <div className="space-y-8">
             <div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+              <h3 className="text-xl font-semibold text-fg mb-6">
                 Get in Touch
               </h3>
               <div className="space-y-6">
@@ -56,8 +56,8 @@ export function ContactSection() {
                     <MessageCircle className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">Message on WhatsApp</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Quick response guaranteed</div>
+                    <div className="font-semibold text-fg">Message on WhatsApp</div>
+                    <div className="text-sm text-muted">Quick response guaranteed</div>
                   </div>
                 </a>
 
@@ -69,8 +69,8 @@ export function ContactSection() {
                     <Mail className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">Send us an Email</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">hello@zidesigns.com</div>
+                    <div className="font-semibold text-fg">Send us an Email</div>
+                    <div className="text-sm text-muted">hello@zidesigns.com</div>
                   </div>
                 </a>
 
@@ -82,26 +82,26 @@ export function ContactSection() {
                     <Calendar className="h-6 w-6 text-white" />
                   </div>
                   <div>
-                    <div className="font-semibold text-gray-900 dark:text-white">Book a Call</div>
-                    <div className="text-sm text-gray-600 dark:text-gray-300">Schedule a free consultation</div>
+                    <div className="font-semibold text-fg">Book a Call</div>
+                    <div className="text-sm text-muted">Schedule a free consultation</div>
                   </div>
                 </a>
               </div>
             </div>
 
             {/* Contact Info */}
-            <div className="pt-8 border-t border-gray-200 dark:border-gray-700">
-              <h4 className="font-semibold text-gray-900 dark:text-white mb-4">Contact Information</h4>
+            <div className="pt-8 border-t border-base">
+              <h4 className="font-semibold text-fg mb-4">Contact Information</h4>
               <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                <div className="flex items-center gap-3 text-muted">
                   <Mail className="h-4 w-4" />
                   hello@zidesigns.com
                 </div>
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                <div className="flex items-center gap-3 text-muted">
                   <Phone className="h-4 w-4" />
                   +256 700 000 000
                 </div>
-                <div className="flex items-center gap-3 text-gray-600 dark:text-gray-300">
+                <div className="flex items-center gap-3 text-muted">
                   <MessageCircle className="h-4 w-4" />
                   @zidesigns01
                 </div>
@@ -110,14 +110,14 @@ export function ContactSection() {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm">
-            <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-6">
+          <div className="p-8 rounded-2xl border border-base shadow-sm bg-surface">
+            <h3 className="text-xl font-semibold text-fg mb-6">
               Tell us about your project
             </h3>
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="name" className="block text-sm font-medium text-fg-soft">
                     Name *
                   </label>
                   <input
@@ -127,12 +127,12 @@ export function ContactSection() {
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
+                    className="mt-2 block w-full rounded-lg border border-base bg-surface-alt px-4 py-3 text-fg placeholder-muted focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
                     placeholder="Your name"
                   />
                 </div>
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="email" className="block text-sm font-medium text-fg-soft">
                     Email *
                   </label>
                   <input
@@ -142,7 +142,7 @@ export function ContactSection() {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
+                    className="mt-2 block w-full rounded-lg border border-base bg-surface-alt px-4 py-3 text-fg placeholder-muted focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -150,7 +150,7 @@ export function ContactSection() {
 
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                 <div>
-                  <label htmlFor="projectType" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="projectType" className="block text-sm font-medium text-fg-soft">
                     Project Type
                   </label>
                   <select
@@ -158,7 +158,7 @@ export function ContactSection() {
                     id="projectType"
                     value={formData.projectType}
                     onChange={handleChange}
-                    className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
+                    className="mt-2 block w-full rounded-lg border border-base bg-surface-alt px-4 py-3 text-fg focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
                   >
                     <option value="">Select a project type</option>
                     <option value="website">Website</option>
@@ -170,7 +170,7 @@ export function ContactSection() {
                   </select>
                 </div>
                 <div>
-                  <label htmlFor="budget" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  <label htmlFor="budget" className="block text-sm font-medium text-fg-soft">
                     Budget Range
                   </label>
                   <select
@@ -178,7 +178,7 @@ export function ContactSection() {
                     id="budget"
                     value={formData.budget}
                     onChange={handleChange}
-                    className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
+                    className="mt-2 block w-full rounded-lg border border-base bg-surface-alt px-4 py-3 text-fg focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
                   >
                     <option value="">Select budget range</option>
                     <option value="under-1k">Under $1,000</option>
@@ -191,7 +191,7 @@ export function ContactSection() {
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                <label htmlFor="message" className="block text-sm font-medium text-fg-soft">
                   Project Details *
                 </label>
                 <textarea
@@ -201,7 +201,7 @@ export function ContactSection() {
                   required
                   value={formData.message}
                   onChange={handleChange}
-                  className="mt-2 block w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
+                  className="mt-2 block w-full rounded-lg border border-base bg-surface-alt px-4 py-3 text-fg placeholder-muted focus:border-[var(--primary)] focus:ring-[var(--primary)] transition-colors"
                   placeholder="Tell us about your project, goals, timeline, and any specific requirements..."
                 />
               </div>
