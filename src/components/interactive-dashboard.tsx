@@ -2,31 +2,30 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
-import { BarChart3, Gauge, ListTree, Settings2, TerminalSquare } from "lucide-react";
+import { Smartphone, Globe, Palette } from "lucide-react";
 
 const tabs = [
-  { key: 'metrics', label: 'Metrics', icon: Gauge },
-  { key: 'pipeline', label: 'Pipelines', icon: ListTree },
-  { key: 'terminal', label: 'Console', icon: TerminalSquare },
-  { key: 'analytics', label: 'Analytics', icon: BarChart3 },
-  { key: 'settings', label: 'Settings', icon: Settings2 },
+  { key: 'nfunayo', label: 'Nfunayo', icon: Smartphone },
+  { key: 'websites', label: 'Websites', icon: Globe },
+  { key: 'graphics', label: 'Graphics', icon: Palette },
 ];
 
 export function InteractiveDashboard() {
-  const [active, setActive] = useState('metrics');
+  const [active, setActive] = useState('nfunayo');
 
   return (
-    <section className="relative py-28" id="dashboard">
+    <section className="relative py-28" id="featured-work">
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="orb orb-accent w-[30rem] h-[30rem] -bottom-40 left-1/2 -translate-x-1/2" />
       </div>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="max-w-2xl mb-12">
-          <h2 className="text-fg text-3xl sm:text-4xl font-bold tracking-tight">Interactive system preview</h2>
-          <p className="mt-4 text-muted text-lg max-w-xl">A conceptual dashboard demonstrating depth, motion layering, and dynamic panel transitions—purely illustrative, no backend required.</p>
+        <div className="max-w-5xl mb-12 mx-auto text-center">
+          <p className="text-3xl sm:text-4xl lg:text-5xl font-medium text-muted px-4 sm:px-0 max-w-4xl mx-auto tracking-tight leading-tight sm:leading-tight lg:leading-tight">
+            A curated <span className="text-fg font-semibold">showcase</span> of projects where <span className="text-fg font-semibold">ideas</span> take shape. We translate <span className="text-fg font-semibold">concepts</span> into screens, <span className="text-fg font-semibold">websites</span>, and visual assets that deliver <span className="text-fg font-semibold">clarity</span>, <span className="text-fg font-semibold">usability</span>, and <span className="text-fg font-semibold">impact</span>.
+          </p>
         </div>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-3 justify-center">
           {tabs.map(t => (
             <button
               key={t.key}
@@ -62,11 +61,9 @@ export function InteractiveDashboard() {
               </div>
               <div className="relative min-h-[380px]">
                 <AnimatePresence mode="wait">
-                  {active === 'metrics' && <PanelMetrics key="metrics" />}
-                  {active === 'pipeline' && <PanelPipeline key="pipeline" />}
-                  {active === 'terminal' && <PanelTerminal key="terminal" />}
-                  {active === 'analytics' && <PanelAnalytics key="analytics" />}
-                  {active === 'settings' && <PanelSettings key="settings" />}
+                  {active === 'nfunayo' && <PanelNfunayo key="nfunayo" />}
+                  {active === 'websites' && <PanelWebsites key="websites" />}
+                  {active === 'graphics' && <PanelGraphics key="graphics" />}
                 </AnimatePresence>
               </div>
             </motion.div>
@@ -91,47 +88,30 @@ function BasePanel({ children }: { children: React.ReactNode }) {
   );
 }
 
-function PanelMetrics() {
+function PanelNfunayo() {
+  const screens = [
+    { title: 'Home Screen', desc: 'Clean dashboard with quick access to core features' },
+    { title: 'User Profile', desc: 'Personalized interface with settings and preferences' },
+    { title: 'Activity Feed', desc: 'Real-time updates and notifications in a scrollable view' },
+    { title: 'Search & Filter', desc: 'Intuitive search with advanced filtering options' },
+  ];
+  
   return (
     <BasePanel>
-      <div className="col-span-12 md:col-span-4 flex flex-col gap-4">
-        <StatCard label="Uptime" value="99.982%" trend="+0.12%" />
-        <StatCard label="Latency" value="231ms" trend="-14ms" positive={false} />
-        <StatCard label="Active Users" value="1,284" trend="+8%" />
-      </div>
-      <div className="col-span-12 md:col-span-8 flex flex-col gap-6">
-        <div className="rounded-xl border border-base bg-surface p-4 flex-1 flex flex-col">
-          <h4 className="font-medium text-fg mb-3">Response Time (ms)</h4>
-          <div className="flex-1 relative">
-            <div className="absolute inset-0 flex items-end gap-1">
-              {Array.from({ length: 42 }).map((_, i) => (
-                <div key={i} className="flex-1 bg-gradient-to-t from-[var(--primary)]/15 to-[var(--primary)]/60 rounded-t" style={{ height: `${20 + Math.sin(i/2) * 20 + (i%5)*3}%` }} />
-              ))}
-            </div>
-          </div>
+      <div className="col-span-12">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-fg">Nfunayo Mobile App</h3>
+          <p className="text-sm text-muted mt-1">Android-first mobile application with clean user flows and modern interface design</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <MiniChart title="CPU" color="emerald" />
-          <MiniChart title="Memory" color="pink" />
-        </div>
-      </div>
-    </BasePanel>
-  );
-}
-
-function PanelPipeline() {
-  const stages = ['Fetch', 'Normalize', 'Infer', 'Enrich', 'Cache', 'Dispatch'];
-  return (
-    <BasePanel>
-      <div className="col-span-12 flex flex-col gap-4">
-        <h4 className="font-medium text-fg">Pipeline View</h4>
-        <div className="flex flex-wrap gap-4">
-          {stages.map((s,i) => (
-            <div key={s} className="relative flex-1 min-w-[120px] p-4 rounded-xl border border-base bg-surface-alt">
-              <div className="text-xs font-medium tracking-wide text-muted mb-1">Stage {i+1}</div>
-              <div className="font-semibold text-fg">{s}</div>
-              <div className="mt-2 h-1.5 rounded-full bg-[var(--primary)]/20 overflow-hidden">
-                <div className="h-full bg-[var(--primary)]" style={{ width: `${60 + (i*6)}%` }} />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {screens.map((screen, i) => (
+            <div key={i} className="rounded-xl border border-base bg-surface p-4 flex flex-col gap-3">
+              <div className="aspect-[9/16] rounded-lg bg-gradient-to-br from-[var(--primary)]/10 to-purple-500/10 flex items-center justify-center border border-base">
+                <Smartphone className="w-12 h-12 text-[var(--primary)]/40" />
+              </div>
+              <div>
+                <h4 className="font-medium text-fg text-sm">{screen.title}</h4>
+                <p className="text-xs text-muted mt-1">{screen.desc}</p>
               </div>
             </div>
           ))}
@@ -141,126 +121,69 @@ function PanelPipeline() {
   );
 }
 
-function PanelTerminal() {
-  const lines = [
-    '▶ yarn deploy:edge --region=eu-central-1',
-    'Building containers…',
-    '✓ Bundled 17 modules (2.3s)',
-    'Pushing layers…',
-    '✓ Release created #2143',
-    'Activating traffic…',
-    '✓ All regions healthy',
+function PanelWebsites() {
+  const projects = [
+    { title: 'E-Commerce Platform', desc: 'Responsive online store with seamless checkout experience', tech: 'Next.js, Tailwind' },
+    { title: 'Corporate Website', desc: 'Professional business site with modern design and fast performance', tech: 'React, TypeScript' },
+    { title: 'Portfolio Site', desc: 'Creative showcase with smooth animations and engaging interactions', tech: 'Framer Motion' },
   ];
+  
   return (
     <BasePanel>
-      <div className="col-span-12 flex flex-col rounded-xl border border-base bg-[linear-gradient(#0f172a,#0f1e31)] text-xs font-mono text-[#c2d5f5] p-4">
-        <div className="text-[10px] text-[#7b91b3] mb-2">session: deployment</div>
-        {lines.map((l,i) => (
-          <motion.div key={l} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.15 }}>{l}</motion.div>
-        ))}
-      </div>
-    </BasePanel>
-  );
-}
-
-function PanelAnalytics() {
-  return (
-    <BasePanel>
-      <div className="col-span-12 md:col-span-8 flex flex-col gap-6">
-        <div className="rounded-xl border border-base bg-surface p-4 flex-1">
-          <h4 className="font-medium text-fg mb-4">User Growth</h4>
-          <div className="grid grid-cols-12 gap-1 h-40">
-            {Array.from({ length: 72 }).map((_, i) => (
-              <div key={i} className="col-span-1 bg-gradient-to-t from-[var(--primary)]/15 to-[var(--primary)]/70 rounded" style={{ height: `${20 + (Math.sin(i/3)+1)*30}%` }} />
-            ))}
-          </div>
+      <div className="col-span-12">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-fg">Website Projects</h3>
+          <p className="text-sm text-muted mt-1">Modern, responsive websites built for clarity, speed, and conversion</p>
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <MiniChart title="Sessions" color="amber" />
-          <MiniChart title="Errors" color="rose" inverse />
-        </div>
-      </div>
-      <div className="col-span-12 md:col-span-4 flex flex-col gap-4">
-        <StatCard label="Avg Session" value="6m 21s" trend="+12%" />
-        <StatCard label="Churn" value="3.4%" trend="-0.2%" positive={false} />
-        <StatCard label="NPS" value="68" trend="+5" />
-      </div>
-    </BasePanel>
-  );
-}
-
-function PanelSettings() {
-  return (
-    <BasePanel>
-      <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
-        <div className="rounded-xl border border-base bg-surface p-4">
-          <h4 className="font-medium text-fg mb-3">Environment Flags</h4>
-          <div className="space-y-3 text-xs">
-            {['edge-caching','beta-ai','new-pricing','telemetry','session-v2'].map(flag => (
-              <div key={flag} className="flex items-center justify-between gap-4">
-                <span className="text-muted font-mono">{flag}</span>
-                <span className="inline-flex items-center rounded-full bg-[var(--primary)]/15 px-2 py-0.5 text-[10px] font-medium text-[var(--primary)]">ENABLED</span>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {projects.map((project, i) => (
+            <div key={i} className="rounded-xl border border-base bg-surface-alt p-4 flex flex-col gap-3">
+              <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-500/10 to-[var(--primary)]/10 flex items-center justify-center border border-base">
+                <Globe className="w-10 h-10 text-blue-400/40" />
               </div>
-            ))}
-          </div>
-        </div>
-        <div className="rounded-xl border border-base bg-surface-alt p-4">
-          <h4 className="font-medium text-fg mb-3">Regions</h4>
-          <div className="flex flex-wrap gap-2 text-[10px]">
-            {['us-east','us-west','eu-central','ap-south','sa-east'].map(r => (
-              <span key={r} className="bg-[var(--primary)]/10 text-[var(--primary)] rounded-md px-2 py-1 font-medium">{r}</span>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="col-span-12 md:col-span-6 flex flex-col gap-4">
-        <div className="rounded-xl border border-base bg-surface p-4 flex-1">
-          <h4 className="font-medium text-fg mb-3">Scaling</h4>
-          <p className="text-xs text-muted leading-5">Adaptive autoscaling keeps latency predictable. Configure min/max concurrency and leave the rest to intelligent capacity heuristics.</p>
-          <div className="mt-4 h-2 rounded-full bg-[var(--primary)]/15 overflow-hidden">
-            <div className="h-full bg-[var(--primary)] w-2/3" />
-          </div>
-        </div>
-        <div className="rounded-xl border border-base bg-surface-alt p-4">
-          <h4 className="font-medium text-fg mb-3">Integrations</h4>
-          <div className="flex flex-wrap gap-2 text-[10px]">
-            {['Slack','Zapier','Notion','Linear','Stripe'].map(int => (
-              <span key={int} className="chip-muted rounded-md px-2 py-1 font-medium">{int}</span>
-            ))}
-          </div>
+              <div>
+                <h4 className="font-medium text-fg text-sm">{project.title}</h4>
+                <p className="text-xs text-muted mt-1">{project.desc}</p>
+                <div className="mt-2 text-[10px] text-[var(--primary)] font-medium">{project.tech}</div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </BasePanel>
   );
 }
 
-function StatCard({ label, value, trend, positive = true }: { label: string; value: string; trend: string; positive?: boolean }) {
+function PanelGraphics() {
+  const assets = [
+    { title: 'Brand Identity', desc: 'Logo design, color palette, and typography system', category: 'Branding' },
+    { title: 'UI Components', desc: 'Reusable design system elements and patterns', category: 'UI/UX' },
+    { title: 'Marketing Assets', desc: 'Social media graphics, banners, and promotional materials', category: 'Marketing' },
+    { title: 'Illustrations', desc: 'Custom illustrations and iconography for digital products', category: 'Visual Design' },
+  ];
+  
   return (
-    <div className="rounded-xl border border-base bg-surface-alt p-4 flex flex-col gap-2">
-      <div className="text-xs text-muted uppercase tracking-wide">{label}</div>
-      <div className="text-fg font-semibold text-lg">{value}</div>
-      <div className={`text-[10px] font-medium ${positive ? 'text-emerald-400' : 'text-rose-400'}`}>{trend}</div>
-    </div>
-  );
-}
-
-function MiniChart({ title, color, inverse }: { title: string; color: 'emerald' | 'pink' | 'amber' | 'rose'; inverse?: boolean }) {
-  const bars = Array.from({ length: 30 }).map((_, i) => 20 + (Math.sin(i/2)+1)*40);
-  const gradients: Record<string, { normal: string; inverse: string }> = {
-    emerald: { normal: 'from-emerald-400/20 to-emerald-500/70', inverse: 'from-emerald-500/70 to-emerald-400/20' },
-    pink: { normal: 'from-pink-400/20 to-pink-500/70', inverse: 'from-pink-500/70 to-pink-400/20' },
-    amber: { normal: 'from-amber-400/20 to-amber-500/70', inverse: 'from-amber-500/70 to-amber-400/20' },
-    rose: { normal: 'from-rose-400/20 to-rose-500/70', inverse: 'from-rose-500/70 to-rose-400/20' },
-  };
-  const gradient = inverse ? gradients[color].inverse : gradients[color].normal;
-  return (
-    <div className="rounded-xl border border-base bg-surface-alt p-4 flex flex-col">
-      <div className="text-xs text-muted mb-2">{title}</div>
-      <div className="flex items-end gap-1 h-20">
-        {bars.map((h,i) => (
-          <div key={i} className={`flex-1 bg-gradient-to-t ${gradient} rounded-t`} style={{ height: `${h/1.6}%` }} />
-        ))}
+    <BasePanel>
+      <div className="col-span-12">
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold text-fg">Graphic Design</h3>
+          <p className="text-sm text-muted mt-1">Clean visual systems and design assets that support your product and brand</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {assets.map((asset, i) => (
+            <div key={i} className="rounded-xl border border-base bg-surface p-4 flex gap-4">
+              <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-pink-500/10 to-purple-500/10 flex items-center justify-center border border-base flex-shrink-0">
+                <Palette className="w-8 h-8 text-pink-400/40" />
+              </div>
+              <div className="flex-1">
+                <div className="text-[10px] text-[var(--primary)] font-medium mb-1">{asset.category}</div>
+                <h4 className="font-medium text-fg text-sm">{asset.title}</h4>
+                <p className="text-xs text-muted mt-1">{asset.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </BasePanel>
   );
 }

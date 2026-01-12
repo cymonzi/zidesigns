@@ -101,19 +101,7 @@ export function HeroSection() {
 
         {/* Floating feature cards removed */}
 
-        {/* Scroll indicator */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.6 }}
-          className="mt-16 flex justify-center"
-        >
-          <div className="animate-bounce">
-            <div className="w-6 h-10 border-2 border-base rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-muted-alt rounded-full mt-2 animate-pulse" />
-            </div>
-          </div>
-        </motion.div>
+        {/* Scroll indicator removed per request */}
       </motion.div>
 
       {/* Overlay shine (subtle) */}

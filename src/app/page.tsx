@@ -4,8 +4,6 @@ import { WhatWeBuildSection } from "@/components/what-we-build-section";
 import { DesignLessonsSection } from "@/components/design-lessons-section";
 import { PortfolioSection } from "@/components/portfolio-section";
 import { ContactSection } from "@/components/contact-section";
-// Replacing FeatureShowcase with softer neumorphic style variant
-import { SoftFeatureShowcase } from "@/components/soft-feature-showcase";
 import { InteractiveDashboard } from "@/components/interactive-dashboard";
 import { PricingSection } from "@/components/pricing-section";
 import { Footer } from "@/components/footer";
@@ -18,7 +16,6 @@ export default function Home() {
       <main>
         <HeroSection />
   <WhatWeBuildSection />
-  <SoftFeatureShowcase />
   <InteractiveDashboard />
   <PricingSection />
   <DesignLessonsSection />

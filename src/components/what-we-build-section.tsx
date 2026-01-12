@@ -2,6 +2,7 @@
 
 import { Monitor, Smartphone, Palette } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
+import { motion } from "framer-motion"
 
 const services = [
   {
@@ -62,117 +63,183 @@ export function WhatWeBuildSection() {
 
   return (
     <>
+      {/* Gradient transition overlay */}
+      <div className="relative h-32 bg-gradient-to-b from-page via-page/95 to-page/80" />
+      
       {/* Section Header - scrolls away */}
-      <div className="bg-page/80 backdrop-blur-lg py-16 sm:py-20 lg:py-24">
-        <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold tracking-tight text-fg sm:text-4xl lg:text-5xl">
-            What We Do
-          </h2>
-          <p className="mt-4 sm:mt-5 text-base sm:text-lg leading-7 sm:leading-8 text-muted px-4 sm:px-0 max-w-3xl mx-auto">
-            We focus on designing and developing digital products that are clear, functional, <br className="hidden sm:inline" />
-            and built to last.
+      <motion.div 
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.8, ease: [0.16, 0.84, 0.44, 1] }}
+        className="bg-page/80 backdrop-blur-lg py-28"
+      >
+        <div className="mx-auto max-w-7xl px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto text-center">
+            <p className="text-3xl sm:text-4xl lg:text-5xl font-medium text-muted px-4 sm:px-0 max-w-4xl mx-auto tracking-tight leading-tight sm:leading-tight lg:leading-tight">
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="text-fg font-semibold"
+            >
+              Every great product
+            </motion.span> starts with an <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.35, duration: 0.6 }}
+              className="text-fg font-semibold"
+            >
+              idea
+            </motion.span>. We help
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="mx-2 text-fg font-semibold"
+            >
+              shape
+            </motion.span>, <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.65, duration: 0.6 }}
+              className="mx-2 text-fg font-semibold"
+            >
+              design
+            </motion.span>, and bring it into the
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.8, duration: 0.6 }}
+              className="mx-2 text-fg font-semibold"
+            >
+              digital world
+            </motion.span> through the <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.95, duration: 0.6 }}
+              className="mx-2 text-fg font-semibold"
+            >
+              services
+            </motion.span> we offer.
           </p>
+          </div>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Sticky Services Section */}
+      {/* Smooth transition gradient */}
+      <div className="relative bg-gradient-to-b from-page/80 to-page/40" />
+
+      {/* Services Section */}
       <div ref={containerRef} className="relative" style={{ height: `${300 * services.length}vh` }}>
-        <div ref={sectionRef} className="sticky top-0 min-h-screen flex flex-col justify-center bg-page/80 backdrop-blur-lg py-12 sm:py-16 lg:py-20">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
-            {/* Two Column Layout */}
-            <div className="mx-auto max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            
-            {/* Left Side - Card Stack Animation */}
-            <div className="relative h-[400px] sm:h-[450px] lg:h-[500px]">
+        <div ref={sectionRef} className="sticky top-0 min-h-screen flex flex-col justify-center bg-page/80 backdrop-blur-lg">
+          <div className="mx-auto max-w-7xl px-6 lg:px-8 w-full">
+            <div className="mx-auto max-w-6xl">
+              <div className="space-y-4">
               {services.map((service, i) => {
                 const isActive = i === activeIndex
                 const isPassed = i < activeIndex
-                const offset = isPassed ? -100 : (i - activeIndex) * 8
+                const isUpcoming = i > activeIndex
 
                 return (
-                  <div
+                  <motion.div
                     key={`card-${service.name}`}
-                    className="absolute inset-0 transition-all duration-500 ease-out"
-                    style={{
-                      transform: `translateY(${offset}%) scale(${isActive ? 1 : 0.92})`,
-                      opacity: isPassed ? 0 : isActive ? 1 : 0.5,
-                      zIndex: services.length - i,
-                      pointerEvents: isActive ? 'auto' : 'none',
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ 
+                      opacity: isActive ? 1 : isPassed ? 0.2 : 0.3,
+                      x: isActive ? 0 : isUpcoming ? 20 : -10,
+                      y: 0,
+                      scale: isActive ? 1 : 0.96,
+                      filter: isActive ? 'blur(0px)' : 'blur(1px)'
                     }}
+                    transition={{ 
+                      duration: 0.6, 
+                      ease: [0.16, 0.84, 0.44, 1],
+                      x: { duration: 0.5 },
+                      opacity: { duration: 0.4 }
+                    }}
+                    className={`rounded-2xl bg-surface border transition-all duration-500 ${
+                      isActive 
+                        ? 'border-[var(--primary)]/40 shadow-2xl shadow-[var(--primary)]/20' 
+                        : 'border-border/50'
+                    }`}
                   >
-                    <div className="h-full w-full flex items-center justify-center p-8 glass border-2 border-base rounded-2xl bg-surface/90 backdrop-blur-sm shadow-xl overflow-hidden relative">
-                      {/* Large decorative icon */}
-                      <div className="absolute inset-0 flex items-center justify-center opacity-10">
-                        <service.icon className="h-64 w-64" aria-hidden="true" />
-                      </div>
-                      
-                      {/* Centered icon */}
-                      <div className={`relative rounded-2xl p-8 ${service.color.replace('text-', 'bg-').replace('dark:text-', 'dark:bg-')}/15`}>
-                        <service.icon className={`h-24 w-24 sm:h-32 sm:w-32 ${service.color}`} aria-hidden="true" />
+                    <div className="p-6 sm:p-8 lg:p-10">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 lg:gap-8">
+                        {/* Icon with rotation effect */}
+                        <motion.div 
+                          animate={{
+                            scale: isActive ? 1 : 0.9,
+                            rotate: isActive ? 0 : -5
+                          }}
+                          transition={{ duration: 0.4, ease: "easeOut" }}
+                          className={`flex-shrink-0 rounded-xl p-4 transition-all duration-500 ${
+                            service.color.replace('text-', 'bg-').replace('dark:text-', 'dark:bg-')
+                          }/${isActive ? '20' : '10'}`}
+                        >
+                          <service.icon className={`h-12 w-12 sm:h-14 sm:w-14 ${service.color} transition-transform duration-300`} aria-hidden="true" />
+                        </motion.div>
+
+                        {/* Title with slide effect */}
+                        <motion.div 
+                          animate={{
+                            x: isActive ? 0 : -10,
+                            opacity: isActive ? 1 : 0.6
+                          }}
+                          transition={{ duration: 0.4, delay: 0.1 }}
+                          className="flex-shrink-0 sm:w-48 lg:w-56"
+                        >
+                          <h3 className="text-xl sm:text-2xl font-bold text-fg">
+                            {service.name}
+                          </h3>
+                        </motion.div>
+
+                        {/* Description with fade effect */}
+                        <motion.div 
+                          animate={{
+                            x: isActive ? 0 : 10,
+                            opacity: isActive ? 1 : 0.5
+                          }}
+                          transition={{ duration: 0.5, delay: 0.15 }}
+                          className="flex-1"
+                        >
+                          <p className="text-base sm:text-lg text-muted leading-relaxed">
+                            {service.description}
+                          </p>
+                        </motion.div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )
               })}
             </div>
 
-            {/* Vertical Divider */}
-            <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-border transform -translate-x-1/2" />
-
-            {/* Right Side - Text Content */}
-            <div className="relative">
-              {services.map((service, i) => {
-                const isActive = i === activeIndex
-                const isPassed = i < activeIndex
-
-                return (
-                  <div
-                    key={`text-${service.name}`}
-                    className="transition-all duration-500 ease-out"
-                    style={{
-                      position: i === 0 ? 'relative' : 'absolute',
-                      top: 0,
-                      left: 0,
-                      right: 0,
-                      opacity: isActive ? 1 : 0,
-                      transform: `translateY(${isActive ? 0 : isPassed ? -20 : 20}px)`,
-                      pointerEvents: isActive ? 'auto' : 'none',
-                    }}
-                  >
-                    <div className="space-y-6">
-                      <div className={`inline-flex rounded-xl p-3 ${service.color.replace('text-', 'bg-').replace('dark:text-', 'dark:bg-')}/10`}>
-                        <service.icon className={`h-10 w-10 ${service.color}`} aria-hidden="true" />
-                      </div>
-                      
-                      <div>
-                        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-fg mb-4">
-                          {service.name}
-                        </h3>
-                        <p className="text-base sm:text-lg text-muted leading-relaxed">
-                          {service.description}
-                        </p>
-                      </div>
-
-                      {/* Progress indicator */}
-                      <div className="flex gap-2 pt-4">
-                        {services.map((_, idx) => (
-                          <div
-                            key={idx}
-                            className={`h-1.5 rounded-full transition-all duration-300 ${
-                              idx === activeIndex 
-                                ? 'w-12 bg-[var(--primary)]' 
-                                : 'w-1.5 bg-border'
-                            }`}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            </div>
+            {/* Progress indicator with smooth transitions */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="flex justify-center gap-2 mt-8"
+            >
+              {services.map((_, idx) => (
+                <motion.div
+                  key={idx}
+                  animate={{
+                    width: idx === activeIndex ? 32 : 8,
+                    backgroundColor: idx === activeIndex ? 'var(--primary)' : 'rgba(128, 128, 128, 0.3)'
+                  }}
+                  transition={{ duration: 0.4, ease: "easeInOut" }}
+                  className="h-2 rounded-full"
+                />
+              ))}
+            </motion.div>
+          </div>
           </div>
         </div>
       </div>
