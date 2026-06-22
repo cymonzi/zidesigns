@@ -5,7 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 const siteUrl = "https://zidesigns.vercel.app";
 const homeUrl = `${siteUrl}/`;
-const socialImage = "/images/banner.png";
+const socialImage = `${siteUrl}/images/banner.png`;
 
 const inter = Inter({
   subsets: ["latin"],
