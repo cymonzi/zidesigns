@@ -53,6 +53,7 @@ export const metadata: Metadata = {
     "website templates",
     "Zi Designs",
     "Musinguzi Simon Peter",
+    "cymonzi",
   ],
   authors: [{ name: "Musinguzi Simon Peter", url: siteUrl }],
   creator: "Zi Designs",
