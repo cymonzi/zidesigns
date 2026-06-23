@@ -21,26 +21,27 @@ export function HeroSection() {
       >
         <motion.h1
           style={{ transformStyle: "preserve-3d" }}
-          className="text-3xl font-bold tracking-tight text-fg sm:text-5xl lg:text-7xl layer-front mx-auto max-w-4xl leading-tight"
+          className="text-3xl font-bold tracking-tight text-fg sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl layer-front mx-auto max-w-3xl sm:max-w-4xl md:max-w-5xl leading-tight text-center break-words"
         >
-          Turn concepts{" "}
-          <motion.span
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.12, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
-            className="text-gradient inline-block"
-          >
-            into clickable
-          </motion.span>
-          {" "}
-          <motion.span
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.28, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
-            className="text-gradient inline-block"
-          >
-            products.
-          </motion.span>
+          Turn concepts
+          <span className="block">
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.12, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+              className="text-gradient inline-block"
+            >
+              into clickable
+            </motion.span>{" "}
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.28, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+              className="text-gradient inline-block"
+            >
+              products
+            </motion.span>
+          </span>
         </motion.h1>
 
         <motion.p
