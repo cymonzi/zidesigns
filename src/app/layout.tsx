@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Montserrat, Nunito, Orbitron } from "next/font/google";
+import { Inter, Orbitron } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -7,14 +7,9 @@ const siteUrl = "https://zidesigns.vercel.app";
 const homeUrl = `${siteUrl}/`;
 const socialImage = `${siteUrl}/images/banner.png`;
 
-const montserrat = Montserrat({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-montserrat",
-});
-
-const nunito = Nunito({
-  subsets: ["latin"],
-  variable: "--font-nunito",
+  variable: "--font-inter",
 });
 
 const orbitron = Orbitron({
@@ -189,7 +184,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${montserrat.variable} ${nunito.variable} ${orbitron.variable} antialiased`}
+        className={`${inter.variable} ${orbitron.variable} antialiased`}
       >
         <ThemeProvider
           defaultTheme="system"

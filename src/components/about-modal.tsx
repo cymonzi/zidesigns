@@ -139,7 +139,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                         <span className="p-2 rounded-full bg-surface border border-base group-hover:border-[var(--primary)]/50 transition-colors">
                           <Mail className="h-4 w-4" />
                         </span>
-                        <span className="text-sm font-medium break-words">cymonmusinguzi@gmail.com</span>
+                        <span className="text-sm font-medium break-all">cymonmusinguzi@gmail.com</span>
                       </a>
                     </div>
                   </div>
