@@ -1,5 +1,16 @@
 @import "tailwindcss";
 
+/* Theme override mapping for Tailwind font variables
+   - --font-sans maps to Nunito (body)
+   - --font-heading maps to Montserrat (headings)
+ */
+@layer base {
+  body {
+    --font-sans: var(--font-nunito);
+    --font-heading: var(--font-montserrat);
+  }
+}
+
 :root {
   /* Light mode base */
   --background: #ffffff; /* page */
@@ -59,8 +70,22 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, sans-serif;
+  /* Use Tailwind theme mapping: --font-sans -> Nunito */
+  font-family: var(--font-sans), var(--font-inter), system-ui, sans-serif;
   line-height: 1.5;
+}
+
+/* Headings use Montserrat globally */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  /* Use Tailwind theme mapping: --font-heading -> Montserrat */
+  font-family: var(--font-heading), system-ui, sans-serif;
+  color: var(--foreground-soft);
+  margin: 0;
 }
 
 .font-stencil {

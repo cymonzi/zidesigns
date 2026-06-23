@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Orbitron } from "next/font/google";
+import { Inter, Orbitron, Montserrat, Nunito } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
@@ -10,6 +10,18 @@ const socialImage = `${siteUrl}/images/banner.png`;
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-montserrat",
+  weight: ["400", "700"],
+});
+
+const nunito = Nunito({
+  subsets: ["latin"],
+  variable: "--font-nunito",
+  weight: ["300", "400", "700"],
 });
 
 const orbitron = Orbitron({
@@ -184,7 +196,8 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${orbitron.variable} antialiased`}
+        className={`${inter.variable} ${orbitron.variable} ${montserrat.variable} ${nunito.variable} antialiased`}
+        style={{ ['--font-sans' as any]: 'var(--font-nunito)', ['--font-heading' as any]: 'var(--font-montserrat)' } as any}
       >
         <ThemeProvider
           defaultTheme="system"
