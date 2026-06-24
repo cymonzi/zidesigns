@@ -69,6 +69,8 @@ export function StartProjectForm() {
   const [timeline, setTimeline] = useState<string | null>(null)
   const [goal, setGoal] = useState("")
   const [details, setDetails] = useState("")
+  const [customService, setCustomService] = useState("")
+  const [customBudget, setCustomBudget] = useState("")
 
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
@@ -86,9 +88,11 @@ export function StartProjectForm() {
   const startingPrice = selectedService ? STARTING_PRICES[selectedService] ?? "Custom — contact for scope" : null
 
   const budgetsForCategory = selectedCategory ? BUDGETS[selectedCategory] ?? [] : []
+  const displayedService = selectedService === "Other" ? (customService || "Other") : selectedService
+  const displayedBudget = budget === "Other / Custom" ? (customBudget || "Other / Custom") : budget
 
-  const isPhase1Valid = !!selectedService
-  const isPhase2Valid = !!budget && !!timeline && goal.trim().length > 0
+  const isPhase1Valid = !!selectedService && (selectedService !== "Other" || customService.trim().length > 0)
+  const isPhase2Valid = !!budget && !!timeline && goal.trim().length > 0 && (budget !== "Other / Custom" || customBudget.trim().length > 0)
 
   const validateName = (v: string) => v.trim().length >= 2
   const validatePhone = (v: string) => {
@@ -116,9 +120,9 @@ export function StartProjectForm() {
     try {
       const payload = {
         category: selectedCategory ?? "",
-        service: selectedService ?? "",
+        service: selectedService === "Other" ? customService || "Other" : selectedService ?? "",
         startingPrice: startingPrice ?? "",
-        budget: budget ?? "",
+        budget: budget === "Other / Custom" ? customBudget || "Other / Custom" : budget ?? "",
         timeline: timeline ?? "",
         goal,
         details,
@@ -161,8 +165,8 @@ export function StartProjectForm() {
             company: company || "—",
             preferred_contact: preferredContact ?? "—",
             category: selectedCategory ?? "—",
-            service: selectedService ?? "—",
-            budget: budget ?? "—",
+            service: displayedService ?? "—",
+            budget: displayedBudget ?? "—",
             timeline: timeline ?? "—",
             goal: goal || "—",
             details: details || "—",
@@ -188,9 +192,9 @@ export function StartProjectForm() {
     lines.push('ZI DESIGNS - Project Request')
     lines.push('------------------------------')
     lines.push(`Category: ${selectedCategory ?? '—'}`)
-    lines.push(`Service: ${selectedService ?? '—'}`)
+    lines.push(`Service: ${displayedService ?? '—'}`)
     lines.push(`Starting price: ${startingPrice ?? '—'}`)
-    lines.push(`Budget: ${budget ?? '—'}`)
+    lines.push(`Budget: ${displayedBudget ?? '—'}`)
     lines.push(`Timeline: ${timeline ?? '—'}`)
     lines.push('')
     lines.push('Project details:')
@@ -374,20 +378,37 @@ export function StartProjectForm() {
                         {servicesForCategory.map((s) => (
                           <button
                             key={s}
-                            onClick={() => setSelectedService(s)}
-                            className={`px-3 py-2 rounded-full border ${selectedService === s ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
+                              onClick={() => {
+                                setSelectedService(s)
+                                setCustomService("")
+                              }}
+                              className={`px-3 py-2 rounded-full border ${selectedService === s ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                          <button
+                            key="Other"
+                            onClick={() => {
+                              setSelectedService("Other")
+                              setCustomService("")
+                            }}
+                            className={`px-3 py-2 rounded-full border ${selectedService === "Other" ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
                           >
-                            {s}
+                            Other
                           </button>
-                        ))}
-                      </div>
-
-                      {selectedService && (
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="text-sm text-muted">Starting price</div>
-                          <div className="font-semibold">{startingPrice}</div>
                         </div>
-                      )}
+
+                        {selectedService === "Other" && (
+                          <div className="mt-4">
+                            <input
+                              value={customService}
+                              onChange={(e) => setCustomService(e.target.value)}
+                              placeholder="Describe your service (e.g. custom app, AI workflow, or brand system)"
+                              className="w-full mt-2 rounded-md border px-3 py-2 text-sm"
+                            />
+                          </div>
+                        )}
 
                       <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
                         <button
@@ -416,13 +437,36 @@ export function StartProjectForm() {
                       {budgetsForCategory.map((b) => (
                         <button
                           key={b}
-                          onClick={() => setBudget(b)}
+                          onClick={() => {
+                            setBudget(b)
+                            setCustomBudget("")
+                          }}
                           className={`px-3 py-2 rounded-full border ${budget === b ? 'bg-[var(--primary)] text-black border-transparent shadow-sm' : 'bg-surface-alt text-fg border-base'}`}
                         >
                           {b}
                         </button>
                       ))}
+                      <button
+                        key="Other / Custom"
+                        onClick={() => {
+                          setBudget("Other / Custom")
+                          setCustomBudget("")
+                        }}
+                        className={`px-3 py-2 rounded-full border ${budget === "Other / Custom" ? 'bg-[var(--primary)] text-black border-transparent shadow-sm' : 'bg-surface-alt text-fg border-base'}`}
+                      >
+                        Other / Custom
+                      </button>
                     </div>
+                    {budget === "Other / Custom" && (
+                      <div className="mt-3">
+                        <input
+                          value={customBudget}
+                          onChange={(e) => setCustomBudget(e.target.value)}
+                          placeholder="e.g. UGX 800,000 or open to discussion"
+                          className="w-full rounded-md border px-3 py-2 text-sm"
+                        />
+                      </div>
+                    )}
                   </div>
 
                   <div>
@@ -600,6 +644,8 @@ export function StartProjectForm() {
                             setEmail("")
                             setCompany("")
                             setPreferredContact("WhatsApp")
+                            setCustomService("")
+                            setCustomBudget("")
                           }}
                           className="w-full sm:w-auto px-4 py-2 rounded-lg border text-sm md:text-base"
                         >
@@ -618,9 +664,9 @@ export function StartProjectForm() {
                         <p className="text-xs md:text-sm font-semibold text-fg">Your request so far</p>
                         <div className="mt-4 space-y-2 md:space-y-3">
                           {selectedCategory && <SummaryRow label="Category" value={selectedCategory} />}
-                          {selectedService && <SummaryRow label="Service" value={selectedService} />}
+                          {selectedService && <SummaryRow label="Service" value={displayedService ?? selectedService} />}
                           {startingPrice && <SummaryRow label="Starting price" value={startingPrice} />}
-                          {budget && <SummaryRow label="Budget" value={budget} />}
+                          {budget && <SummaryRow label="Budget" value={displayedBudget ?? budget} />}
                           {timeline && <SummaryRow label="Timeline" value={timeline} />}
                         </div>
                       </>
