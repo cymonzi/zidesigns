@@ -78,6 +78,8 @@ export function StartProjectForm() {
   const [nameTouched, setNameTouched] = useState(false)
   const [phoneTouched, setPhoneTouched] = useState(false)
   const [emailTouched, setEmailTouched] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const servicesForCategory = useMemo(() => (selectedCategory ? SERVICES[selectedCategory] ?? [] : []), [selectedCategory])
 
@@ -101,9 +103,58 @@ export function StartProjectForm() {
 
   const isPhase3Valid = nameValid && phoneValid && emailValid
 
-  const submit = () => {
-    // Here we'd normally POST to an API endpoint. For now, just show confirmation.
-    setPhase(4)
+  const submit = async () => {
+    setSubmitError(null)
+    if (!isPhase3Valid) {
+      setNameTouched(true)
+      setPhoneTouched(true)
+      setEmailTouched(true)
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const payload = {
+        category: selectedCategory ?? "",
+        service: selectedService ?? "",
+        startingPrice: startingPrice ?? "",
+        budget: budget ?? "",
+        timeline: timeline ?? "",
+        goal,
+        details,
+        name,
+        phone,
+        email,
+        company,
+        preferredContact,
+        // Formspree helper fields: send copies to both addresses and set reply-to
+        _cc: "cymonmusinguzi@gmail.com,zidesigns001@gmail.com",
+        _replyto: email,
+        _subject: `New project request - ${name || "(no name)"}`,
+      }
+
+      const res = await fetch("https://formspree.io/f/xqevebow", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      })
+
+      if (!res.ok) {
+        const text = await res.text()
+        throw new Error(`Submission failed: ${res.status} ${text}`)
+      }
+
+      // Success: show confirmation
+      setPhase(4)
+    } catch (err: any) {
+      console.error("Form submission error:", err)
+      setSubmitError(err?.message || "Submission failed. Please try again.")
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   const buildSummaryText = () => {
@@ -468,13 +519,16 @@ export function StartProjectForm() {
                   >
                     Cancel
                   </button>
-                  <button
-                    disabled={!isPhase3Valid}
-                    onClick={submit}
-                    className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black"
-                  >
-                    Continue →
-                  </button>
+                  <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
+                    <button
+                      disabled={!isPhase3Valid || submitting}
+                      onClick={submit}
+                      className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black disabled:opacity-60"
+                    >
+                      {submitting ? "Sending..." : "Continue →"}
+                    </button>
+                    {submitError && <p className="text-xs text-red-500 mt-1">{submitError}</p>}
+                  </div>
                 </div>
               </motion.div>
             )}
