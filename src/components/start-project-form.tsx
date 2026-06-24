@@ -171,10 +171,8 @@ export function StartProjectForm() {
         }),
       })
 
-      if (!emailRes.ok) {
-        // Non-blocking — log but don't fail the submission
-        console.warn("EmailJS notification failed:", await emailRes.text())
-      }
+      const emailResText = await emailRes.text()
+      console.log("EmailJS response:", emailRes.status, emailResText)
 
       setPhase(4)
     } catch (err: any) {
