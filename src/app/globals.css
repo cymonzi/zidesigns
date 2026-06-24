@@ -31,6 +31,7 @@
   --accent-foreground: #0f172a;
   --border: #e2e8f0;
   --border-strong: #cbd5e1;
+  --nav-height: 6rem;
   /* 3D depth tokens */
   --depth-1: 2;
   --depth-2: 4;
@@ -113,7 +114,7 @@ html {
 
 /* Keep anchor targets visible below fixed navigation */
 [id] {
-  scroll-margin-top: 6.5rem;
+  scroll-margin-top: var(--nav-height);
 }
 
 /* Small rendering hint for long sections to keep scrolling smooth */

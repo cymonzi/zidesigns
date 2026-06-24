@@ -8,7 +8,7 @@ export function HeroSection() {
   // Removed mouse parallax/tilt — using simple fade animations for headline words
 
   return (
-    <div id="home" className="relative isolate px-4 sm:px-6 pt-24 sm:pt-32 lg:px-8 min-h-screen flex items-center perspective overflow-hidden">
+    <div id="home" className="relative isolate px-4 sm:px-6 pt-[var(--nav-height)] lg:px-8 min-h-screen flex items-center perspective overflow-hidden">
       {/* Ambient gradient blobs (top-left and bottom-right) */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute -top-44 left-12 h-[36rem] w-[36rem] rounded-full bg-[radial-gradient(circle_at_10%_10%,rgba(64,224,208,0.15),transparent_70%)] blur-3xl" />
@@ -79,17 +79,17 @@ export function HeroSection() {
           style={{ transform: 'translateZ(40px)' }}
         >
           <Link
-            href="#contact"
+            href="/start-project"
             className="w-full sm:w-auto focus-ring relative rounded-lg bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[rgba(64,224,208,0.35)] ring-0 transition-all duration-300 hover:shadow-[rgba(64,224,208,0.55)] text-center"
           >
-            <span className="relative z-10 inline-flex items-center gap-2 justify-center">Start a Project <ArrowRight className="h-4 w-4" /></span>
+            <span className="relative z-10 inline-flex items-center gap-2 justify-center">Request a Service <ArrowRight className="h-4 w-4" /></span>
             <span className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-br from-white/10 to-white/0 opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
           <Link
             href="#services"
             className="w-full sm:w-auto focus-ring group relative rounded-lg border border-base px-7 py-3.5 text-sm font-semibold text-fg transition-all duration-300 hover:bg-surface-alt text-center"
           >
-            <span className="inline-flex items-center gap-2 justify-center"><ArrowRight className="h-4 w-4" /> View Work</span>
+            <span className="inline-flex items-center gap-2 justify-center"><ArrowRight className="h-4 w-4" /> View Services</span>
           </Link>
         </motion.div>
 

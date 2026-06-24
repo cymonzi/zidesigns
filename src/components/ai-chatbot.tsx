@@ -48,8 +48,12 @@ const keywordSectionLinks: Array<{ keywords: string[]; link: ChatLink }> = [
   { keywords: ["mobile app", "mobile", "app", "nfunayo"], link: { label: "Mobile App Service", href: "#service-mobile-app" } },
   { keywords: ["graphic design", "graphic", "logo", "poster", "book cover"], link: { label: "Graphic Design Service", href: "#service-graphic-design" } },
   { keywords: ["video", "video editing", "visual effects"], link: { label: "Video Editing Service", href: "#service-video-editing" } },
+  { keywords: ["ai", "chatbot", "automation", "workflow"], link: { label: "Smart Digital Tools", href: "#service-smart-tools" } },
+  { keywords: ["strategy", "consulting", "discovery"], link: { label: "View Services", href: "#services" } },
+  { keywords: ["start a project", "start project", "how do i start", "how to start"], link: { label: "Start a Project", href: "/start-project" } },
+  { keywords: ["deposit", "payment", "refund", "cost", "price", "budget"], link: { label: "Contact Us", href: "#contact" } },
   { keywords: ["work", "projects", "portfolio"], link: { label: "View Work", href: "#work" } },
-  { keywords: ["contact", "email", "instagram", "whatsapp", "start project"], link: { label: "Go to Contact", href: "#contact" } },
+  { keywords: ["contact", "email", "instagram", "whatsapp"], link: { label: "Go to Contact", href: "#contact" } },
 ]
 
 // Acknowledgement phrases that don't need full AI responses
@@ -98,38 +102,53 @@ const closingResponses = [
 const questionIndicators = ["what", "how", "do you", "can you", "where", "when", "why", "?", "tell me", "explain"]
 
 const aiResponses: Record<string, string> = {
-  // About Zi Designs
-  "what is zi designs": "Zi Designs is a creative-tech studio that designs websites, mobile apps, and visual systems for startups, creators, and organizations. We combine design, development, and AI tools to turn ideas into real digital products.",
-  "who founded": "Zi Designs was founded by Musinguzi Simon Peter, a creative-tech leader passionate about building impactful digital products.",
-  
+  // About
+  "what is zi designs": "Zi Designs is a creative-tech studio based in Kampala, Uganda. We partner with startups, small businesses, personal brands, churches, NGOs, and entrepreneurs to build digital systems that perform, scale, and grow with you.",
+  "who founded": "Zi Designs was founded by Musinguzi Simon Peter, a creative-tech leader passionate about building impactful digital products for African businesses.",
+  "where are you located": "We're based in Kampala, Uganda - but we work with clients across East Africa and internationally. All communication and file delivery is handled digitally.",
+  "outside uganda": "Yes! We work with clients across East Africa and internationally. Payments can be arranged in both USD and UGX.",
+
   // Services
-  "website": "We design and build modern, responsive websites that help businesses present their services clearly and attract new clients. Check out our work on Futureline Solutions and Workmasters Website.",
-  "mobile app": "We design mobile app interfaces and wireframes that focus on usability, clarity, and real-world user needs. Check out our Nfunayo wireframes for an example.",
-  "graphic design": "We design visual assets that communicate ideas clearly and professionally. Our work includes logos, posters, and other design assets.",
-  "services": "Zi Designs offers services in Website Development, Mobile App Design, Graphic Design, and Video Editing. What would you like to know more about?",
-  
-  // Projects
-  "futureline": "Futureline Solutions is a modern website we built to help them present their vision and connect with clients. You can check it out at https://futureline-ten.vercel.app/",
-  "workmasters": "Workmasters Website is a professional website we designed to present services clearly and help the company reach new clients. You can visit it at https://workmasters.vercel.app",
-  "nfunayo": "Nfunayo is a mobile app we designed with wireframes focused on usability and user needs. It's a simple expense tracking application.",
-  "projects": "Our recent work includes: Futureline Solutions, Workmasters Website, Nfunayo App Wireframes, and graphic design projects like logos and posters. Would you like details about any of these?",
-  "work": "We have a variety of work including Futureline Solutions, the Workmasters Website, Nfunayo app wireframes, and graphic design projects like logos and posters.",
-  
-  // Process & Timeline
-  "how long": "Project timelines vary depending on complexity. Typically, websites take 4-8 weeks, mobile apps 8-12 weeks, and design work 1-4 weeks.",
-  "timeline": "Project timelines vary depending on complexity. Typically, websites take 4-8 weeks, mobile apps 8-12 weeks, and design work 1-4 weeks.",
-  "process": "Our process includes: discovery & planning, design & prototyping, development, testing, and launch. We keep you involved at every stage.",
-  "start a project": "You can start by filling out the contact form on our website or messaging us directly on WhatsApp or email. Tell us about your idea and we'll discuss how we can help!",
-  
-  // Pricing
-  "price": "Pricing is handled directly between client and business based on your exact scope. Please contact us and we will share the right package for your project.",
-  "cost": "Pricing is handled directly between client and business based on your exact scope. Please contact us and we will share the right package for your project.",
-  "budget": "Let's discuss your project goals directly and share a tailored quote. Reach us through the contact form, email, or Instagram.",
-  
+  "services": "We offer five service areas: Graphic Design, Logo & Branding, Website Development, Mobile Applications, and AI & Automation. We also offer Strategy & Consulting. What would you like to know more about?",
+  "graphic design": "We create compelling visual assets including Posters & Flyers (from UGX 20,000), CV Design (from UGX 50,000), Presentations (from UGX 100,000), Company Profiles (from UGX 100,000), and Certificates (from UGX 20,000). All files are delivered print-ready and web-optimised.",
+  "logo": "Our branding packages range from a Starter Logo (UGX 30,000 - 1 concept, 1 revision) all the way to a full Brand Identity Package (UGX 500,000 - full identity system, unlimited revisions, all assets). Every tier includes the source files.",
+  "branding": "We build brand identities that are distinctive, scalable, and aligned with your business values. Packages start at UGX 30,000 for a Starter Logo up to UGX 500,000 for a full Brand Identity system with guidelines and all assets.",
+  "website": "We build fast, responsive, SEO-optimised websites. Packages: Starter Website (UGX 750,000) for personal brands and landing pages, Business Website (UGX 1,500,000) for up to 5+ pages with blog, gallery and analytics, and E-Commerce Website (UGX 3,000,000) with unlimited products, payments, and an admin dashboard. All include mobile-first design, SSL, and 14 days post-launch support.",
+  "web application": "Beyond websites, we build custom dashboards, management platforms, booking systems, and data-driven applications. This includes user authentication, database architecture, REST APIs, and payment integration. Web applications start from UGX 3,000,000.",
+  "mobile app": "We develop native and cross-platform mobile apps for Android and iOS using React Native or Flutter. Includes backend integration, push notifications, offline functionality, and App Store deployment support. Mobile apps start from UGX 5,000,000.",
+  "ai chatbot": "We build AI-powered chatbots for 24/7 customer support, lead capture, and FAQ automation - powered by large language models. Starting from UGX 1,500,000.",
+  "ai": "Our AI & Automation solutions include AI Chatbots, Workflow Automation, AI Content Tools, Custom AI Integrations, and Data & Analytics dashboards. We integrate AI into your existing website, app, or business workflows. Starting from UGX 1,500,000.",
+  "automation": "We automate repetitive business tasks - emails, reports, data entry, notifications - saving you time and reducing errors. Workflow automation starts from UGX 2,000,000.",
+  "strategy": "Our Strategy & Consulting services include Product Discovery, Digital Strategy, and Technical Consultation - helping you plan the right solution before building it.",
+
+  // Process
+  "process": "Our process has 7 steps: Inquiry → Discovery Call → Proposal & Scope → Project Confirmation (50% deposit) → Design & Development → Review & Revisions → Final Delivery & Handover. We keep you updated at every milestone.",
+  "how long": "Timelines vary by project: graphic design takes 1–4 days, branding 3–7 days, websites 2–6 weeks, web applications 6–12 weeks, and mobile apps 8–16 weeks. Rush delivery is available - contact us to discuss.",
+  "timeline": "Timelines depend on complexity: design work 1–4 days, branding 3–7 days, websites 2–6 weeks, web apps 6–12 weeks, mobile apps 8–16 weeks. Rush delivery is available on request.",
+  "start a project": "Starting is simple - fill out our project request form on the website, message us on WhatsApp (+256 782062673), or email zidesigns001@gmail.com. We respond within 24 hours and schedule a discovery call to understand your goals.",
+  "how do i start": "Just reach out! Fill in the project request form, WhatsApp us on +256 782062673, or email zidesigns001@gmail.com. We acknowledge all inquiries within 24 hours.",
+
+  // Pricing & Payment
+  "price": "Our published prices are starting points - your final quote reflects the full scope of your project. Factors include deliverables, complexity, timeline, and revision rounds. Contact us for a tailored quote.",
+  "cost": "Pricing starts at UGX 20,000 for simple design work, up to UGX 5,000,000+ for mobile apps. Every quote is scoped to your specific project. Reach out and we'll prepare a clear proposal.",
+  "budget": "We work with a range of budgets. Share your project idea and we'll recommend the best option and prepare a transparent proposal with no surprises.",
+  "deposit": "A 50% deposit is required before work begins. This secures your project slot and covers initial production. The remaining 50% is due on completion before final files are released.",
+  "payment": "We accept Mobile Money (MTN or Airtel), bank transfer, and other mutually agreed methods. A 50% deposit starts the project; the balance is due on completion.",
+  "refund": "Deposits are non-refundable once work has commenced. Any concerns are handled in accordance with the terms in your project agreement.",
+
+  // Deliverables & FAQs
+  "revisions": "Every package includes a defined number of revision rounds - from 1 round on the Starter Logo up to unlimited on Professional and Brand Identity packages. Additional revisions beyond your package are billed at a small hourly rate.",
+  "file format": "Design and branding files are delivered in PNG, JPG, SVG, PDF, and source files (AI, PSD, or Figma) where applicable. Websites are fully deployed and handed over with all credentials.",
+  "hosting": "We assist with deployment and setup, but domain registration and hosting are third-party costs billed separately. We guide you through the process and recommend reliable providers.",
+  "portfolio": "You can view our work at zidesigns.vercel.app. You can also request a portfolio PDF during your discovery call.",
+  "retainer": "Yes, we offer retainer packages for clients who need consistent monthly design or development support. Contact us to discuss a custom arrangement.",
+
   // Contact
-  "contact": "You can reach us through: the contact form on our website, Instagram (@zidesigns01), or email at zidesigns001@gmail.com. We respond quickly!",
-  "email": "You can email us at zidesigns001@gmail.com or fill out the contact form on our website.",
-  "instagram": "You can reach us on Instagram @zidesigns01. Follow us for updates and behind-the-scenes content!",
+  "contact": "You can reach us via WhatsApp or phone at +256 782062673, email at zidesigns001@gmail.com, or Instagram @zidesigns01. We respond within 24 hours.",
+  "whatsapp": "Message us directly on WhatsApp: +256 782062673. It's the fastest way to reach us.",
+  "email": "Send us an email at zidesigns001@gmail.com and we'll get back to you within 24 hours.",
+  "instagram": "Follow us and send a DM on Instagram @zidesigns01 for updates and project enquiries.",
+  "phone": "You can call or WhatsApp us on +256 782062673.",
 }
 
 function isAcknowledgement(message: string): boolean {
@@ -161,7 +180,8 @@ function getBestKeywordMatch(message: string): { key: string | null; score: numb
   let bestKey: string | null = null
   let bestScore = 0
 
-  for (const key of Object.keys(aiResponses)) {
+  const sortedEntries = Object.entries(aiResponses).sort((a, b) => b[0].length - a[0].length)
+  for (const [key] of sortedEntries) {
     const keyTokens = key.split(/\s+/)
     const overlap = keyTokens.filter((t) => tokens.includes(t)).length
     const score = overlap / keyTokens.length
@@ -423,7 +443,7 @@ export function AIChatbot() {
             <div className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/80 px-6 py-4">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-black">Zi AI Assistant</h3>
+                  <h3 style={{ color: '#000' }} className="text-lg font-semibold">Zi AI Assistant</h3>
                   <p className="text-sm text-black/70">Always here to help</p>
                 </div>
                 <button

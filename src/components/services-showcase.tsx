@@ -353,10 +353,10 @@ export function ServicesShowcase() {
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-fg leading-[1.05]">
-              What We Do
+              Services
             </h2>
             <p className="sm:max-w-xs text-base text-muted leading-relaxed">
-              You bring the goal. We build the product that gets you there.
+              Choose the service that fits your idea and let us build it with clarity and speed.
             </p>
           </div>
         </motion.div>
@@ -396,7 +396,7 @@ export function ServicesShowcase() {
                 </p>
 
                 {/* CTA / Links */}
-                <div className="pl-9">
+                <div className="pl-9 flex flex-col gap-3">
                   {!service.webExamples && service.example?.type === "live" && (
                     <a
                       href={service.example.url}
@@ -408,6 +408,14 @@ export function ServicesShowcase() {
                       <ArrowUpRight className="h-4 w-4" />
                     </a>
                   )}
+
+                  <Link
+                    href={`/start-project?service=${encodeURIComponent(service.title)}`}
+                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-base text-sm font-semibold text-fg hover:bg-surface-alt hover:text-[var(--primary)] hover:underline transition-all"
+                  >
+                    Request this service
+                    <ArrowUpRight className="h-4 w-4" />
+                  </Link>
 
                   {service.subExamples && (
                     <div className="flex flex-col gap-3">
