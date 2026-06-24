@@ -78,6 +78,8 @@ export function StartProjectForm() {
   const [nameTouched, setNameTouched] = useState(false)
   const [phoneTouched, setPhoneTouched] = useState(false)
   const [emailTouched, setEmailTouched] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
 
   const servicesForCategory = useMemo(() => (selectedCategory ? SERVICES[selectedCategory] ?? [] : []), [selectedCategory])
 
@@ -545,13 +547,16 @@ export function StartProjectForm() {
                   >
                     Cancel
                   </button>
-                  <button
-                    disabled={!isPhase3Valid}
-                    onClick={submit}
-                    className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black"
-                  >
-                    Continue →
-                  </button>
+                  <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
+                    <button
+                      disabled={!isPhase3Valid || submitting}
+                      onClick={submit}
+                      className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black disabled:opacity-60"
+                    >
+                      {submitting ? "Sending..." : "Continue →"}
+                    </button>
+                    {submitError && <p className="text-xs text-red-500 mt-1">{submitError}</p>}
+                  </div>
                 </div>
               </motion.div>
             )}
