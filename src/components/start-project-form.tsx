@@ -275,7 +275,7 @@ export function StartProjectForm() {
     autoTable(doc, {
       startY: afterFirst + 6,
       body: [
-        ["Full Name", name || "—"],
+        ["Name", name || "—"],
         ["Phone", phone || "—"],
         ["Email", email || "—"],
         ["Company", company || "—"],
