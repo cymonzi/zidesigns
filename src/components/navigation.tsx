@@ -3,16 +3,16 @@
 import { useState, useRef, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-import { Menu, X, ArrowUpRight, Mail } from "lucide-react"
+import { Menu, X, ArrowUpRight } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { AboutModal } from "./about-modal"
 import { cn } from "@/lib/utils"
 
 const navigation = [
   { name: "Home", href: "#home" },
-  { name: "What We Do", href: "#services" },
+  { name: "Services", href: "#services" },
   { name: "About", href: "#", action: "about" },
-  { name: "Contact", href: "#contact" },
+  { name: "Get Started", href: "/start-project" },
 ]
 
 export function Navigation() {
@@ -23,6 +23,7 @@ export function Navigation() {
   const [aboutModalOpen, setAboutModalOpen] = useState(false)
   const [activeIndex, setActiveIndex] = useState(0)
   const [pillStyle, setPillStyle] = useState<{ left: number; width: number; top: number; height: number } | null>(null)
+  const headerRef = useRef<HTMLElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const linkRefs = useRef<Array<HTMLAnchorElement | HTMLButtonElement | null>>([])
 
@@ -74,8 +75,20 @@ export function Navigation() {
     }
   }, [mobileMenuOpen])
 
-  const contactIndex = navigation.findIndex((n) => n.name === "Contact")
-  const isContactActive = activeIndex === contactIndex
+  const getStartedIndex = navigation.findIndex((n) => n.name === "Get Started")
+  const isGetStartedActive = activeIndex === getStartedIndex
+
+  useEffect(() => {
+    if (pathname === "/start-project") {
+      setActiveIndex(getStartedIndex)
+      return
+    }
+
+    if (pathname === "/") {
+      setActiveIndex(0)
+      return
+    }
+  }, [pathname, getStartedIndex])
 
   const handleGoHome = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
@@ -89,11 +102,14 @@ export function Navigation() {
     setTimeout(() => positionPill(0), 50)
   }
 
-  const navHref = (href: string) => (isHome ? href : "/" + href)
+  const navHref = (href: string) => {
+    if (href.startsWith("/")) return href
+    return isHome ? href : `/${href}`
+  }
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 bg-page/80 backdrop-blur-lg border-b border-base">
+      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 bg-page/80 backdrop-blur-lg border-b border-base">
         <nav className="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link href="#home" className="-m-1.5 p-1.5" onClick={handleGoHome}>
@@ -119,7 +135,7 @@ export function Navigation() {
               className={`nav-pill-indicator ${pillStyle ? 'active' : ''}`}
               style={
                 pillStyle
-                  ? { transform: `translateX(${pillStyle.left}px)`, width: `${pillStyle.width}px`, top: `${pillStyle.top}px`, height: `${pillStyle.height}px`, opacity: isContactActive ? 0 : 1 }
+                  ? { transform: `translateX(${pillStyle.left}px)`, width: `${pillStyle.width}px`, top: `${pillStyle.top}px`, height: `${pillStyle.height}px`, opacity: isGetStartedActive ? 0 : 1 }
                   : { width: 0 }
               }
               aria-hidden="true"
@@ -138,7 +154,7 @@ export function Navigation() {
                         setTimeout(() => positionPill(idx), 50)
                       }
                     }}
-                    className={item.name === 'Contact' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover whitespace-nowrap'}
+                    className={item.name === 'Get Started' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover whitespace-nowrap'}
                   >
                     {item.name}
                   </button>
@@ -155,10 +171,9 @@ export function Navigation() {
                       setTimeout(() => positionPill(idx), 50)
                     }
                   }}
-                  className={item.name === 'Contact' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover whitespace-nowrap'}
+                  className={item.name === 'Get Started' ? 'btn-contact focus-ring' : 'text-sm font-semibold leading-6 text-fg nav-link-hover whitespace-nowrap'}
                 >
                   {item.name}
-                  {item.name === 'Contact' ? <span className="shimmer-overlay" aria-hidden="true" /> : null}
                 </a>
               )
             })}
@@ -237,7 +252,7 @@ export function Navigation() {
                     href={navHref(item.href)}
                     className={cn(
                       "group flex items-center justify-between rounded-xl border px-4 py-3 text-base font-semibold transition-all duration-200",
-                      item.name === "Contact"
+                      item.name === "Get Started"
                         ? "border-transparent bg-[var(--primary)] text-black shadow-md"
                         : "border-base bg-surface text-fg hover:bg-surface-alt"
                     )}
@@ -246,7 +261,7 @@ export function Navigation() {
                     <span className="inline-flex items-center gap-3">
                       <span className={cn(
                         "inline-flex h-6 w-6 items-center justify-center rounded-full text-xs",
-                        item.name === "Contact" ? "bg-black/15" : "bg-surface-alt"
+                        item.name === "Get Started" ? "bg-black/15" : "bg-surface-alt"
                       )}>
                         {idx + 1}
                       </span>
@@ -258,16 +273,6 @@ export function Navigation() {
               })}
             </div>
 
-            <div className="mt-8 rounded-xl border border-base bg-surface p-4">
-              <p className="text-xs uppercase tracking-[0.18em] text-muted">Quick Contact</p>
-              <a
-                href="mailto:zidesigns001@gmail.com"
-                className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-base px-4 py-2.5 text-sm font-semibold text-fg transition-colors hover:bg-surface-alt"
-              >
-                <Mail className="h-4 w-4" />
-                Email Us
-              </a>
-            </div>
 
             <div className="mt-6 pt-6 border-t border-base">
               <ThemeToggle />

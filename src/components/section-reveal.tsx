@@ -6,9 +6,10 @@ import type { ReactNode } from "react"
 interface SectionRevealProps {
   children: ReactNode
   delay?: number
+  className?: string
 }
 
-export function SectionReveal({ children, delay = 0 }: SectionRevealProps) {
+export function SectionReveal({ children, delay = 0, className = "" }: SectionRevealProps) {
   const shouldReduceMotion = useReducedMotion()
 
   if (shouldReduceMotion) {
@@ -17,6 +18,7 @@ export function SectionReveal({ children, delay = 0 }: SectionRevealProps) {
 
   return (
     <motion.div
+      className={className}
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10% 0px -10% 0px" }}

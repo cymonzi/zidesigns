@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { HeroSection } from "@/components/hero-section";
 import { ServicesShowcase } from "@/components/services-showcase";
-import { ContactSection } from "@/components/contact-section";
+// Contact section removed; contact handled in footer and /start-project
 import { Footer } from "@/components/footer";
 import { AIChatbot } from "@/components/ai-chatbot";
 import { PageTitleTracker } from "@/components/page-title-tracker";
@@ -40,9 +40,7 @@ export default function Home() {
         <SectionReveal delay={0.05}>
           <ServicesShowcase />
         </SectionReveal>
-        <SectionReveal delay={0.08}>
-          <ContactSection />
-        </SectionReveal>
+        {/* ContactSection removed — contact links moved to the footer and Start Project flow */}
       </main>
       <SectionReveal delay={0.1}>
         <Footer />
