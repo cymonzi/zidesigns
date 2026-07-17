@@ -1,13 +1,14 @@
 # Zi Designs - Creative Tech Studio Website
 
-A modern, responsive website for Zi Designs, a creative-tech studio led by Musinguzi Simon Peter. Building smart brands, websites, and AI tools that drive real results.
+A modern, responsive website for Zi Designs, a creative-tech studio led by Musinguzi Simon Peter. We build professional websites, mobile applications, graphic designs, and digital tools that help businesses grow and succeed.
 
 ## 🚀 Features
 
 - **Modern Design**: Clean, professional design with mint aqua (#40E0D0) + charcoal (#36454F) palette
 - **Dark/Light/System Theme**: Flash-safe custom theme provider with persistent localStorage
 - **Responsive Design**: Mobile-first, fluid typography, touch-friendly interfaces
-- **Services Showcase**: Dynamic carousel displaying Website Development (Futureline, Workmasters), Mobile App Design, Graphic Design, and Video Editing work
+- **Services Showcase**: Dynamic display of 5 core services with pricing and portfolio examples
+- **Multi-Step Project Request Form**: Interactive form with service selection, package options, and PDF summary generation
 - **AI Chatbot Assistant**: Interactive chat with project knowledge, service info, and smart navigation links
 - **SEO Optimized**: Semantic HTML, metadata, and proper heading hierarchy
 - **Accessibility**: Focus rings, keyboard navigation, reduced-motion support
@@ -15,12 +16,14 @@ A modern, responsive website for Zi Designs, a creative-tech studio led by Musin
 
 ## 🛠️ Tech Stack
 
-- **Framework**: Next.js 15 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS v4 with CSS variables
 - **Motion**: Framer Motion for animations
 - **Icons**: Lucide React
+- **PDF Generation**: jsPDF + jsPDF-autotable
 - **Animation**: Lottie Web (for avatar animation in chatbot)
+- **Theme**: next-themes for theme management
 - **Fonts**: Inter (body), Orbitron (logo)
 
 ## 🎨 Design System
@@ -63,12 +66,13 @@ export function ThemeToggle() {
 
 1. **Navigation** - Sticky header with theme toggle and mobile menu
 2. **Hero Section** - Bold headline with CTAs and gradient backgrounds
-3. **Services Showcase** - Four service categories with live website carousel and embedded previews
+3. **Services Showcase** - Five service categories with pricing details and portfolio examples
    - Website Development (Futureline Solutions, Workmasters Website)
-   - Mobile App Design
+   - Mobile Application Development
    - Graphic Design
    - Video Editing & Visual Effects
-4. **Contact Section** - Contact form with service selection and multiple contact options
+   - Smart Digital Tools
+4. **Start Project Form** - Multi-step form for service requests with package selection and PDF generation
 5. **Footer** - Links and social media
 6. **AI Chatbot** - Interactive assistant with project knowledge and navigation
 
@@ -89,17 +93,19 @@ src/
 │   ├── globals.css
 │   ├── layout.tsx
 │   ├── page.tsx
-│   └── privacy/
+│   ├── privacy/
+│   │   └── page.tsx
+│   └── start-project/
 │       └── page.tsx
 ├── components/
+│   ├── about-modal.tsx
 │   ├── ai-chatbot.tsx
-│   ├── contact-section.tsx
 │   ├── footer.tsx
 │   ├── hero-section.tsx
 │   ├── navigation.tsx
 │   ├── page-title-tracker.tsx
-│   ├── section-reveal.tsx
 │   ├── services-showcase.tsx
+│   ├── start-project-form.tsx
 │   ├── theme-provider.tsx
 │   ├── theme-toggle.tsx
 │   └── ui/
@@ -136,8 +142,10 @@ The site is optimized for Vercel deployment. Push to `main` branch to trigger au
 
 - `src/app/layout.tsx` - Root layout with theme provider and metadata
 - `src/app/page.tsx` - Home page with all sections
+- `src/app/start-project/page.tsx` - Dedicated page for project request form
 - `src/app/globals.css` - Global styles and CSS variables
-- `src/components/services-showcase.tsx` - Service categories with carousel
+- `src/components/services-showcase.tsx` - Service categories with pricing and examples
+- `src/components/start-project-form.tsx` - Multi-step form with PDF generation
 - `src/components/ai-chatbot.tsx` - Interactive chatbot with knowledge base
 - `src/components/theme-provider.tsx` - Theme system implementation
 
@@ -150,13 +158,24 @@ The site is optimized for Vercel deployment. Push to `main` branch to trigger au
 5. Commit with descriptive messages
 6. Push to GitHub and create a pull request
 
-## 📄 Sites Showcase
+## � Services
 
-Portfolio items featured in the Services section:
+Zi Designs offers comprehensive digital services:
+
+- **Website Development** - Professional websites starting from UGX 750,000
+- **Mobile Application Development** - Custom Android & iOS apps starting from UGX 5,000,000  
+- **Graphic Design** - Visual design services starting from UGX 20,000
+- **Video Editing & Visual Effects** - Professional video production and editing
+- **Smart Digital Tools** - Custom business tools and workflow automation
+
+## 📄 Portfolio Showcase
+
+Featured projects in the Services section:
 - **Futureline Solutions**: https://futureline-ten.vercel.app/
 - **Workmasters Website**: https://theworkmasters.vercel.app/
-- Shared `useTilt` hook + reduced-motion fallback
-- Theme switcher menu (system / light / dark explicit)
+- **Nfunayo App Wireframes**: Mobile app design prototypes
+- **Litywise UI Prototype**: Mobile app UI screens
+- **Momento**: Smart digital tool with intro, sign-up, and dashboard screens
 
 ## 📄 License
 Private – All rights reserved © 2025 Zi Designs.
