@@ -1,20 +1,19 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
+import { useSearchParams } from "next/navigation"
 
 type Phase = 1 | 2 | 3 | 4
 
-const CATEGORIES = ["Design", "Branding", "Development", "AI & Automation", "Strategy & Consulting"]
+const CATEGORIES = ["Design", "Branding", "Development"]
 
 const SERVICES: Record<string, string[]> = {
   Design: ["Posters & Flyers", "CV Design", "Presentations", "Company Profiles", "Certificates"],
-  Branding: ["Starter Logo", "Basic Logo", "Standard Logo", "Professional Logo", "Brand Identity Package"],
-  Development: ["Starter Website", "Business Website", "E-Commerce Website", "Web Application", "Mobile Application"],
-  "AI & Automation": ["AI Chatbots", "Workflow Automation", "AI Content Tools", "Custom AI Integrations", "Data & Analytics"],
-  "Strategy & Consulting": ["Product Discovery", "Digital Strategy", "Technical Consultation"],
+  Branding: ["Logo"],
+  Development: ["Website", "Mobile Application"],
 }
 
 const STARTING_PRICES: Record<string, string> = {
@@ -23,29 +22,170 @@ const STARTING_PRICES: Record<string, string> = {
   "CV Design": "UGX 50,000+",
   "Presentations": "UGX 100,000+",
   "Company Profiles": "UGX 100,000+",
-  "Starter Logo": "UGX 30,000+",
-  "Basic Logo": "UGX 50,000+",
-  "Standard Logo": "UGX 100,000+",
-  "Professional Logo": "UGX 200,000+",
-  "Brand Identity Package": "UGX 500,000+",
-  "Starter Website": "UGX 750,000+",
-  "Business Website": "UGX 1,500,000+",
-  "E-Commerce Website": "UGX 3,000,000+",
-  "Web Application": "UGX 3,000,000+",
+  "Logo": "UGX 50,000+",
+  "Website": "UGX 750,000+",
   "Mobile Application": "UGX 5,000,000+",
-  "AI Chatbots": "From UGX 1,500,000",
-  "Workflow Automation": "From UGX 2,000,000",
-  "AI Content Tools": "From UGX 1,500,000",
-  "Custom AI Integrations": "From UGX 3,000,000+",
-  "Data & Analytics": "From UGX 1,500,000",
 }
 
-const BUDGETS: Record<string, string[]> = {
-  Design: ["UGX 20,000–50,000", "UGX 50,000–100,000", "UGX 100,000–250,000", "UGX 250,000+"],
-  Branding: ["UGX 20,000–50,000", "UGX 50,000–100,000", "UGX 100,000–250,000", "UGX 250,000+"],
-  Development: ["UGX 500,000–1,000,000", "UGX 1,000,000–2,000,000", "UGX 2,000,000–5,000,000", "UGX 5,000,000+"],
-  "AI & Automation": ["UGX 3,000,000–5,000,000", "UGX 5,000,000–10,000,000", "UGX 10,000,000+"],
-  "Strategy & Consulting": ["UGX 500,000–1,500,000", "UGX 1,500,000–3,000,000", "UGX 3,000,000+"],
+type PackageOption = {
+  label: string
+  details: string[]
+}
+
+const POSTERS_FLYERS_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 20,000",
+    details: ["1 poster/flyer design", "1 revision", "Print-ready & digital files"],
+  },
+  {
+    label: "UGX 50,000",
+    details: ["Up to 3 designs", "2 revisions", "Source files included"],
+  },
+  {
+    label: "UGX 100,000",
+    details: ["Up to 6 designs", "Unlimited minor revisions", "Source files & priority support"],
+  },
+]
+
+const CV_DESIGN_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 50,000",
+    details: ["Modern CV layout", "1 revision", "PDF and editable source"],
+  },
+  {
+    label: "UGX 100,000",
+    details: ["2 variations + polished structure", "2 revisions", "ATS-friendly formatting"],
+  },
+  {
+    label: "UGX 200,000+",
+    details: ["Executive CV + cover letter", "Premium visual direction", "Tailored to your field"],
+  },
+]
+
+const PRESENTATION_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 100,000",
+    details: ["Up to 10-slide presentation", "Clean visual layout", "2 revisions"],
+  },
+  {
+    label: "UGX 250,000",
+    details: ["20-slide deck with branding", "3 revisions", "Enhanced visuals and icons"],
+  },
+  {
+    label: "UGX 500,000+",
+    details: ["Pitch-ready presentation", "Custom templates and animations", "Tailored to your audience"],
+  },
+]
+
+const COMPANY_PROFILE_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 100,000",
+    details: ["Simple company profile layout", "1 revision", "PDF-ready design"],
+  },
+  {
+    label: "UGX 250,000",
+    details: ["Multi-page profile with branding", "2 revisions", "Professional visual hierarchy"],
+  },
+  {
+    label: "UGX 500,000+",
+    details: ["Premium company profile", "Advanced layout and visuals", "Tailored for investors or clients"],
+  },
+]
+
+const CERTIFICATE_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 20,000",
+    details: ["1 certificate design", "1 revision", "Print-ready export"],
+  },
+  {
+    label: "UGX 50,000",
+    details: ["Certificate set with matching style", "2 revisions", "Printable and digital files"],
+  },
+  {
+    label: "UGX 100,000+",
+    details: ["Custom certificate series", "Brand-aligned styling", "Flexible for events or training"],
+  },
+]
+
+const BRANDING_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 50,000",
+    details: ["2 logo concepts", "Brand colours", "PNG, PDF & SVG files", "2 revisions"],
+  },
+  {
+    label: "UGX 250,000",
+    details: ["Premium logo package", "Multiple concepts", "Brand kit & mockups", "Source files"],
+  },
+  {
+    label: "UGX 500,000",
+    details: ["Complete brand identity", "Brand guidelines", "Full branding assets", "Unlimited revisions"],
+  },
+]
+
+const DEVELOPMENT_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 750,000",
+    details: ["Landing page or personal website", "Responsive design", "Contact form", "SEO & deployment"],
+  },
+  {
+    label: "UGX 1,500,000",
+    details: ["Business website (5+ pages)", "Blog & gallery", "Google Analytics", "SEO & deployment"],
+  },
+  {
+    label: "UGX 3,000,000",
+    details: ["E-commerce website", "Payments", "Admin dashboard", "Deployment & support"],
+  },
+]
+
+const MOBILE_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 5,000,000",
+    details: ["Up to 8 screens", "Android or iOS (single platform)", "User authentication", "Basic backend integration", "Admin dashboard (basic)", "Testing & deployment support"],
+  },
+  {
+    label: "UGX 10,000,000",
+    details: ["Up to 20 screens", "Android & iOS", "Custom UI/UX", "Push notifications", "Payment integration", "Maps & location", "Admin dashboard", "Analytics", "30 days post-launch support"],
+  },
+  {
+    label: "UGX 20,000,000+",
+    details: ["Unlimited screens", "Android & iOS", "Custom backend/API development", "Role-based permissions", "Advanced security", "AI integrations", "Offline functionality", "Third-party integrations", "Analytics & reporting", "Documentation", "Training", "90 days support"],
+  },
+]
+
+function getPackageOptions(service: string | null | undefined, category: string | null): PackageOption[] {
+  if (!service) return []
+
+  const normalized = service.toLowerCase()
+  if (["posters & flyers"].includes(normalized)) {
+    return POSTERS_FLYERS_PACKAGE_OPTIONS
+  }
+  if (["certificates"].includes(normalized)) {
+    return CERTIFICATE_PACKAGE_OPTIONS
+  }
+  if (["cv design"].includes(normalized)) {
+    return CV_DESIGN_PACKAGE_OPTIONS
+  }
+  if (["presentations"].includes(normalized)) {
+    return PRESENTATION_PACKAGE_OPTIONS
+  }
+  if (["company profiles"].includes(normalized)) {
+    return COMPANY_PROFILE_PACKAGE_OPTIONS
+  }
+  if (["logo"].includes(normalized)) {
+    return BRANDING_PACKAGE_OPTIONS
+  }
+  if (["website"].includes(normalized)) {
+    return DEVELOPMENT_PACKAGE_OPTIONS
+  }
+  if (["mobile application"].includes(normalized)) {
+    return MOBILE_PACKAGE_OPTIONS
+  }
+
+  if (category === "Design") return POSTERS_FLYERS_PACKAGE_OPTIONS
+  if (category === "Branding") return BRANDING_PACKAGE_OPTIONS
+  if (category === "Development") return DEVELOPMENT_PACKAGE_OPTIONS
+
+  return []
 }
 
 function SummaryRow({ label, value }: { label: string; value: string }) {
@@ -58,17 +198,28 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 }
 
 export function StartProjectForm() {
+  const searchParams = useSearchParams()
   const [phase, setPhase] = useState<Phase>(1)
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [selectedCategory, setSelectedCategory] = useState<string | null>("Design")
   const [selectedService, setSelectedService] = useState<string | null>(null)
+
+  useEffect(() => {
+    const serviceParam = searchParams.get("service")
+    if (serviceParam) {
+      if (serviceParam.includes("Website") || serviceParam.includes("Mobile")) {
+        setSelectedCategory("Development")
+      }
+    }
+  }, [searchParams])
 
   const [currency, setCurrency] = useState<"UGX" | "USD">("UGX")
   const approxRate = 3800 // example static approximate rate UGX per USD
 
   const [budget, setBudget] = useState<string | null>(null)
-  const [timeline, setTimeline] = useState<string | null>(null)
   const [goal, setGoal] = useState("")
   const [details, setDetails] = useState("")
+  const [customService, setCustomService] = useState("")
+  const [customBudget, setCustomBudget] = useState("")
 
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
@@ -85,10 +236,12 @@ export function StartProjectForm() {
 
   const startingPrice = selectedService ? STARTING_PRICES[selectedService] ?? "Custom — contact for scope" : null
 
-  const budgetsForCategory = selectedCategory ? BUDGETS[selectedCategory] ?? [] : []
+  const displayedService = selectedService === "Other" ? (customService || "Other") : selectedService
+  const displayedBudget = budget === "Other / Custom" ? (customBudget || "Other / Custom") : budget
+  const packageOptions = useMemo(() => getPackageOptions(displayedService, selectedCategory), [displayedService, selectedCategory])
 
-  const isPhase1Valid = !!selectedService
-  const isPhase2Valid = !!budget && !!timeline && goal.trim().length > 0
+  const isPhase1Valid = !!selectedService && (selectedService !== "Other" || customService.trim().length > 0)
+  const isPhase2Valid = !!budget && (budget !== "Other / Custom" || customBudget.trim().length > 0)
 
   const validateName = (v: string) => v.trim().length >= 2
   const validatePhone = (v: string) => {
@@ -190,10 +343,8 @@ export function StartProjectForm() {
     lines.push('ZI DESIGNS - Project Request')
     lines.push('------------------------------')
     lines.push(`Category: ${selectedCategory ?? '—'}`)
-    lines.push(`Service: ${selectedService ?? '—'}`)
-    lines.push(`Starting price: ${startingPrice ?? '—'}`)
-    lines.push(`Budget: ${budget ?? '—'}`)
-    lines.push(`Timeline: ${timeline ?? '—'}`)
+    lines.push(`Service: ${displayedService ?? '—'}`)
+    lines.push(`Package: ${displayedBudget ?? '—'}`)
     lines.push('')
     lines.push('Project details:')
     lines.push(details || '—')
@@ -255,10 +406,7 @@ export function StartProjectForm() {
       body: [
         ["Category", selectedCategory ?? "—"],
         ["Service", selectedService ?? "—"],
-        ["Starting Price", startingPrice ?? "—"],
-        ["Budget", budget ?? "—"],
-        ["Timeline", timeline ?? "—"],
-        ["Primary Goal", goal || "—"],
+        ["Package", displayedBudget ?? "—"],
         ["Additional Details", details || "—"],
       ],
       headStyles: { fillColor: primary, textColor: 255, fontStyle: "bold" },
@@ -277,7 +425,7 @@ export function StartProjectForm() {
     autoTable(doc, {
       startY: afterFirst + 6,
       body: [
-        ["Full Name", name || "—"],
+        ["Name", name || "—"],
         ["Phone", phone || "—"],
         ["Email", email || "—"],
         ["Company", company || "—"],
@@ -314,11 +462,6 @@ export function StartProjectForm() {
                 const done = phase > n
                 const active = phase === n
                 const reachable = n < 4 || (isPhase1Valid && isPhase2Valid && isPhase3Valid)
-                let isValid = false
-                if (n === 1) isValid = isPhase1Valid
-                else if (n === 2) isValid = isPhase2Valid
-                else if (n === 3) isValid = isPhase3Valid
-                else isValid = phase > n
                 return (
                   <button
                     key={n}
@@ -329,12 +472,12 @@ export function StartProjectForm() {
                     className={`flex items-center gap-2 px-4 py-3 text-sm border-b-2 transition-colors
                       ${active
                         ? 'border-[var(--primary)] text-fg font-semibold'
-                        : isValid
+                        : done
                         ? 'border-transparent text-[var(--primary)] cursor-pointer'
                         : 'border-transparent text-muted cursor-default'
                       } ${!reachable ? 'opacity-40 cursor-not-allowed' : ''}`}
                   >
-                    {isValid ? (
+                    {done ? (
                       <span className="w-5 h-5 rounded-full bg-[var(--primary)] flex items-center justify-center text-black text-xs">✓</span>
                     ) : (
                       <span className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
@@ -376,20 +519,37 @@ export function StartProjectForm() {
                         {servicesForCategory.map((s) => (
                           <button
                             key={s}
-                            onClick={() => setSelectedService(s)}
-                            className={`px-3 py-2 rounded-full border ${selectedService === s ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
+                              onClick={() => {
+                                setSelectedService(s)
+                                setCustomService("")
+                              }}
+                              className={`px-3 py-2 rounded-full border ${selectedService === s ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
+                            >
+                              {s}
+                            </button>
+                          ))}
+                          <button
+                            key="Other"
+                            onClick={() => {
+                              setSelectedService("Other")
+                              setCustomService("")
+                            }}
+                            className={`px-3 py-2 rounded-full border ${selectedService === "Other" ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
                           >
-                            {s}
+                            Other
                           </button>
-                        ))}
-                      </div>
-
-                      {selectedService && (
-                        <div className="mt-4 flex items-center justify-between">
-                          <div className="text-sm text-muted">Starting price</div>
-                          <div className="font-semibold">{startingPrice}</div>
                         </div>
-                      )}
+
+                        {selectedService === "Other" && (
+                          <div className="mt-4">
+                            <input
+                              value={customService}
+                              onChange={(e) => setCustomService(e.target.value)}
+                              placeholder="Describe your service (e.g. custom app, AI workflow, or brand system)"
+                              className="w-full mt-2 rounded-md border px-3 py-2 text-sm"
+                            />
+                          </div>
+                        )}
 
                       <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
                         <button
@@ -409,44 +569,82 @@ export function StartProjectForm() {
 
             {phase === 2 && (
               <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-                <h3 className="text-lg font-semibold">Project context</h3>
+                <h3 className="text-lg font-semibold">Choose a package</h3>
+                <p className="mt-2 text-sm text-muted">These package options are tailored to {displayedService || "your selected service"} and show what you get at each investment level.</p>
 
-                <div className="mt-4 grid sm:grid-cols-2 gap-4 md:gap-6">
-                  <div>
-                    <div className="text-sm font-semibold">Budget</div>
-                    <div className="mt-3 flex flex-wrap gap-2 md:gap-3">
-                      {budgetsForCategory.map((b) => (
-                        <button
-                          key={b}
-                          onClick={() => setBudget(b)}
-                          className={`px-3 py-2 rounded-full border ${budget === b ? 'bg-[var(--primary)] text-black border-transparent shadow-sm' : 'bg-surface-alt text-fg border-base'}`}
-                        >
-                          {b}
-                        </button>
-                      ))}
-                    </div>
+                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
+                  <div className="space-y-3">
+                    {packageOptions.slice(0, 3).map((option) => (
+                      <button
+                        key={option.label}
+                        type="button"
+                        onClick={() => {
+                          setBudget(option.label)
+                          setCustomBudget("")
+                        }}
+                        className={`w-full rounded-2xl border p-4 text-left transition ${budget === option.label ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface-alt hover:border-[var(--primary)]/60'}`}
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <div className="text-sm font-semibold">{option.label}</div>
+                            <p className="mt-1 text-sm text-muted">Select this package</p>
+                          </div>
+                          {budget === option.label && (
+                            <span className="rounded-full bg-[var(--primary)] px-2.5 py-1 text-xs font-semibold text-black">Selected</span>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setBudget("Other / Custom")
+                        setCustomBudget("")
+                      }}
+                      className={`w-full rounded-2xl border p-4 text-left transition ${budget === "Other / Custom" ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface-alt hover:border-[var(--primary)]/60'}`}
+                    >
+                      <div className="text-sm font-semibold">Other / Custom</div>
+                      <p className="mt-1 text-sm text-muted">Tell us your scope and we’ll tailor a package around it.</p>
+                    </button>
                   </div>
 
-                  <div>
-                    <div className="text-sm font-semibold">Timeline</div>
-                    <div className="mt-3 flex flex-wrap gap-2 md:gap-3">
-                      {['As Soon As Possible (1–3 Days)', '1 Week', '2–4 Weeks', '1 Month+', 'Flexible'].map((t) => (
-                        <button
-                          key={t}
-                          onClick={() => setTimeline(t)}
-                          className={`px-3 py-2 rounded-full border ${timeline === t ? 'bg-[var(--primary)] text-black border-transparent shadow-sm' : 'bg-surface-alt text-fg border-base'}`}
-                        >
-                          {t}
-                        </button>
-                      ))}
-                    </div>
+                  <div className="rounded-2xl border border-base bg-surface p-4 md:p-5">
+                    <div className="text-sm font-semibold">Package details</div>
+                    {budget ? (
+                      <div className="mt-3 rounded-xl border border-base bg-surface-alt p-4">
+                        {budget === "Other / Custom" ? (
+                          <>
+                            <p className="text-sm font-semibold">Custom package</p>
+                            <p className="mt-2 text-sm text-muted">We’ll tailor this around your scope and budget.</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="text-sm font-semibold">{budget}</p>
+                            <ul className="mt-3 space-y-2 text-sm text-muted list-disc list-inside">
+                              {packageOptions.find((option) => option.label === budget)?.details.map((detail) => (
+                                <li key={detail}>{detail}</li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <p className="mt-3 text-sm text-muted">Select a package to see its details here.</p>
+                    )}
                   </div>
                 </div>
 
-                <div className="mt-4">
-                  <div className="text-sm font-semibold">Primary goal</div>
-                  <input value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="Primary goal (e.g., increase sales, launch product)" className="w-full mt-2 rounded-md border px-3 py-2" />
-                </div>
+                {budget === "Other / Custom" && (
+                  <div className="mt-4">
+                    <input
+                      value={customBudget}
+                      onChange={(e) => setCustomBudget(e.target.value)}
+                      placeholder="e.g. UGX 800,000 or open to discussion"
+                      className="w-full rounded-md border px-3 py-2 text-sm"
+                    />
+                  </div>
+                )}
 
                 <div className="mt-4">
                   <div className="text-sm font-semibold">More details (optional)</div>
@@ -595,13 +793,14 @@ export function StartProjectForm() {
                             setSelectedCategory(null)
                             setSelectedService(null)
                             setBudget(null)
-                            setTimeline(null)
                             setDetails("")
                             setName("")
                             setPhone("")
                             setEmail("")
                             setCompany("")
                             setPreferredContact("WhatsApp")
+                            setCustomService("")
+                            setCustomBudget("")
                           }}
                           className="w-full sm:w-auto px-4 py-2 rounded-lg border text-sm md:text-base"
                         >
@@ -620,10 +819,8 @@ export function StartProjectForm() {
                         <p className="text-xs md:text-sm font-semibold text-fg">Your request so far</p>
                         <div className="mt-4 space-y-2 md:space-y-3">
                           {selectedCategory && <SummaryRow label="Category" value={selectedCategory} />}
-                          {selectedService && <SummaryRow label="Service" value={selectedService} />}
-                          {startingPrice && <SummaryRow label="Starting price" value={startingPrice} />}
-                          {budget && <SummaryRow label="Budget" value={budget} />}
-                          {timeline && <SummaryRow label="Timeline" value={timeline} />}
+                          {selectedService && <SummaryRow label="Service" value={displayedService ?? selectedService} />}
+                          {budget && <SummaryRow label="Package" value={displayedBudget ?? budget} />}
                         </div>
                       </>
                     ) : (
@@ -631,7 +828,7 @@ export function StartProjectForm() {
                         <p className="text-xs md:text-sm font-semibold text-fg">Quick tips</p>
                         <ul className="mt-4 space-y-1 md:space-y-2 text-xs md:text-sm text-muted list-disc list-inside">
                           <li>Pick the service closest to your idea.</li>
-                          <li>Budget and timeline help us give a realistic quote.</li>
+                          <li>Select the package that best matches your scope.</li>
                           <li>Detail your goal clearly for the fastest reply.</li>
                         </ul>
                       </>

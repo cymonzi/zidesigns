@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { usePathname } from "next/navigation"
 import { RotateCcw, Send, X } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import lottie from "lottie-web"
@@ -101,6 +102,28 @@ const closingResponses = [
 // Question indicators
 const questionIndicators = ["what", "how", "do you", "can you", "where", "when", "why", "?", "tell me", "explain"]
 
+// Typo/variant alias map for normalization
+const aliasMap: Record<string, string> = {
+  "mobileapp": "mobile app",
+  "mobil": "mobile",
+  "webapp": "web application",
+  "chatbot": "chatbot",
+  "logo": "logo",
+  "branding": "branding",
+  "graphic": "graphic design",
+  "video": "video editing",
+  "automation": "automation",
+  "ai": "ai",
+}
+
+function normalizeInput(text: string): string {
+  let normalized = text.toLowerCase().trim()
+  for (const [alias, replacement] of Object.entries(aliasMap)) {
+    normalized = normalized.replace(new RegExp(alias, "g"), replacement)
+  }
+  return normalized
+}
+
 const aiResponses: Record<string, string> = {
   // About
   "what is zi designs": "Zi Designs is a creative-tech studio based in Kampala, Uganda. We partner with startups, small businesses, personal brands, churches, NGOs, and entrepreneurs to build digital systems that perform, scale, and grow with you.",
@@ -185,7 +208,8 @@ function getBestKeywordMatch(message: string): { key: string | null; score: numb
     const keyTokens = key.split(/\s+/)
     const overlap = keyTokens.filter((t) => tokens.includes(t)).length
     const score = overlap / keyTokens.length
-    if (score > bestScore) {
+    // Tiebreaker: prefer longer keys when scores are equal
+    if (score > bestScore || (score === bestScore && score > 0 && key.length > (bestKey?.length || 0))) {
       bestScore = score
       bestKey = key
     }
@@ -204,11 +228,6 @@ function getSuggestionGroup(message: string): string[] {
   return responseSuggestions.fallback
 }
 
-function isPricingRelated(message: string): boolean {
-  const lower = message.toLowerCase()
-  return lower.includes("price") || lower.includes("pricing") || lower.includes("cost") || lower.includes("budget") || lower.includes("quote")
-}
-
 function getLinksForText(message: string): ChatLink[] {
   const lower = message.toLowerCase()
   const links: ChatLink[] = []
@@ -225,6 +244,7 @@ function getLinksForText(message: string): ChatLink[] {
 }
 
 export function AIChatbot() {
+  const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>(initialMessages)
   const [inputValue, setInputValue] = useState("")
@@ -233,6 +253,35 @@ export function AIChatbot() {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const lottieContainer = useRef<HTMLDivElement>(null)
   const lottieInstance = useRef<any>(null)
+
+  // Hydrate messages from localStorage on mount
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem("zi-chat-history")
+        if (stored) {
+          const parsed = JSON.parse(stored)
+          if (Array.isArray(parsed) && parsed.length > 0) {
+            setMessages(parsed.map((m: any) => ({ ...m, timestamp: new Date(m.timestamp) })))
+          }
+        }
+      } catch (e) {
+        console.error("Failed to load chat history:", e)
+      }
+    }
+  }, [])
+
+  // Persist messages to localStorage on update (capped at 20)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const toStore = messages.slice(-20)
+        localStorage.setItem("zi-chat-history", JSON.stringify(toStore))
+      } catch (e) {
+        console.error("Failed to save chat history:", e)
+      }
+    }
+  }, [messages])
 
   useEffect(() => {
     let isMounted = true
@@ -287,15 +336,29 @@ export function AIChatbot() {
     scrollToBottom()
   }, [messages])
 
-  const buildAIReply = (userText: string): { text: string; suggestions: string[]; links: ChatLink[] } => {
-    const lowerMessage = userText.toLowerCase().trim()
-    const contextualLinks = getLinksForText(lowerMessage)
+  // Adjust link hrefs based on current page
+  const adjustLinkHref = (href: string): string => {
+    // If on homepage, keep hash links as-is
+    if (pathname === "/") {
+      return href
+    }
+    // If on other pages and it's a hash link, prepend "/" to point to homepage
+    if (href.startsWith("#")) {
+      return "/" + href
+    }
+    // Otherwise keep as-is (absolute paths like /start-project)
+    return href
+  }
 
-    if (isAcknowledgement(lowerMessage)) {
+  const buildAIReply = (userText: string): { text: string; suggestions: string[]; links: ChatLink[] } => {
+    const normalizedMessage = normalizeInput(userText)
+    const contextualLinks = getLinksForText(normalizedMessage)
+
+    if (isAcknowledgement(normalizedMessage)) {
       return { text: getRandomResponse(acknowledgementResponses), suggestions: defaultSuggestions, links: contextualLinks }
     }
 
-    if (isClosing(lowerMessage)) {
+    if (isClosing(normalizedMessage)) {
       return {
         text: getRandomResponse(closingResponses),
         suggestions: ["Start a new project", "Show me your services", "How can I contact you?"],
@@ -303,35 +366,69 @@ export function AIChatbot() {
       }
     }
 
-    for (const [key, response] of Object.entries(aiResponses)) {
-      if (lowerMessage.includes(key)) {
+    // Sort by key length (longest first) to ensure specific phrases match before generic substrings
+    const sortedEntries = Object.entries(aiResponses).sort((a, b) => b[0].length - a[0].length)
+    for (const [key, response] of sortedEntries) {
+      if (normalizedMessage.includes(key)) {
         const keyLinks = getLinksForText(key)
-        return { text: response, suggestions: getSuggestionGroup(key), links: keyLinks.length > 0 ? keyLinks : contextualLinks }
+        let finalLinks = keyLinks.length > 0 ? keyLinks : contextualLinks
+        // Add contact link for pricing-related responses
+        if (key === "price" || key === "cost" || key === "budget") {
+          const contactLink = { label: "Want a full quote? Contact us", href: "#contact" }
+          if (!finalLinks.some((link) => link.href === contactLink.href)) {
+            finalLinks = [...finalLinks, contactLink]
+          }
+        }
+        return { text: response, suggestions: getSuggestionGroup(key), links: finalLinks }
       }
     }
 
-    if (isQuestion(lowerMessage)) {
-      const bestMatch = getBestKeywordMatch(lowerMessage)
+    if (isQuestion(normalizedMessage)) {
+      const bestMatch = getBestKeywordMatch(normalizedMessage)
       if (bestMatch.key && bestMatch.score >= 0.5) {
         const matchLinks = getLinksForText(bestMatch.key)
+        let finalLinks = matchLinks.length > 0 ? matchLinks : contextualLinks
+        // Add contact link for pricing-related matches
+        if (bestMatch.key === "price" || bestMatch.key === "cost" || bestMatch.key === "budget") {
+          const contactLink = { label: "Want a full quote? Contact us", href: "#contact" }
+          if (!finalLinks.some((link) => link.href === contactLink.href)) {
+            finalLinks = [...finalLinks, contactLink]
+          }
+        }
         return {
           text: aiResponses[bestMatch.key],
           suggestions: getSuggestionGroup(bestMatch.key),
-          links: matchLinks.length > 0 ? matchLinks : contextualLinks,
+          links: finalLinks,
         }
       }
 
+      // Low-confidence fallback: always include contact link
+      const fallbackLinks = contextualLinks.length > 0 
+        ? contextualLinks 
+        : [{ label: "Go to Contact", href: "#contact" }]
+      const contactLink = { label: "Go to Contact", href: "#contact" }
+      if (!fallbackLinks.some((link) => link.href === contactLink.href)) {
+        fallbackLinks.push(contactLink)
+      }
       return {
         text: "Great question. I may not have a direct answer yet, but I can help you with services, timelines, projects, and contact options. What would you like to explore next?",
         suggestions: defaultSuggestions,
-        links: contextualLinks,
+        links: fallbackLinks,
       }
     }
 
+    // Final fallback: always include contact link
+    const finalFallbackLinks = contextualLinks.length > 0 
+      ? contextualLinks 
+      : [{ label: "Go to Contact", href: "#contact" }]
+    const contactLink = { label: "Go to Contact", href: "#contact" }
+    if (!finalFallbackLinks.some((link) => link.href === contactLink.href)) {
+      finalFallbackLinks.push(contactLink)
+    }
     return {
       text: "I can help with services, timelines, project examples, and how to get started. Tap a suggestion below or ask anything in your own words.",
       suggestions: defaultSuggestions,
-      links: contextualLinks,
+      links: finalFallbackLinks,
     }
   }
 
@@ -374,10 +471,6 @@ export function AIChatbot() {
   }
 
   const handleSuggestionClick = (suggestion: string) => {
-    if (isPricingRelated(suggestion)) {
-      submitUserMessage("How can I contact you?")
-      return
-    }
     submitUserMessage(suggestion)
   }
 
@@ -392,6 +485,14 @@ export function AIChatbot() {
     setInputValue("")
     setQuickSuggestions(defaultSuggestions)
     setIsLoading(false)
+    // Clear localStorage
+    if (typeof window !== "undefined") {
+      try {
+        localStorage.removeItem("zi-chat-history")
+      } catch (e) {
+        console.error("Failed to clear chat history:", e)
+      }
+    }
   }
 
   return (
@@ -483,7 +584,7 @@ export function AIChatbot() {
                         {message.links.map((link) => (
                           <a
                             key={`${message.id}-${link.href}`}
-                            href={link.href}
+                            href={adjustLinkHref(link.href)}
                             onClick={() => setIsOpen(false)}
                             className="inline-flex rounded-full border border-base bg-page/60 px-2.5 py-1 text-[11px] font-semibold text-fg hover:bg-page transition-colors"
                           >
