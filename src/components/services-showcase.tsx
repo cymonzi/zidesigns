@@ -19,6 +19,7 @@ interface WebExample {
   url: string
   image: string
   imageAlt?: string
+  downloadUrl?: string
 }
 
 interface SingleExample {
@@ -36,6 +37,12 @@ interface Service {
   example?: SingleExample
   webExamples?: WebExample[]
   subExamples?: SubExample[]
+  pricing?: {
+    startingFrom?: string
+    perfectFor: string[]
+    whatsIncluded: string[]
+    optionalAddons?: string[]
+  }
 }
 
 const services: Service[] = [
@@ -44,8 +51,18 @@ const services: Service[] = [
     number: "01",
     slug: "website",
     title: "Website Development",
-    description:
-      "Turn visitors into leads with a website that looks sharp, loads fast, and makes people take action.",
+    description: "Professional websites designed to help businesses attract customers, build credibility, and grow online.",
+    pricing: {
+      startingFrom: "UGX 750,000",
+      perfectFor: [
+        "Small & Medium Businesses",
+        "Startups",
+        "Corporate Organizations",
+        "E-commerce Brands",
+      ],
+      whatsIncluded: ["Responsive design", "Custom UI", "Contact forms", "SEO-ready setup", "Performance optimization", "CMS (where applicable)"],
+      optionalAddons: ["Booking system", "Online payments", "Blog", "Live chat", "Analytics"],
+    },
     webExamples: [
       {
         name: "Futureline Solutions",
@@ -65,9 +82,23 @@ const services: Service[] = [
     id: 2,
     number: "02",
     slug: "mobile-app",
-    title: "Mobile App Design",
-    description:
-      "Launch faster with app flows your users understand in seconds, so your product gets used not ignored.",
+    title: "Mobile Application Development",
+    description: "Build custom Android and iOS applications that help your business engage customers, streamline operations, and scale with confidence.",
+    pricing: {
+      startingFrom: "UGX 5,000,000",
+      perfectFor: [
+        "Startups & MVPs",
+        "Customer-Facing Businesses",
+        "Service Providers",
+        "Organizations Building Digital Platforms",
+      ],
+      whatsIncluded: [
+        "Custom UI/UX Design",
+        "Android & iOS Development",
+        "Backend Integration",
+        "Testing & Deployment Support",
+      ],
+    },
     subExamples: [
       {
         name: "Nfunayo App Wireframes",
@@ -88,8 +119,31 @@ const services: Service[] = [
     number: "03",
     slug: "graphic-design",
     title: "Graphic Design",
-    description: "Make your brand instantly recognizable with visuals people remember and trust.",
+    description: "Create visually compelling designs that communicate your message, strengthen your brand, and leave a lasting impression across print and digital platforms.",
+    pricing: {
+      startingFrom: "UGX 20,000",
+      perfectFor: [
+        "Marketing Campaigns",
+        "Business Promotions",
+        "Corporate Communications",
+        "Events & Conferences",
+      ],
+      whatsIncluded: [
+        "Posters & Flyers",
+        "Social Media Graphics",
+        "Company Profiles",
+        "Presentation Design",
+        "Marketing Materials",
+      ],
+    },
     webExamples: [
+      {
+        name: "GMF",
+        url: "https://www.canva.com/design/DAG-O_hQtAQ/HfMHg3dQAzLgjuKuLQXqPQ/view",
+        image: "/images/GMF.png",
+        imageAlt: "GMF Design by MUSINGUZI",
+        downloadUrl: "/document/GMF.pdf",
+      },
       {
         name: "Builder Profiles",
         url: "/images/zicharacter.png",
@@ -115,7 +169,22 @@ const services: Service[] = [
     number: "04",
     slug: "video-editing",
     title: "Video Editing & Visual Effects",
-    description: "Stop the scroll with polished videos that hold attention and drive real response.",
+    description: "Transform raw footage into engaging videos that capture attention, tell compelling stories, and elevate your brand across digital platforms.",
+    pricing: {
+      perfectFor: [
+        "Marketing Campaigns",
+        "Social Media Content",
+        "Corporate Videos",
+        "Product Promotions",
+      ],
+      whatsIncluded: [
+        "Professional Video Editing",
+        "Motion Graphics",
+        "Visual Effects",
+        "Color Correction & Audio Enhancement",
+        "Export for Web & Social Media",
+      ],
+    },
     subExamples: [
       {
         name: "Cymon Zi Promo",
@@ -134,8 +203,22 @@ const services: Service[] = [
     number: "05",
     slug: "smart-tools",
     title: "Smart Digital Tools",
-    description:
-      "We design and build simple, intelligent tools that help people manage their daily lives.",
+    description: "Empower your business with custom digital tools that automate workflows, improve productivity, and simplify everyday operations.",
+    pricing: {
+      perfectFor: [
+        "Automating repetitive tasks",
+        "Digitizing manual workflows",
+        "Managing business data",
+        "Improving team productivity",
+      ],
+      whatsIncluded: [
+        "Custom Business Tools",
+        "Workflow Automation",
+        "Data Management Solutions",
+        "Dashboard Development",
+        "Ongoing Support & Enhancements",
+      ],
+    },
     webExamples: [
       {
         name: "Momento - Intro Page",
@@ -258,7 +341,7 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
   )
 }
 
-function LiveSlideshow({ examples }: { examples: WebExample[] }) {
+function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serviceSlug?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0)
 
   const handlePrev = () => {
@@ -275,23 +358,42 @@ function LiveSlideshow({ examples }: { examples: WebExample[] }) {
     return null
   }
 
+  const isGraphicDesign = serviceSlug === "graphic-design"
+
   return (
     <div className="space-y-4">
-      <Link
-        href={currentExample.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
-      >
-        <div className="relative w-full h-[400px]">
-          <Image
-            src={currentExample.image}
-            alt={currentExample.imageAlt ?? currentExample.name}
-            fill
-            className="object-contain bg-surface/50 p-2"
-          />
-        </div>
-      </Link>
+      {isGraphicDesign ? (
+        <button
+          type="button"
+          onClick={() => window.open(currentExample.url, "_blank", "noopener,noreferrer")}
+          className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
+        >
+          <div className="relative w-full h-[400px]">
+            <Image
+              src={currentExample.image}
+              alt={currentExample.imageAlt ?? currentExample.name}
+              fill
+              className="object-contain bg-surface/50 p-2"
+            />
+          </div>
+        </button>
+      ) : (
+        <Link
+          href={currentExample.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
+        >
+          <div className="relative w-full h-[400px]">
+            <Image
+              src={currentExample.image}
+              alt={currentExample.imageAlt ?? currentExample.name}
+              fill
+              className="object-contain bg-surface/50 p-2"
+            />
+          </div>
+        </Link>
+      )}
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -304,9 +406,24 @@ function LiveSlideshow({ examples }: { examples: WebExample[] }) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
           >
-            <ExternalLink className="h-3 w-3" />
-            Visit
+            View
           </a>
+          {currentExample.downloadUrl && (
+            <button
+              type="button"
+              onClick={() => {
+                const a = document.createElement("a")
+                a.href = currentExample.downloadUrl!
+                a.download = ""
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+              }}
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-muted hover:text-fg transition-colors"
+            >
+              Download
+            </button>
+          )}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
@@ -395,6 +512,42 @@ export function ServicesShowcase() {
                   {service.description}
                 </p>
 
+                {/* Pricing Details */}
+                {service.pricing && (
+                  <div className="pl-9 space-y-5">
+                    {/* Starting price only if available */}
+                    {service.pricing.startingFrom && (
+                      <div className="flex flex-col gap-1">
+                        <p className="text-xs font-medium text-muted uppercase tracking-wider">Starting Price</p>
+                        <p className="text-xl font-bold text-fg">{service.pricing.startingFrom}</p>
+                      </div>
+                    )}
+
+                    {/* Perfect for — chips */}
+                    <ul className="flex flex-wrap gap-2">
+                      {service.pricing.perfectFor.map((item, i) => (
+                        <li key={i} className="px-3 py-1 rounded-full bg-surface-alt border border-base text-xs font-medium text-fg">
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+
+                    {/* Included + add-ons merged into one chip row */}
+                    <ul className="flex flex-wrap gap-1.5">
+                      {service.pricing.whatsIncluded.map((item, i) => (
+                        <li key={i} className="px-2.5 py-1 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-medium">
+                          {item}
+                        </li>
+                      ))}
+                      {service.pricing.optionalAddons?.map((item, i) => (
+                        <li key={i} className="px-2.5 py-1 rounded-md border border-dashed border-base text-muted text-xs font-medium">
+                          + {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
                 {/* CTA / Links */}
                 <div className="pl-9 flex flex-col gap-3">
                   {!service.webExamples && service.example?.type === "live" && (
@@ -444,7 +597,7 @@ export function ServicesShowcase() {
 
                 {/* Live websites slideshow */}
                 {service.webExamples && service.webExamples.length > 0 && (
-                  <LiveSlideshow examples={service.webExamples} />
+                  <LiveSlideshow examples={service.webExamples} serviceSlug={service.slug} />
                 )}
 
                 {/* Live site screenshot */}

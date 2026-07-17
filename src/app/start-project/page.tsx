@@ -2,6 +2,7 @@
 
 // Link removed — navigation provided in the form
 import { motion } from "framer-motion"
+import { Suspense } from "react"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PageTitleTracker } from "@/components/page-title-tracker"
@@ -29,7 +30,9 @@ export default function StartProjectPage() {
         </div>
 
         <SectionReveal className="mt-10">
-          <StartProjectForm />
+          <Suspense fallback={<div>Loading...</div>}>
+            <StartProjectForm />
+          </Suspense>
         </SectionReveal>
 
         {/* page-level Return Home removed; use form actions instead */}
