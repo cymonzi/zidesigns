@@ -269,9 +269,10 @@ export function StartProjectForm() {
     try {
       const payload = {
         category: selectedCategory ?? "",
-        service: selectedService === "Other" ? customService || "Other" : selectedService ?? "",
+        service: selectedService ?? "",
         startingPrice: startingPrice ?? "",
-        budget: budget === "Other / Custom" ? customBudget || "Other / Custom" : budget ?? "",
+        budget: budget ?? "",
+        timeline: timeline ?? "",
         goal,
         details,
         name,
@@ -279,6 +280,7 @@ export function StartProjectForm() {
         email,
         company,
         preferredContact,
+        // Formspree helper fields: send copies to both addresses and set reply-to
         _cc: "cymonmusinguzi@gmail.com,zidesigns001@gmail.com",
         _replyto: email,
         _subject: `New project request - ${name || "(no name)"}`,
@@ -298,33 +300,7 @@ export function StartProjectForm() {
         throw new Error(`Submission failed: ${res.status} ${text}`)
       }
 
-      // EmailJS — notify both inboxes
-      const emailRes = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          service_id: "service_1ral4jg",
-          template_id: "template_y5ipuvd",
-          user_id: "9CSL_X0NzWLZWuDOw",
-          template_params: {
-            client_name: name,
-            client_email: email,
-            client_phone: phone,
-            company: company || "—",
-            preferred_contact: preferredContact ?? "—",
-            category: selectedCategory ?? "—",
-            service: displayedService ?? "—",
-            budget: displayedBudget ?? "—",
-            goal: goal || "—",
-            details: details || "—",
-            logo_url: "https://zidesigns.vercel.app/favicon/android-chrome-512x512.png",
-          },
-        }),
-      })
-
-      const emailResText = await emailRes.text()
-      console.log("EmailJS response:", emailRes.status, emailResText)
-
+      // Success: show confirmation
       setPhase(4)
     } catch (err: any) {
       console.error("Form submission error:", err)
