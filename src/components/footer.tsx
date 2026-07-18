@@ -26,7 +26,10 @@ const navigation = {
 export function Footer() {
   const pathname = usePathname()
   const isHome = pathname === "/"
-  const navHref = (href: string) => (isHome ? href : "/" + href)
+  const navHref = (href: string) => {
+    if (href.startsWith("/")) return href // Already absolute path
+    return isHome ? href : "/" + href // Hash links need / prefix on non-home pages
+  }
   const [aboutModalOpen, setAboutModalOpen] = useState(false)
 
   return (
