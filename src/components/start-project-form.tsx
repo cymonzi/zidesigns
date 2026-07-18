@@ -362,6 +362,9 @@ export function StartProjectForm() {
     const doc = new jsPDF()
     const primary: [number, number, number] = [29, 178, 152]
 
+    // Use jsPDF standard fonts to avoid unicode cmap errors
+    // helvetica-bold for brand logo and headings, helvetica for body text
+
     doc.setFillColor(primary[0], primary[1], primary[2])
     doc.rect(0, 0, 210, 28, "F")
 
@@ -407,10 +410,10 @@ export function StartProjectForm() {
         ["Package", displayedBudget ?? "—"],
         ["Additional Details", details || "—"],
       ],
-      headStyles: { fillColor: primary, textColor: 255, fontStyle: "bold" },
+      headStyles: { fillColor: primary, textColor: 255, fontStyle: "bold", font: "helvetica" },
       alternateRowStyles: { fillColor: [245, 253, 251] },
       columnStyles: { 0: { fontStyle: "bold", cellWidth: 50 } },
-      styles: { fontSize: 10, cellPadding: 4 },
+      styles: { font: "helvetica", fontStyle: "normal", fontSize: 10, cellPadding: 4 },
     })
 
     const afterFirst = (doc as any).lastAutoTable.finalY + 10
@@ -430,7 +433,7 @@ export function StartProjectForm() {
         ["Preferred Contact", preferredContact || "—"],
       ],
       columnStyles: { 0: { fontStyle: "bold", cellWidth: 50 } },
-      styles: { fontSize: 10, cellPadding: 4 },
+      styles: { font: "helvetica", fontStyle: "normal", fontSize: 10, cellPadding: 4 },
       alternateRowStyles: { fillColor: [245, 253, 251] },
     })
 
