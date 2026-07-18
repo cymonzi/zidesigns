@@ -58,7 +58,7 @@ export function InsightsShowcase() {
       for (const framework of frameworks) {
         try {
           // Increment view count
-          const { error: incrementError } = await supabase.rpc('increment_view', { 
+          const { error: incrementError } = await supabase!.rpc('increment_view', { 
             p_framework_id: framework.frameworkId, 
             p_visitor_id: visitorId 
           })
@@ -68,7 +68,7 @@ export function InsightsShowcase() {
           }
 
           // Fetch current counts
-          const { data, error } = await supabase
+          const { data, error } = await supabase!
             .from('frameworks')
             .select('views, downloads')
             .eq('id', framework.frameworkId)
@@ -111,7 +111,7 @@ export function InsightsShowcase() {
     // Increment download count if Supabase is configured
     if (supabase) {
       try {
-        await supabase.rpc('increment_download', { p_framework_id: frameworkId })
+        await supabase!.rpc('increment_download', { p_framework_id: frameworkId })
       } catch (err) {
         console.error('Error incrementing download:', err)
       }
