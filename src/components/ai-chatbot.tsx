@@ -30,13 +30,14 @@ const initialMessages: Message[] = [
 
 const defaultSuggestions = [
   "What services do you offer?",
+  "Tell me about Insights",
   "How do I start a project?",
   "Show me recent projects",
-  "How can I contact you?",
 ]
 
 const responseSuggestions: Record<string, string[]> = {
   services: ["Tell me about website development", "Tell me about mobile app design", "Tell me about graphic design"],
+  insights: ["What is the GMF framework?", "Tell me about Insights", "What frameworks do you have?"],
   projects: ["Show me website work", "Show me design work", "How long do projects take?"],
   process: ["What is your process?", "How long does a website take?", "What do you need from me to start?"],
   contact: ["How can I contact you?", "Do you use WhatsApp?", "Can I send project details by email?"],
@@ -51,6 +52,7 @@ const keywordSectionLinks: Array<{ keywords: string[]; link: ChatLink }> = [
   { keywords: ["video", "video editing", "visual effects"], link: { label: "Video Editing Service", href: "#service-video-editing" } },
   { keywords: ["ai", "chatbot", "automation", "workflow"], link: { label: "Smart Digital Tools", href: "#service-smart-tools" } },
   { keywords: ["strategy", "consulting", "discovery"], link: { label: "View Services", href: "#services" } },
+  { keywords: ["insights", "knowledge hub", "frameworks", "gmf", "gift maturation"], link: { label: "View Insights", href: "/insights" } },
   { keywords: ["start a project", "start project", "how do i start", "how to start"], link: { label: "Start a Project", href: "/start-project" } },
   { keywords: ["deposit", "payment", "refund", "cost", "price", "budget"], link: { label: "Contact Us", href: "#contact" } },
   { keywords: ["work", "projects", "portfolio"], link: { label: "View Work", href: "#work" } },
@@ -130,6 +132,13 @@ const aiResponses: Record<string, string> = {
   "who founded": "Zi Designs was founded by Musinguzi Simon Peter, a creative-tech leader passionate about building impactful digital products for African businesses.",
   "where are you located": "We're based in Kampala, Uganda - but we work with clients across East Africa and internationally. All communication and file delivery is handled digitally.",
   "outside uganda": "Yes! We work with clients across East Africa and internationally. Payments can be arranged in both USD and UGX.",
+
+  // Insights
+  "insights": "Our Insights page is a knowledge hub featuring practical frameworks, research, and resources designed to help people learn, build, and grow. It includes frameworks like the Gift Maturation Framework (GMF) and other tools for personal and professional development.",
+  "knowledge hub": "The Knowledge Hub is our Insights page where we share ideas, frameworks, research, and practical resources. It's designed to help individuals and organizations create lasting value through structured thinking and proven models.",
+  "gmf": "The Gift Maturation Framework (GMF) is a practical model for discovering your gifts, developing them with purpose, expressing them through service, validating their value, building sustainable systems, and multiplying their impact. You can view and download it from our Insights page.",
+  "gift maturation": "The Gift Maturation Framework provides a practical pathway for personal and professional growth. It guides you through six stages: Discovery, Development, Expression, Validation, Structure, and Multiplication. Visit our Insights page to learn more.",
+  "frameworks": "We develop practical frameworks to simplify complex ideas and guide decision-making. Our current frameworks include the Gift Maturation Framework (GMF) for personal growth, with more coming soon. Check our Insights page for the latest resources.",
 
   // Services
   "services": "We offer five service areas: Graphic Design, Logo & Branding, Website Development, Mobile Applications, and AI & Automation. We also offer Strategy & Consulting. What would you like to know more about?",
@@ -221,6 +230,7 @@ function getBestKeywordMatch(message: string): { key: string | null; score: numb
 function getSuggestionGroup(message: string): string[] {
   const lower = message.toLowerCase()
   if (lower.includes("service") || lower.includes("website") || lower.includes("mobile") || lower.includes("graphic")) return responseSuggestions.services
+  if (lower.includes("insights") || lower.includes("framework") || lower.includes("gmf") || lower.includes("knowledge")) return responseSuggestions.insights
   if (lower.includes("project") || lower.includes("work") || lower.includes("portfolio")) return responseSuggestions.projects
   if (lower.includes("price") || lower.includes("cost") || lower.includes("budget") || lower.includes("quote")) return responseSuggestions.contact
   if (lower.includes("process") || lower.includes("timeline") || lower.includes("how long") || lower.includes("start")) return responseSuggestions.process
