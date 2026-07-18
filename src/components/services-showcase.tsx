@@ -5,6 +5,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
 import { useState } from "react"
+import { useRouter } from "next/navigation"
 
 interface SubExample {
   name: string
@@ -139,10 +140,9 @@ const services: Service[] = [
     webExamples: [
       {
         name: "GMF",
-        url: "https://www.canva.com/design/DAG-O_hQtAQ/HfMHg3dQAzLgjuKuLQXqPQ/view",
+        url: "/insights",
         image: "/images/GMF.png",
         imageAlt: "GMF Design by MUSINGUZI",
-        downloadUrl: "/document/GMF.pdf",
       },
       {
         name: "Builder Profiles",
@@ -349,6 +349,7 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
 
 function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serviceSlug?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const router = useRouter()
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + examples.length) % examples.length)
@@ -365,13 +366,20 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   }
 
   const isGraphicDesign = serviceSlug === "graphic-design"
+  const isInternalLink = currentExample.url.startsWith("/")
 
   return (
     <div className="space-y-4">
       {isGraphicDesign ? (
         <button
           type="button"
-          onClick={() => window.open(currentExample.url, "_blank", "noopener,noreferrer")}
+          onClick={() => {
+            if (isInternalLink) {
+              router.push(currentExample.url)
+            } else {
+              window.open(currentExample.url, "_blank", "noopener,noreferrer")
+            }
+          }}
           className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
         >
           <div className="relative w-full h-[400px]">

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect } from "react"
+import { usePathname } from "next/navigation"
 
 const BASE_TITLE = "Zi Designs"
 
@@ -14,12 +15,25 @@ const sectionMap: Array<{ id: string; label: string }> = [
   { id: "contact", label: "Contact" },
 ]
 
+const pageTitles: Record<string, string> = {
+  "/start-project": "Start Project",
+  "/insights": "Insights",
+}
+
 function setTitle(label: string) {
   document.title = `${BASE_TITLE} - ${label}`
 }
 
 export function PageTitleTracker() {
+  const pathname = usePathname()
+
   useEffect(() => {
+    // Check if current pathname has a specific title
+    if (pageTitles[pathname]) {
+      setTitle(pageTitles[pathname])
+      return
+    }
+
     const activeByHash = () => {
       const hash = window.location.hash.replace("#", "")
       const found = sectionMap.find((s) => s.id === hash)
@@ -64,7 +78,7 @@ export function PageTitleTracker() {
       window.removeEventListener("scroll", onScroll)
       window.removeEventListener("hashchange", onHashChange)
     }
-  }, [])
+  }, [pathname])
 
   return null
 }
