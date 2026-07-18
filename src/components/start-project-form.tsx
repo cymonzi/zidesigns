@@ -298,13 +298,13 @@ export function StartProjectForm() {
         throw new Error(`Submission failed: ${res.status} ${text}`)
       }
 
-      // EmailJS — notify both inboxes
-      const emailRes = await fetch("https://api.emailjs.com/api/v1.0/email/send", {
+      // EmailJS — notify both inboxes securely through our API proxy
+      const emailRes = await fetch("/api/send-email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           service_id: "service_1ral4jg",
-          template_id: "template_p7lg0nz",
+          template_id: "template_y5ipuvd",
           user_id: "9CSL_X0NzWLZWuDOw",
           template_params: {
             client_name: name,
