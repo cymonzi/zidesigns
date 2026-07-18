@@ -141,7 +141,7 @@ const services: Service[] = [
       {
         name: "GMF",
         url: "/insights",
-        image: "/images/GMF.png",
+        image: "/images/GMF/1.png",
         imageAlt: "GMF Design by MUSINGUZI",
       },
       {

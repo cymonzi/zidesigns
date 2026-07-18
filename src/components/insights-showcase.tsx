@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { ArrowUpRight, Download, Eye } from "lucide-react"
+import { ArrowUpRight, Download, Eye, FileDown } from "lucide-react"
 import { useState, useEffect } from "react"
 import { supabase } from "@/lib/supabase"
 import { getOrCreateVisitorId, formatCompact } from "@/lib/visitor-id"
@@ -26,8 +26,9 @@ interface Framework {
   frameworkDescription?: string
   audience: string[]
   tags: string[]
-  coverImage: string
+  images: string[]
   frameworkId: string
+  viewUrl?: string
   downloadUrl: string
 }
 
@@ -42,14 +43,36 @@ const frameworks: Framework[] = [
     frameworkDescription: "GMF provides a practical pathway for discovering your gifts, developing them with purpose, expressing them through service, validating their value, building sustainable systems, and multiplying their impact.",
     audience: ["Students", "Professionals", "Entrepreneurs", "Leaders", "Educators"],
     tags: ["Discovery", "Development", "Expression", "Validation", "Structure", "Multiplication"],
-    coverImage: "/images/GMF.png",
+    images: [
+      "/images/GMF/1.png",
+      "/images/GMF/2.png",
+      "/images/GMF/4.png",
+      "/images/GMF/7.png",
+      "/images/GMF/12.png",
+      "/images/GMF/15.png",
+      "/images/GMF/18.png",
+    ],
     frameworkId: "gmf",
+    viewUrl: "https://www.canva.com/design/DAG-O_hQtAQ/HfMHg3dQAzLgjuKuLQXqPQ/view",
     downloadUrl: "/document/GMF.pdf",
   },
 ]
 
 export function InsightsShowcase() {
   const [viewCounts, setViewCounts] = useState<Record<string, { views: number; downloads: number }>>({})
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0)
+
+  useEffect(() => {
+    const slideCount = frameworks[0]?.images?.length ?? 0
+
+    if (slideCount <= 1) return
+
+    const interval = window.setInterval(() => {
+      setActiveSlideIndex((prev) => (prev + 1) % slideCount)
+    }, 5000)
+
+    return () => window.clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const trackViews = async () => {
@@ -136,6 +159,11 @@ export function InsightsShowcase() {
     document.body.removeChild(a)
   }
 
+  const handleView = (viewUrl?: string) => {
+    if (!viewUrl) return
+    window.open(viewUrl, "_blank", "noopener,noreferrer")
+  }
+
   return (
     <section className="py-24 sm:py-32 bg-page/80 backdrop-blur-lg border-t border-base">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -159,7 +187,7 @@ export function InsightsShowcase() {
               Insights
             </h2>
             <p className="sm:max-w-xs text-base text-muted leading-relaxed">
-              Share ideas, frameworks, research, and practical resources designed to help people learn, build and grow.
+              Ideas, frameworks, research, and practical resources designed to help people learn, build and grow.
             </p>
           </div>
         </motion.div>
@@ -243,13 +271,29 @@ export function InsightsShowcase() {
               <div className="flex flex-col gap-4 order-1 lg:order-2">
                 {/* Cover Image */}
                 <div className="rounded-2xl overflow-hidden border border-base shadow-md bg-surface">
-                  <div className="relative w-full h-[400px]">
-                    <Image
-                      src={framework.coverImage}
-                      alt={framework.latestFramework}
-                      fill
-                      className="object-contain bg-surface/50 p-2"
-                    />
+                  <div className="relative w-full h-[400px] overflow-hidden">
+                    {framework.images.map((image, index) => (
+                      <motion.div
+                        key={image}
+                        initial={false}
+                        animate={{
+                          opacity: index === activeSlideIndex ? 1 : 0,
+                        }}
+                        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                        className="absolute inset-0"
+                      >
+                        <Image
+                          src={image}
+                          alt={`${framework.latestFramework} slide ${index + 1}`}
+                          fill
+                          className="object-contain bg-surface/50 p-2"
+                        />
+                      </motion.div>
+                    ))}
+                    {/* Preview Badge */}
+                    <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/10">
+                      <span className="text-xs font-medium text-white/90">Preview</span>
+                    </div>
                   </div>
                 </div>
 
@@ -275,14 +319,26 @@ export function InsightsShowcase() {
                       </span>
                     </div>
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => handleDownload(framework.frameworkId, framework.downloadUrl)}
-                    className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--primary)] text-black text-xs font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all w-full sm:w-auto"
-                  >
-                    Download Framework
-                    <ArrowUpRight className="h-3.5 w-3.5" />
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
+                    {framework.viewUrl && (
+                      <button
+                        type="button"
+                        onClick={() => handleView(framework.viewUrl)}
+                        className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-base bg-surface text-fg text-xs font-semibold rounded-lg hover:bg-surface/80 active:scale-[0.97] transition-all w-full sm:w-auto"
+                      >
+                        View Framework
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() => handleDownload(framework.frameworkId, framework.downloadUrl)}
+                      className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--primary)] text-black text-xs font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all w-full sm:w-auto"
+                    >
+                      Download
+                      <FileDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
