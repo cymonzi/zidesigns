@@ -9,7 +9,7 @@ import { AboutModal } from "./about-modal"
 const navigation = {
   main: [
     { name: "Home", href: "#home" },
-    { name: "What We Do", href: "#services" },
+    { name: "Services", href: "#services" },
     { name: "Insights", href: "/insights" },
     { name: "About", href: "#", action: "about" },
     { name: "Get Started", href: "/start-project" },
