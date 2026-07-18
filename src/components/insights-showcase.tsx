@@ -108,8 +108,14 @@ export function InsightsShowcase() {
   }, [])
 
   const handleDownload = async (frameworkId: string, downloadUrl: string) => {
-    // Increment download count
-    await supabase.rpc('increment_download', { p_framework_id: frameworkId })
+    // Increment download count if Supabase is configured
+    if (supabase) {
+      try {
+        await supabase.rpc('increment_download', { p_framework_id: frameworkId })
+      } catch (err) {
+        console.error('Error incrementing download:', err)
+      }
+    }
 
     // Trigger download
     const a = document.createElement("a")
