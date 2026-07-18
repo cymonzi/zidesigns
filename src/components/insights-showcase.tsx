@@ -268,7 +268,7 @@ export function InsightsShowcase() {
               </div>
 
               {/* ── Right: Cover Image + Action Bar ── */}
-              <div className="flex flex-col gap-4 order-1 lg:order-2">
+              <div id="preview" className="flex flex-col gap-4 order-1 lg:order-2">
                 {/* Cover Image */}
                 <div className="rounded-2xl overflow-hidden border border-base shadow-md bg-surface">
                   <div className="relative w-full h-[400px] overflow-hidden">

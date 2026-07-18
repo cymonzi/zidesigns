@@ -140,7 +140,7 @@ const services: Service[] = [
     webExamples: [
       {
         name: "GMF",
-        url: "/insights",
+        url: "/insights#preview",
         image: "/images/GMF/1.png",
         imageAlt: "GMF Design by MUSINGUZI",
       },
@@ -367,6 +367,9 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
 
   const isGraphicDesign = serviceSlug === "graphic-design"
   const isInternalLink = currentExample.url.startsWith("/")
+  const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
+  const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
+  const actionLabel = isGmfPreview ? "Preview" : "View"
 
   return (
     <div className="space-y-4">
@@ -415,12 +418,12 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
             {currentExample.name}
           </p>
           <a
-            href={currentExample.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={actionHref}
+            target={isGmfPreview ? undefined : "_blank"}
+            rel={isGmfPreview ? undefined : "noopener noreferrer"}
             className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
           >
-            View
+            {actionLabel}
           </a>
           {currentExample.downloadUrl && (
             <button
