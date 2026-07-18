@@ -53,12 +53,22 @@ export function InsightsShowcase() {
 
   useEffect(() => {
     const trackViews = async () => {
+      // Skip if Supabase is not configured
+      if (!supabase) {
+        console.log('Supabase not configured, using fallback values')
+        setViewCounts(prev => ({
+          ...prev,
+          gmf: { views: 1284, downloads: 312 }
+        }))
+        return
+      }
+
       const visitorId = getOrCreateVisitorId()
 
       for (const framework of frameworks) {
         try {
           // Increment view count
-          const { error: incrementError } = await supabase!.rpc('increment_view', { 
+          const { error: incrementError } = await supabase.rpc('increment_view', { 
             p_framework_id: framework.frameworkId, 
             p_visitor_id: visitorId 
           })
@@ -68,7 +78,7 @@ export function InsightsShowcase() {
           }
 
           // Fetch current counts
-          const { data, error } = await supabase!
+          const { data, error } = await supabase
             .from('frameworks')
             .select('views, downloads')
             .eq('id', framework.frameworkId)
@@ -111,7 +121,7 @@ export function InsightsShowcase() {
     // Increment download count if Supabase is configured
     if (supabase) {
       try {
-        await supabase!.rpc('increment_download', { p_framework_id: frameworkId })
+        await supabase.rpc('increment_download', { p_framework_id: frameworkId })
       } catch (err) {
         console.error('Error incrementing download:', err)
       }
@@ -141,7 +151,7 @@ export function InsightsShowcase() {
           {/* Label pill */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-6">
             <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />
-            Insights
+            KNOWLEDGE HUB
           </div>
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
