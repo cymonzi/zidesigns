@@ -162,6 +162,12 @@ const services: Service[] = [
         image: "/images/cm.png",
         imageAlt: "Course Masters Design",
       },
+      {
+        name: "WM Poster",
+        url: "/images/WMPoster.png",
+        image: "/images/WMPoster.png",
+        imageAlt: "WM Poster graphic design by Zi Designs",
+      },
     ],
   },
   {
