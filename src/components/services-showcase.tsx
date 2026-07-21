@@ -356,17 +356,18 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
 function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serviceSlug?: string }) {
   const [currentIndex, setCurrentIndex] = useState(0)
   const router = useRouter()
+  const isSmartTools = serviceSlug === "smart-tools"
 
-  // Auto-loop effect
+  // Auto-loop effect only for smart tools
   useEffect(() => {
-    if (examples.length <= 1) return
+    if (!isSmartTools || examples.length <= 1) return
 
     const interval = window.setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % examples.length)
     }, 5000)
 
     return () => window.clearInterval(interval)
-  }, [examples.length])
+  }, [examples.length, isSmartTools])
 
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + examples.length) % examples.length)
@@ -387,7 +388,6 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
   const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
   const actionLabel = isGmfPreview ? "Preview" : "View"
-  const isSmartTools = serviceSlug === "smart-tools"
 
   return (
     <div className="space-y-4">
