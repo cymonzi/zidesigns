@@ -21,6 +21,7 @@ interface WebExample {
   image: string
   imageAlt?: string
   downloadUrl?: string
+  disabled?: boolean
 }
 
 interface SingleExample {
@@ -143,6 +144,7 @@ const services: Service[] = [
         url: "/insights#preview",
         image: "/images/GMF/1.png",
         imageAlt: "GMF Design by MUSINGUZI",
+        disabled: true,
       },
       {
         name: "Builder Profiles",
@@ -386,6 +388,7 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const isGraphicDesign = serviceSlug === "graphic-design"
   const isInternalLink = currentExample.url.startsWith("/")
   const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
+  const isUnavailablePreview = Boolean(isGmfPreview && currentExample.disabled)
   const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
   const actionLabel = isGmfPreview ? "Preview" : "View"
 
@@ -420,26 +423,39 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
           </div>
         </Link>
       ) : isGraphicDesign ? (
-        <button
-          type="button"
-          onClick={() => {
-            if (isInternalLink) {
-              router.push(currentExample.url)
-            } else {
-              window.open(currentExample.url, "_blank", "noopener,noreferrer")
-            }
-          }}
-          className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
-        >
-          <div className="relative w-full h-[400px]">
-            <Image
-              src={currentExample.image}
-              alt={currentExample.imageAlt ?? currentExample.name}
-              fill
-              className="object-contain bg-surface/50 p-2"
-            />
+        isUnavailablePreview ? (
+          <div className="block w-full rounded-2xl overflow-hidden border border-base shadow-md bg-surface text-left cursor-default">
+            <div className="relative w-full h-[400px]">
+              <Image
+                src={currentExample.image}
+                alt={currentExample.imageAlt ?? currentExample.name}
+                fill
+                className="object-contain bg-surface/50 p-2 grayscale"
+              />
+            </div>
           </div>
-        </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              if (isInternalLink) {
+                router.push(currentExample.url)
+              } else {
+                window.open(currentExample.url, "_blank", "noopener,noreferrer")
+              }
+            }}
+            className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
+          >
+            <div className="relative w-full h-[400px]">
+              <Image
+                src={currentExample.image}
+                alt={currentExample.imageAlt ?? currentExample.name}
+                fill
+                className="object-contain bg-surface/50 p-2"
+              />
+            </div>
+          </button>
+        )
       ) : (
         <Link
           href={currentExample.url}
@@ -463,14 +479,20 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
           <p className="text-sm text-muted font-medium truncate">
             {currentExample.name}
           </p>
-          <a
-            href={actionHref}
-            target={isGmfPreview ? undefined : "_blank"}
-            rel={isGmfPreview ? undefined : "noopener noreferrer"}
-            className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
-          >
-            {actionLabel}
-          </a>
+          {isUnavailablePreview ? (
+            <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-muted">
+              Coming soon
+            </span>
+          ) : (
+            <a
+              href={actionHref}
+              target={isGmfPreview ? undefined : "_blank"}
+              rel={isGmfPreview ? undefined : "noopener noreferrer"}
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
+            >
+              {actionLabel}
+            </a>
+          )}
           {currentExample.downloadUrl && (
             <button
               type="button"
