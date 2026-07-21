@@ -4,7 +4,7 @@ import { ExternalLink, ArrowUpRight, ChevronLeft, ChevronRight } from "lucide-re
 import Link from "next/link"
 import Image from "next/image"
 import { motion } from "framer-motion"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
 interface SubExample {
@@ -227,22 +227,28 @@ const services: Service[] = [
     },
     webExamples: [
       {
-        name: "Momento - Intro Page",
-        url: "https://momento01.vercel.app/",
-        image: "/images/momento/intro-page.png",
-        imageAlt: "Momento app intro screen preview designed by Zi Designs",
+        name: "Beyond - Sign In",
+        url: "https://beyond-cyan.vercel.app/",
+        image: "/images/beyond/auth.png",
+        imageAlt: "Beyond app auth screen preview designed by Zi Designs",
       },
       {
-        name: "Momento - Sign Up",
-        url: "https://momento01.vercel.app/",
-        image: "/images/momento/sign-up.png",
-        imageAlt: "Momento sign up screen preview designed by Zi Designs",
+        name: "Beyond - Home",
+        url: "https://beyond-cyan.vercel.app/",
+        image: "/images/beyond/home.png",
+        imageAlt: "Beyond app home screen preview designed by Zi Designs",
       },
       {
-        name: "Momento - Inside",
-        url: "https://momento01.vercel.app/",
-        image: "/images/momento/inside.png",
-        imageAlt: "Momento in-app dashboard preview designed by Zi Designs",
+        name: "Beyond - Create Account",
+        url: "https://beyond-cyan.vercel.app/",
+        image: "/images/beyond/account.png",
+        imageAlt: "Beyond app accounts screen preview designed by Zi Designs",
+      },
+      {
+        name: "Beyond - Add Transaction",
+        url: "https://beyond-cyan.vercel.app/",
+        image: "/images/beyond/transaction.png",
+        imageAlt: "Beyond app transactions screen preview designed by Zi Designs",
       },
     ],
   },
@@ -351,6 +357,17 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const [currentIndex, setCurrentIndex] = useState(0)
   const router = useRouter()
 
+  // Auto-loop effect
+  useEffect(() => {
+    if (examples.length <= 1) return
+
+    const interval = window.setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % examples.length)
+    }, 5000)
+
+    return () => window.clearInterval(interval)
+  }, [examples.length])
+
   const handlePrev = () => {
     setCurrentIndex((prev) => (prev - 1 + examples.length) % examples.length)
   }
@@ -370,10 +387,39 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
   const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
   const actionLabel = isGmfPreview ? "Preview" : "View"
+  const isSmartTools = serviceSlug === "smart-tools"
 
   return (
     <div className="space-y-4">
-      {isGraphicDesign ? (
+      {isSmartTools ? (
+        <Link
+          href={currentExample.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
+        >
+          <div className="relative w-full h-[400px] overflow-hidden">
+            {examples.map((example, index) => (
+              <motion.div
+                key={example.name}
+                initial={false}
+                animate={{
+                  opacity: index === currentIndex ? 1 : 0,
+                }}
+                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={example.image}
+                  alt={example.imageAlt ?? example.name}
+                  fill
+                  className="object-contain bg-surface/50 p-2"
+                />
+              </motion.div>
+            ))}
+          </div>
+        </Link>
+      ) : isGraphicDesign ? (
         <button
           type="button"
           onClick={() => {
@@ -587,25 +633,7 @@ export function ServicesShowcase() {
                     <ArrowUpRight className="h-4 w-4" />
                   </Link>
 
-                  {service.subExamples && (
-                    <div className="flex flex-col gap-3">
-                      <p className="text-xs font-medium text-muted uppercase tracking-widest mb-1">
-                        Proof
-                      </p>
-                      {service.subExamples.map((ex) => (
-                        <a
-                          key={ex.name}
-                          href={getProjectLink(ex.url)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors group"
-                        >
-                          {ex.name}
-                          <ExternalLink className="h-3.5 w-3.5 opacity-60 group-hover:opacity-100 transition-opacity" />
-                        </a>
-                      ))}
-                    </div>
-                  )}
+
                 </div>
               </div>
 
