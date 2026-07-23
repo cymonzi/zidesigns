@@ -13,6 +13,7 @@ interface SubExample {
   type: "embed"
   thumbnail?: string
   imageAlt?: string
+  downloadUrl?: string
 }
 
 interface WebExample {
@@ -102,6 +103,14 @@ const services: Service[] = [
       ],
     },
     subExamples: [
+      {
+        name: "Offscreen",
+        url: "/apps/offscreen.apk",
+        type: "embed",
+        thumbnail: "/images/Offscreen.png",
+        imageAlt: "Offscreen mobile app designed by Zi Designs",
+        downloadUrl: "/apps/offscreen.apk",
+      },
       {
         name: "Nfunayo App Wireframes",
         url: "https://www.canva.com/design/DAGQoe1eN-k/pIxPEgpY0wcHTJE0dU5mbg/view?embed",
@@ -321,15 +330,32 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
           <p className="text-sm text-muted font-medium truncate">
             {currentExample.name}
           </p>
-          <a
-            href={fullViewLink}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors flex-shrink-0"
-          >
-            <ExternalLink className="h-3 w-3" />
-            Full view
-          </a>
+          {currentExample.downloadUrl ? (
+            <button
+              type="button"
+              onClick={() => {
+                const a = document.createElement("a")
+                a.href = currentExample.downloadUrl!
+                a.download = ""
+                document.body.appendChild(a)
+                a.click()
+                document.body.removeChild(a)
+              }}
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors flex-shrink-0"
+            >
+              Download App
+            </button>
+          ) : (
+            <a
+              href={fullViewLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors flex-shrink-0"
+            >
+              <ExternalLink className="h-3 w-3" />
+              Full view
+            </a>
+          )}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
@@ -483,17 +509,7 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
             <span className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-muted">
               Coming soon
             </span>
-          ) : (
-            <a
-              href={actionHref}
-              target={isGmfPreview ? undefined : "_blank"}
-              rel={isGmfPreview ? undefined : "noopener noreferrer"}
-              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
-            >
-              {actionLabel}
-            </a>
-          )}
-          {currentExample.downloadUrl && (
+          ) : currentExample.downloadUrl ? (
             <button
               type="button"
               onClick={() => {
@@ -504,10 +520,19 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
                 a.click()
                 document.body.removeChild(a)
               }}
-              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-muted hover:text-fg transition-colors"
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
             >
-              Download
+              Download App
             </button>
+          ) : (
+            <a
+              href={actionHref}
+              target={isGmfPreview ? undefined : "_blank"}
+              rel={isGmfPreview ? undefined : "noopener noreferrer"}
+              className="inline-flex items-center gap-1 px-3 py-1 text-xs font-semibold text-[var(--primary)] hover:text-[var(--primary)]/75 transition-colors"
+            >
+              {actionLabel}
+            </a>
           )}
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
