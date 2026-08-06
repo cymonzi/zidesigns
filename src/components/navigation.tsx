@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils"
 const navigation = [
   { name: "Home", href: "#home" },
   { name: "Services", href: "#services" },
+  { name: "Insights", href: "/insights" },
   { name: "About", href: "#", action: "about" },
   { name: "Get Started", href: "/start-project" },
 ]
@@ -75,6 +76,7 @@ export function Navigation() {
     }
   }, [mobileMenuOpen])
 
+  const insightsIndex = navigation.findIndex((n) => n.name === "Insights")
   const getStartedIndex = navigation.findIndex((n) => n.name === "Get Started")
   const isGetStartedActive = activeIndex === getStartedIndex
 
@@ -84,11 +86,16 @@ export function Navigation() {
       return
     }
 
+    if (pathname === "/insights") {
+      setActiveIndex(insightsIndex)
+      return
+    }
+
     if (pathname === "/") {
       setActiveIndex(0)
       return
     }
-  }, [pathname, getStartedIndex])
+  }, [pathname, getStartedIndex, insightsIndex])
 
   const handleGoHome = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()

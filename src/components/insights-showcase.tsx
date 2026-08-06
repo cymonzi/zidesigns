@@ -2,10 +2,9 @@
 
 import { motion } from "framer-motion"
 import Image from "next/image"
-import { ArrowUpRight, Download, Eye, FileDown } from "lucide-react"
-import { useState, useEffect } from "react"
-import { supabase } from "@/lib/supabase"
-import { getOrCreateVisitorId, formatCompact } from "@/lib/visitor-id"
+import { Suspense, useEffect, useState, useRef } from "react"
+import WaitlistModal from "./waitlist-modal"
+import InsightsToast from "./insights-toast"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -28,8 +27,8 @@ interface Framework {
   tags: string[]
   images: string[]
   frameworkId: string
-  viewUrl?: string
-  downloadUrl: string
+  trailerUrl: string
+  posterUrl: string
 }
 
 const frameworks: Framework[] = [
@@ -53,115 +52,50 @@ const frameworks: Framework[] = [
       "/images/GMF/18.png",
     ],
     frameworkId: "gmf",
-    viewUrl: "https://www.canva.com/design/DAG-O_hQtAQ/HfMHg3dQAzLgjuKuLQXqPQ/view",
-    downloadUrl: "/document/GMF.pdf",
+    trailerUrl: "/videos/GMF-Trailer.mp4",
+    posterUrl: "/images/GMF.png",
   },
 ]
 
 export function InsightsShowcase() {
-  const [viewCounts, setViewCounts] = useState<Record<string, { views: number; downloads: number }>>({})
-  const [activeSlideIndex, setActiveSlideIndex] = useState(0)
+  const [waitlistOpen, setWaitlistOpen] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  
 
   useEffect(() => {
-    const slideCount = frameworks[0]?.images?.length ?? 0
+    const video = videoRef.current
+    if (!video) return
 
-    if (slideCount <= 1) return
-
-    const interval = window.setInterval(() => {
-      setActiveSlideIndex((prev) => (prev + 1) % slideCount)
-    }, 5000)
-
-    return () => window.clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
-    const trackViews = async () => {
-      // Skip if Supabase is not configured
-      if (!supabase) {
-        console.log('Supabase not configured, using fallback values')
-        setViewCounts(prev => ({
-          ...prev,
-          gmf: { views: 1284, downloads: 312 }
-        }))
-        return
-      }
-
-      const visitorId = getOrCreateVisitorId()
-
-      for (const framework of frameworks) {
-        try {
-          // Increment view count
-          const { error: incrementError } = await supabase.rpc('increment_view', { 
-            p_framework_id: framework.frameworkId, 
-            p_visitor_id: visitorId 
-          })
-
-          if (incrementError) {
-            console.error('Increment view error:', incrementError)
-          }
-
-          // Fetch current counts
-          const { data, error } = await supabase
-            .from('frameworks')
-            .select('views, downloads')
-            .eq('id', framework.frameworkId)
-            .single()
-
-          console.log('Supabase response:', { frameworkId: framework.frameworkId, data, error })
-
-          if (error) {
-            console.error('Fetch counts error:', error)
-          }
-
-          if (data && !error && data.views !== undefined && data.downloads !== undefined) {
-            setViewCounts(prev => ({
-              ...prev,
-              [framework.frameworkId]: { views: data.views, downloads: data.downloads }
-            }))
-          } else {
-            // Fallback to initial values if fetch fails or returns undefined
-            console.log('Using fallback values for:', framework.frameworkId)
-            setViewCounts(prev => ({
-              ...prev,
-              [framework.frameworkId]: { views: 1284, downloads: 312 }
-            }))
-          }
-        } catch (err) {
-          console.error('Error tracking views:', err)
-          // Fallback to initial values
-          setViewCounts(prev => ({
-            ...prev,
-            [framework.frameworkId]: { views: 1284, downloads: 312 }
-          }))
-        }
-      }
-    }
-
-    trackViews()
-  }, [])
-
-  const handleDownload = async (frameworkId: string, downloadUrl: string) => {
-    // Increment download count if Supabase is configured
-    if (supabase) {
+    const startMuted = async () => {
       try {
-        await supabase.rpc('increment_download', { p_framework_id: frameworkId })
-      } catch (err) {
-        console.error('Error incrementing download:', err)
+        video.muted = true
+        await video.play()
+        setIsPlaying(true)
+      } catch (error) {
+        console.error("Auto-play failed:", error)
       }
     }
 
-    // Trigger download
-    const a = document.createElement("a")
-    a.href = downloadUrl
-    a.download = ""
-    document.body.appendChild(a)
-    a.click()
-    document.body.removeChild(a)
-  }
+    startMuted()
+  }, [])
 
-  const handleView = (viewUrl?: string) => {
-    if (!viewUrl) return
-    window.open(viewUrl, "_blank", "noopener,noreferrer")
+  const handlePlayClick = async () => {
+    const video = videoRef.current
+    if (!video) return
+
+    try {
+      if (video.paused) {
+        await video.play()
+        setIsPlaying(true)
+      } else {
+        video.pause()
+        setIsPlaying(false)
+      }
+    } catch (error) {
+      console.error("Video playback error:", error)
+    }
   }
 
   return (
@@ -186,9 +120,16 @@ export function InsightsShowcase() {
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-fg leading-[1.05]">
               Insights
             </h2>
-            <p className="sm:max-w-xs text-base text-muted leading-relaxed">
-              Ideas, frameworks, research, and practical resources designed to help people learn, build and grow.
-            </p>
+            <div className="sm:max-w-xs flex flex-col gap-3">
+              <p className="text-base text-muted leading-relaxed order-1 sm:order-2">
+                Ideas, frameworks, research, and practical resources designed to help people learn, build and grow.
+              </p>
+              <div className="order-2 sm:order-1">
+                <Suspense fallback={null}>
+                  <InsightsToast />
+                </Suspense>
+              </div>
+            </div>
           </div>
         </motion.div>
 
@@ -205,10 +146,10 @@ export function InsightsShowcase() {
               whileInView="show"
               viewport={{ once: true, margin: "-80px" }}
               variants={fadeUp}
-              className="grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-start py-16 border-b border-base"
+              className="grid lg:grid-cols-[1fr_1.1fr] gap-10 lg:gap-16 items-stretch py-16 border-b border-base"
             >
               {/* ── Left: Text Content ── */}
-              <div className="flex flex-col gap-8">
+              <div className="flex flex-col gap-6">
 
                 {/* Number + Title */}
                 <div className="flex items-start gap-5">
@@ -246,12 +187,15 @@ export function InsightsShowcase() {
                     </ul>
                   </div>
 
-                  {/* Tag chips */}
                   <div>
-                    <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">Topics</p>
-                    <ul className="flex flex-wrap gap-1.5">
+                    <p className="text-xs font-medium text-muted uppercase tracking-wider mb-3">What&apos;s Coming</p>
+                    <ul className="flex flex-wrap gap-2">
                       {framework.tags.map((item, i) => (
-                        <li key={i} className="px-2.5 py-1 rounded-md bg-[var(--primary)]/10 text-[var(--primary)] text-xs font-medium">
+                        <li
+                          key={i}
+                          className="inline-flex items-center gap-1 rounded-full bg-surface-alt/80 px-3 py-1.5 text-xs font-medium text-muted opacity-80 cursor-not-allowed"
+                        >
+                          <span aria-hidden="true">🔒</span>
                           {item}
                         </li>
                       ))}
@@ -267,76 +211,49 @@ export function InsightsShowcase() {
                 </div>
               </div>
 
-              {/* ── Right: Cover Image + Action Bar ── */}
-              <div id="preview" className="flex flex-col gap-4 order-1 lg:order-2">
-                {/* Cover Image */}
-                <div className="rounded-2xl overflow-hidden border border-base shadow-md bg-surface">
-                  <div className="relative w-full h-[400px] overflow-hidden">
-                    {framework.images.map((image, index) => (
-                      <motion.div
-                        key={image}
-                        initial={false}
-                        animate={{
-                          opacity: index === activeSlideIndex ? 1 : 0,
-                        }}
-                        transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                        className="absolute inset-0"
-                      >
-                        <Image
-                          src={image}
-                          alt={`${framework.latestFramework} slide ${index + 1}`}
-                          fill
-                          className="object-contain bg-surface/50 p-2"
-                        />
-                      </motion.div>
-                    ))}
-                    {/* Preview Badge */}
-                    <div className="absolute top-3 right-3 px-3 py-1.5 rounded-full bg-black/60 backdrop-blur-sm border border-white/10">
-                      <span className="text-xs font-medium text-white/90">Preview</span>
+              {/* ── Right: Trailer Preview Card ── */}
+              <div id="preview" className="order-1 lg:order-2">
+                <div className="rounded-[2rem] border border-white/10 bg-slate-950/95 shadow-[0_30px_80px_rgba(15,23,42,0.35)] p-5">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
+                      GMF Trailer
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--primary)] border border-[var(--primary)]/15">
+                        Preview
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* Action Bar */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-4 py-3 rounded-xl bg-surface-alt border border-base">
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5 text-xs text-muted">
-                      <Eye className="h-3.5 w-3.5" />
-                      <span 
-                        className="font-medium"
-                        title={`${viewCounts[framework.frameworkId]?.views || 0} views`}
-                      >
-                        {formatCompact(viewCounts[framework.frameworkId]?.views || 0)} Views
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1.5 text-xs text-muted">
-                      <Download className="h-3.5 w-3.5" />
-                      <span 
-                        className="font-medium"
-                        title={`${viewCounts[framework.frameworkId]?.downloads || 0} downloads`}
-                      >
-                        {formatCompact(viewCounts[framework.frameworkId]?.downloads || 0)} Downloads
-                      </span>
-                    </div>
+                  <div className="mt-6 overflow-hidden rounded-[1.75rem] bg-slate-950/95 relative">
+                    <video
+                      ref={videoRef}
+                      poster={framework.posterUrl}
+                      className="aspect-video w-full object-cover"
+                      controls
+                      disablePictureInPicture
+                      preload="metadata"
+                      playsInline
+                      muted
+                      loop
+                    >
+                      <source src={framework.trailerUrl} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+
                   </div>
-                  <div className="flex flex-col sm:flex-row gap-2 w-full sm:w-auto">
-                    {framework.viewUrl && (
-                      <button
-                        type="button"
-                        onClick={() => handleView(framework.viewUrl)}
-                        className="inline-flex items-center justify-center gap-2 px-4 py-2 border border-base bg-surface text-fg text-xs font-semibold rounded-lg hover:bg-surface/80 active:scale-[0.97] transition-all w-full sm:w-auto"
-                      >
-                        View Framework
-                        <ArrowUpRight className="h-3.5 w-3.5" />
-                      </button>
-                    )}
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <span className="rounded-full bg-slate-900/90 px-4 py-2 text-xs text-muted">Full Course Coming Soon</span>
+                  </div>
+
+                  <div className="mt-6 flex justify-end">
                     <button
                       type="button"
-                      onClick={() => handleDownload(framework.frameworkId, framework.downloadUrl)}
-                      className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--primary)] text-black text-xs font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all w-full sm:w-auto"
+                      onClick={() => setWaitlistOpen(true)}
+                      className="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-7 py-3 text-sm font-semibold text-black transition hover:bg-[var(--primary)]/90"
                     >
-                      Download
-                      <FileDown className="h-3.5 w-3.5" />
+                      Join the Waitlist
                     </button>
                   </div>
                 </div>
@@ -345,6 +262,8 @@ export function InsightsShowcase() {
           ))}
         </div>
       </div>
+
+      <WaitlistModal isOpen={waitlistOpen} onClose={() => setWaitlistOpen(false)} />
     </section>
   )
 }

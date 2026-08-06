@@ -414,7 +414,7 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const isGraphicDesign = serviceSlug === "graphic-design"
   const isInternalLink = currentExample.url.startsWith("/")
   const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
-  const isUnavailablePreview = Boolean(isGmfPreview && currentExample.disabled)
+  const isUnavailablePreview = Boolean(isGraphicDesign && currentExample.disabled && !isGmfPreview)
   const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
   const actionLabel = isGmfPreview ? "Preview" : "View"
 
@@ -456,7 +456,7 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
                 src={currentExample.image}
                 alt={currentExample.imageAlt ?? currentExample.name}
                 fill
-                className="object-contain bg-surface/50 p-2 grayscale"
+                className="object-contain bg-surface/50 p-2"
               />
             </div>
           </div>
