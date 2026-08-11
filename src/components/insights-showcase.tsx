@@ -213,19 +213,19 @@ export function InsightsShowcase() {
 
               {/* ── Right: Trailer Preview Card ── */}
               <div id="preview" className="order-1 lg:order-2">
-                <div className="rounded-[2rem] border border-white/10 bg-slate-950/95 shadow-[0_30px_80px_rgba(15,23,42,0.35)] p-5">
+                <div className="rounded-[2rem] border border-base bg-surface shadow-[0_30px_80px_rgba(0,0,0,0.1)] dark:shadow-[0_30px_80px_rgba(15,23,42,0.35)] p-5">
                   <div className="flex items-center justify-between gap-3">
                     <div className="text-xs font-semibold uppercase tracking-[0.24em] text-muted">
                       GMF Trailer
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="rounded-full bg-white/5 px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--primary)] border border-[var(--primary)]/15">
+                      <div className="rounded-full bg-surface-alt px-3 py-1 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--primary)] border border-[var(--primary)]/15">
                         Preview
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-6 overflow-hidden rounded-[1.75rem] bg-slate-950/95 relative">
+                  <div className="mt-6 overflow-hidden rounded-[1.75rem] bg-surface-alt relative">
                     <video
                       ref={videoRef}
                       poster={framework.posterUrl}
@@ -244,7 +244,7 @@ export function InsightsShowcase() {
                   </div>
 
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <span className="rounded-full bg-slate-900/90 px-4 py-2 text-xs text-muted">Full Course Coming Soon</span>
+                    <span className="rounded-full bg-surface-alt px-4 py-2 text-xs text-muted">Full Course Coming Soon</span>
                   </div>
 
                   <div className="mt-6 flex justify-end">
