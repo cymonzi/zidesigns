@@ -144,6 +144,7 @@ const services: Service[] = [
     title: "Web Apps & SaaS",
     description: "Empower your business with custom digital tools that automate workflows, improve productivity, and simplify everyday operations.",
     pricing: {
+      startingFrom: "UGX 5,000,000",
       perfectFor: [
         "Automating repetitive tasks",
         "Digitizing manual workflows",
@@ -689,7 +690,7 @@ export function ServicesShowcase() {
                   {/* Special "View Packages" button for services with package pages */}
                   {service.slug === "graphic-design" ? (
                     <Link
-                      href="/graphic-design-packages"
+                      href="/graphic-design-packages?from=home"
                       className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
                     >
                       View Packages
@@ -697,7 +698,7 @@ export function ServicesShowcase() {
                     </Link>
                   ) : service.slug === "website" ? (
                     <Link
-                      href="/website-packages"
+                      href="/website-packages?from=home"
                       className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
                     >
                       View Packages
@@ -705,7 +706,7 @@ export function ServicesShowcase() {
                     </Link>
                   ) : service.slug === "mobile-app" ? (
                     <Link
-                      href="/mobile-app-packages"
+                      href="/mobile-app-packages?from=home"
                       className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
                     >
                       View Packages
@@ -713,7 +714,7 @@ export function ServicesShowcase() {
                     </Link>
                   ) : service.slug === "smart-tools" ? (
                     <Link
-                      href="/saas-packages"
+                      href="/saas-packages?from=home"
                       className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
                     >
                       View Packages

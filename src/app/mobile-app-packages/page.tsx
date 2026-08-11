@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Check, ArrowRight, ArrowLeft } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PageTitleTracker } from "@/components/page-title-tracker"
@@ -27,7 +27,7 @@ const MOBILE_APP_PACKAGES: MobileAppPackage[] = [
     number: "01",
     name: "Mobile App Starter",
     price: 5000000,
-    displayPrice: "UGX 5,000,000+",
+    displayPrice: "UGX 5,000,000",
     description: "For simple apps and MVPs.",
     features: [
       "Up to 8 screens",
@@ -45,7 +45,7 @@ const MOBILE_APP_PACKAGES: MobileAppPackage[] = [
     number: "02",
     name: "Business Mobile App",
     price: 10000000,
-    displayPrice: "UGX 10,000,000+",
+    displayPrice: "UGX 10,000,000",
     description: "For businesses that need a complete mobile application.",
     features: [
       "Up to 20 screens",
@@ -66,7 +66,7 @@ const MOBILE_APP_PACKAGES: MobileAppPackage[] = [
     number: "03",
     name: "Advanced Mobile App",
     price: 20000000,
-    displayPrice: "UGX 20,000,000+",
+    displayPrice: "UGX 20,000,000",
     description: "For complex mobile products requiring advanced functionality.",
     features: [
       "20+ screens",
@@ -89,15 +89,26 @@ const MOBILE_APP_PACKAGES: MobileAppPackage[] = [
 export default function MobileAppPackagesPage() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null)
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Get the service name from URL to display contextual back button
+  const fromService = searchParams.get('from') || 'Services'
 
   const handleContinue = () => {
     if (!selectedPackage) return
 
     const pkg = MOBILE_APP_PACKAGES.find((p) => p.id === selectedPackage)
     if (pkg) {
-      router.push(`/start-project?service=${encodeURIComponent(pkg.name)}&category=Development`)
+      router.push(`/start-project?service=${encodeURIComponent(pkg.name)}&price=${encodeURIComponent(pkg.displayPrice)}&category=Development&phase=2&fromPackage=mobile-app`)
     }
   }
+
+  useEffect(() => {
+    const svc = searchParams.get("service")
+    if (!svc) return
+    const match = MOBILE_APP_PACKAGES.find((p) => p.name.toLowerCase() === svc.toLowerCase())
+    if (match) setSelectedPackage(match.id)
+  }, [searchParams])
 
   const selectedPkg = MOBILE_APP_PACKAGES.find((p) => p.id === selectedPackage)
 
@@ -138,21 +149,21 @@ export default function MobileAppPackagesPage() {
             </motion.p>
           </div>
 
+          {/* Back Button - Top Left (outside cards) */}
+          <button
+            onClick={() => router.push('/start-project')}
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to {fromService}
+          </button>
+
           {/* 2-Column Layout with Fixed Heights */}
           <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8 flex-1 min-h-0">
             {/* Left Column - Packages Container (Subtle background with scrollable content) */}
             <SectionReveal className="min-h-0 flex flex-col">
               {/* Container with subtle background and defined height */}
               <div className="rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-6 flex flex-col max-h-[500px]">
-                {/* Back Button */}
-                <button
-                  onClick={() => router.back()}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back
-                </button>
-
                 <div className="overflow-y-auto pr-2 custom-scrollbar flex-1">
                   <div className="space-y-4 pb-4">
                     {MOBILE_APP_PACKAGES.map((pkg, index) => {

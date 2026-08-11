@@ -15,30 +15,49 @@ export default function StartProjectPage() {
     <div className="min-h-screen flex flex-col bg-page">
       <Navigation />
       <PageTitleTracker />
-      <main className="flex-1 min-h-[calc(100vh_-_var(--nav-height))] pt-[calc(var(--nav-height)_+_1rem)] pb-20 px-6 lg:px-8 max-w-5xl mx-auto">
-        <div className="relative pt-10 sm:pt-12 pb-8 sm:pb-12 px-4 text-center overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 -z-10">
-            <div className="absolute -top-24 left-1/2 -translate-x-1/2 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(64,224,208,0.15),transparent_70%)] blur-3xl" />
+      
+      <main className="flex-1 pt-[var(--nav-height)] overflow-hidden">
+        <div className="h-full max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col">
+          {/* Header */}
+          <div className="relative pb-6 text-center flex-shrink-0">
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-3"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />
+              Get Started
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.05 }}
+              className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight"
+            >
+              Start a <span className="text-gradient">Project</span>
+            </motion.h1>
+            
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="mt-2 text-muted max-w-2xl mx-auto text-sm leading-relaxed"
+            >
+              Tell us about your project and we'll recommend the best solution, timeline, and next steps.
+            </motion.p>
           </div>
 
-          <motion.h1 initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-2xl sm:text-3xl font-bold tracking-tight">
-            Start a <span className="text-gradient">Project</span>
-          </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="mt-2 text-muted max-w-lg mx-auto text-sm sm:text-base leading-7">
-            Tell us about your project and we'll recommend the best solution, timeline, and next steps. Most inquiries receive a response within 24 hours.
-          </motion.p>
+          {/* Form Content */}
+          <div className="flex-1 min-h-0">
+            <Suspense fallback={<div>Loading...</div>}>
+              <StartProjectForm />
+            </Suspense>
+          </div>
         </div>
-
-        <SectionReveal className="mt-10">
-          <Suspense fallback={<div>Loading...</div>}>
-            <StartProjectForm />
-          </Suspense>
-        </SectionReveal>
-
-        {/* page-level Return Home removed; use form actions instead */}
       </main>
 
-      <SectionReveal delay={0.1}>
+      <SectionReveal delay={0.3}>
         <Footer />
       </SectionReveal>
 

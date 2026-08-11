@@ -4,9 +4,11 @@ import { useState, useMemo, useEffect } from "react"
 import { motion } from "framer-motion"
 import jsPDF from "jspdf"
 import autoTable from "jspdf-autotable"
-import { useSearchParams } from "next/navigation"
+import { useSearchParams, useRouter } from "next/navigation"
+import { StartProjectStepOne } from "@/components/start-project-step-one"
+import { StartProjectContactStep } from "@/components/start-project-contact-step"
 
-type Phase = 1 | 2 | 3 | 4
+type Phase = 1 | 2 | 3
 
 const CATEGORIES = ["Design", "Branding", "Development"]
 
@@ -218,13 +220,17 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
 
 export function StartProjectForm() {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [phase, setPhase] = useState<Phase>(1)
   const [selectedCategory, setSelectedCategory] = useState<string | null>("Design")
   const [selectedService, setSelectedService] = useState<string | null>(null)
+  const [selectedMain, setSelectedMain] = useState<string | null>(null)
+  const [selectedPrice, setSelectedPrice] = useState<string | null>(null)
 
   useEffect(() => {
     const serviceParam = searchParams.get("service")
     const categoryParam = searchParams.get("category")
+    const priceParam = searchParams.get("price")
     
     if (serviceParam) {
       // Map service to category and auto-select
@@ -247,6 +253,16 @@ export function StartProjectForm() {
         setSelectedCategory(category)
         setSelectedService(serviceParam)
       }
+    }
+
+    if (priceParam) {
+      setSelectedPrice(priceParam)
+    }
+
+    const phaseParam = searchParams.get("phase")
+    if (phaseParam) {
+      const n = parseInt(phaseParam, 10)
+      if (n >= 1 && n <= 3) setPhase(n as Phase)
     }
   }, [searchParams])
 
@@ -278,8 +294,7 @@ export function StartProjectForm() {
   const displayedBudget = budget === "Other / Custom" ? (customBudget || "Other / Custom") : budget
   const packageOptions = useMemo(() => getPackageOptions(displayedService, selectedCategory), [displayedService, selectedCategory])
 
-  const isPhase1Valid = !!selectedService && (selectedService !== "Other" || customService.trim().length > 0)
-  const isPhase2Valid = !!budget && (budget !== "Other / Custom" || customBudget.trim().length > 0)
+  const isPhase1Valid = (!!selectedService && (selectedService !== "Other" || customService.trim().length > 0)) || !!selectedMain
 
   const validateName = (v: string) => v.trim().length >= 2
   const validatePhone = (v: string) => {
@@ -292,11 +307,11 @@ export function StartProjectForm() {
   const phoneValid = validatePhone(phone)
   const emailValid = validateEmail(email)
 
-  const isPhase3Valid = nameValid && phoneValid && emailValid
+  const isPhase2Valid = nameValid && phoneValid && emailValid
 
   const submit = async () => {
     setSubmitError(null)
-    if (!isPhase3Valid) {
+    if (!isPhase2Valid) {
       setNameTouched(true)
       setPhoneTouched(true)
       setEmailTouched(true)
@@ -365,7 +380,7 @@ export function StartProjectForm() {
         console.warn("EmailJS notification failed:", await emailRes.text())
       }
 
-      setPhase(4)
+      setPhase(3)
     } catch (err: any) {
       console.error("Form submission error:", err)
       setSubmitError(err?.message || "Submission failed. Please try again.")
@@ -488,24 +503,23 @@ export function StartProjectForm() {
 
   return (
     <>
-      <div className="grid gap-6">
-        <div className="bg-surface rounded-2xl border border-base shadow-sm p-4 md:p-6 h-[500px] flex flex-col">
+      <div className="flex-1 min-h-0 flex flex-col">
+        <div className="bg-surface rounded-2xl border border-base shadow-sm p-4 md:p-6 flex-1 flex flex-col min-h-0">
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex border-b border-base mb-6 -mx-4 md:-mx-6 px-4 md:px-6 overflow-x-auto flex-shrink-0">
               {[
-                { n: 1, label: 'Service' },
-                { n: 2, label: 'Details' },
-                { n: 3, label: 'Contact' },
-                { n: 4, label: 'Confirm' },
+                { n: 1, label: 'Services' },
+                { n: 2, label: 'Contact' },
+                { n: 3, label: 'Confirm' },
               ].map(({ n, label }) => {
                 const done = phase > n
                 const active = phase === n
-                const reachable = n < 4 || (isPhase1Valid && isPhase2Valid && isPhase3Valid)
+                const reachable = n < 3 || (isPhase1Valid && isPhase2Valid)
                 return (
                   <button
                     key={n}
                     onClick={() => {
-                      if (n < 4) setPhase(n as Phase)
+                      if (n < 3) setPhase(n as Phase)
                       else if (reachable) setPhase(n as Phase)
                     }}
                     className={`flex items-center gap-2 px-4 py-3 text-sm border-b-2 transition-colors
@@ -530,280 +544,66 @@ export function StartProjectForm() {
               })}
             </div>
 
-            {phase === 1 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                <h3 className="text-lg font-semibold">What do you need?</h3>
-
-                <div className="mt-4 pb-4">
-                  <div className="flex flex-wrap gap-2 md:gap-3">
-                    {CATEGORIES.map((c) => (
-                      <button
-                        key={c}
-                        onClick={() => {
-                          setSelectedCategory(c)
-                          setSelectedService(null)
-                          setBudget(null)
-                        }}
-                        className={`px-4 py-2 rounded-full border ${selectedCategory === c ? 'bg-[var(--primary)] text-black border-transparent shadow-sm' : 'bg-surface-alt text-fg border-base'}`}
-                      >
-                        {c}
-                      </button>
-                    ))}
-                  </div>
-
-                  {selectedCategory && (
-                    <div className="mt-4">
-                      <p className="text-sm text-muted">Choose a service</p>
-                      <div className="mt-3 flex flex-wrap gap-2 md:gap-3">
-                        {servicesForCategory.map((s) => (
-                          <button
-                            key={s}
-                              onClick={() => {
-                                setSelectedService(s)
-                                setCustomService("")
-                              }}
-                              className={`px-3 py-2 rounded-full border ${selectedService === s ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
-                            >
-                              {s}
-                            </button>
-                          ))}
-                          <button
-                            key="Other"
-                            onClick={() => {
-                              setSelectedService("Other")
-                              setCustomService("")
-                            }}
-                            className={`px-3 py-2 rounded-full border ${selectedService === "Other" ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
-                          >
-                            Other
-                          </button>
-                        </div>
-
-                        {selectedService === "Other" && (
-                          <div className="mt-4">
-                            <input
-                              value={customService}
-                              onChange={(e) => setCustomService(e.target.value)}
-                              placeholder="Describe your service (e.g. custom app, AI workflow, or brand system)"
-                              className="w-full mt-2 rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                            />
-                          </div>
-                        )}
-
-                      <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
-                        <button
-                          disabled={!isPhase1Valid}
-                          onClick={() => setPhase(2)}
-                          className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black"
-                        >
-                          Continue →
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-              </motion.div>
-            )}
+            {phase === 1 && <StartProjectStepOne />}
 
             {phase === 2 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                <h3 className="text-lg font-semibold">Choose a package</h3>
-                <p className="mt-2 text-sm text-muted">These package options are tailored to {displayedService || "your selected service"} and show what you get at each investment level.</p>
-
-                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr] pb-4">
-                  <div className="rounded-2xl border border-base/50 bg-surface-alt/30 p-3 flex flex-col">
-                    <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar" style={{ maxHeight: '300px' }}>
-                    {packageOptions.map((option) => (
-                      <button
-                        key={option.label}
-                        type="button"
-                        onClick={() => {
-                          setBudget(option.label)
-                          setCustomBudget("")
-                        }}
-                        className={`w-full rounded-2xl border p-4 text-left transition ${budget === option.label ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface hover:border-[var(--primary)]/60'}`}
-                      >
-                        <div className="flex items-start justify-between gap-3">
-                          <div>
-                            <div className="text-sm font-semibold">{option.label}</div>
-                            <p className="mt-1 text-sm text-muted">Select this package</p>
-                          </div>
-                          {budget === option.label && (
-                            <span className="rounded-full bg-[var(--primary)] px-2.5 py-1 text-xs font-semibold text-black">Selected</span>
-                          )}
-                        </div>
-                      </button>
-                    ))}
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setBudget("Other / Custom")
-                        setCustomBudget("")
-                      }}
-                      className={`w-full rounded-2xl border p-4 text-left transition ${budget === "Other / Custom" ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface hover:border-[var(--primary)]/60'}`}
-                    >
-                      <div className="text-sm font-semibold">Other / Custom</div>
-                      <p className="mt-1 text-sm text-muted">Tell us your scope and we’ll tailor a package around it.</p>
-                    </button>
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-base bg-surface p-4 md:p-5 overflow-y-auto custom-scrollbar" style={{ maxHeight: '300px' }}>
-                    <div className="text-sm font-semibold">Package details</div>
-                    {budget ? (
-                      <div className="mt-3 rounded-xl border border-base bg-surface-alt p-4">
-                        {budget === "Other / Custom" ? (
-                          <>
-                            <p className="text-sm font-semibold">Custom package</p>
-                            <p className="mt-2 text-sm text-muted">We’ll tailor this around your scope and budget.</p>
-                          </>
-                        ) : (
-                          <>
-                            <p className="text-sm font-semibold">{budget}</p>
-                            <ul className="mt-3 space-y-2 text-sm text-muted list-disc list-inside">
-                              {packageOptions.find((option) => option.label === budget)?.details.map((detail) => (
-                                <li key={detail}>{detail}</li>
-                              ))}
-                            </ul>
-                          </>
-                        )}
-                      </div>
-                    ) : (
-                      <p className="mt-3 text-sm text-muted">Select a package to see its details here.</p>
-                    )}
-                  </div>
-                </div>
-
-                {budget === "Other / Custom" && (
-                  <div className="mt-4">
-                    <input
-                      value={customBudget}
-                      onChange={(e) => setCustomBudget(e.target.value)}
-                      placeholder="e.g. UGX 800,000 or open to discussion"
-                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    />
-                  </div>
-                )}
-
-                <div className="mt-4">
-                  <div className="text-sm font-semibold">More details (optional)</div>
-                  <textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Optional: wider context, audience, constraints..." className="w-full mt-2 rounded-md border px-3 py-2 min-h-[80px] bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
-                  <button
-                    onClick={() => setPhase((p) => Math.max(1, p - 1) as Phase)}
-                    className="px-6 py-2 rounded-lg bg-base/40 text-muted"
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    disabled={!isPhase2Valid}
-                    onClick={() => setPhase(3)}
-                    className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black"
-                  >
-                    Continue →
-                  </button>
-                </div>
-              </motion.div>
+              <StartProjectContactStep
+                name={name}
+                setName={setName}
+                phone={phone}
+                setPhone={setPhone}
+                email={email}
+                setEmail={setEmail}
+                company={company}
+                setCompany={setCompany}
+                preferredContact={preferredContact}
+                setPreferredContact={setPreferredContact}
+                nameTouched={nameTouched}
+                setNameTouched={setNameTouched}
+                phoneTouched={phoneTouched}
+                setPhoneTouched={setPhoneTouched}
+                emailTouched={emailTouched}
+                setEmailTouched={setEmailTouched}
+                nameValid={nameValid}
+                phoneValid={phoneValid}
+                emailValid={emailValid}
+                selectedService={selectedService}
+                displayedService={displayedService}
+                selectedPrice={selectedPrice}
+                isPhase2Valid={isPhase2Valid}
+                submitting={submitting}
+                submitError={submitError}
+                onBack={() => {
+                  // Navigate back to the appropriate package page based on fromPackage param
+                  const fromPackageParam = searchParams.get("fromPackage")
+                  
+                  if (fromPackageParam === "graphic-design") {
+                    router.push('/graphic-design-packages')
+                  } else if (fromPackageParam === "website") {
+                    router.push('/website-packages')
+                  } else if (fromPackageParam === "mobile-app") {
+                    router.push('/mobile-app-packages')
+                  } else if (fromPackageParam === "saas") {
+                    router.push('/saas-packages')
+                  } else {
+                    // Fallback: try to determine from category
+                    const categoryParam = searchParams.get("category")
+                    if (categoryParam === "Design") {
+                      router.push('/graphic-design-packages')
+                    } else {
+                      // Default fallback to service selection
+                      setPhase(1)
+                    }
+                  }
+                }}
+                onSubmit={submit}
+              />
             )}
 
             {phase === 3 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                <h3 className="text-lg font-semibold">Your details</h3>
-
-                <div className="mt-4 grid sm:grid-cols-2 gap-3 md:gap-4 pb-4">
-                  <div>
-                    <input
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      onBlur={() => setNameTouched(true)}
-                      placeholder="Your name (first or preferred)"
-                      aria-invalid={!nameValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    />
-                    {nameTouched && !nameValid && (
-                      <p className="text-xs text-red-500 mt-1">Please enter your name (first or preferred name is fine).</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <input
-                      type="tel"
-                      value={phone}
-                      onChange={(e) => setPhone(e.target.value)}
-                      onBlur={() => setPhoneTouched(true)}
-                      placeholder="Phone Number (e.g., +2567...)"
-                      aria-invalid={!phoneValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    />
-                    {phoneTouched && !phoneValid && (
-                      <p className="text-xs text-red-500 mt-1">Enter a valid phone number (7–15 digits).</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <input
-                      type="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      onBlur={() => setEmailTouched(true)}
-                      placeholder="Email Address"
-                      aria-invalid={!emailValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    />
-                    {emailTouched && !emailValid && (
-                      <p className="text-xs text-red-500 mt-1">Please enter a valid email address.</p>
-                    )}
-                  </div>
-
-                  <div>
-                    <input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Company / Organisation (optional)" className="w-full rounded-md border px-3 py-2 text-sm opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
-                  </div>
-                </div>
-
-                <div className="mt-4">
-                  <div className="text-sm font-semibold">Preferred contact method</div>
-                  <div className="mt-3 flex flex-wrap gap-2 md:gap-3">
-                    {['WhatsApp', 'Email', 'Phone Call'].map((m) => (
-                      <button
-                        key={m}
-                        onClick={() => setPreferredContact(m)}
-                        className={`px-3 py-2 rounded-full border ${preferredContact === m ? 'bg-[var(--primary)] text-black border-transparent' : 'bg-surface-alt text-fg border-base'}`}
-                      >
-                        {m}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
-                  <button
-                    onClick={() => setPhase((p) => Math.max(1, p - 1) as Phase)}
-                    className="px-6 py-2 rounded-lg bg-base/40 text-muted"
-                  >
-                    Cancel
-                  </button>
-                  <div className="flex flex-col items-end gap-2 w-full sm:w-auto">
-                    <button
-                      disabled={!isPhase3Valid || submitting}
-                      onClick={submit}
-                      className="px-6 py-2 rounded-lg bg-[var(--primary)] text-black disabled:opacity-60"
-                    >
-                      {submitting ? "Sending..." : "Continue →"}
-                    </button>
-                    {submitError && <p className="text-xs text-red-500 mt-1">{submitError}</p>}
-                  </div>
-                </div>
-              </motion.div>
-            )}
-
-            {phase === 4 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
-                <div className="grid md:grid-cols-[1fr_280px] gap-4 md:gap-6 items-start pb-4">
-                  <div className="space-y-5">
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 min-h-0">
+                <div className="grid md:grid-cols-[1fr_280px] gap-4 md:gap-6 items-start pb-4 h-full">
+                  <div className="space-y-5 overflow-y-auto pr-2 custom-scrollbar">
                     <div>
                       <h3 className="text-lg font-bold sm:text-xl">Project Request Submitted</h3>
                       <p className="mt-2 text-sm md:text-base text-muted">We've received your request and will be in touch within 24 hours to discuss next steps.</p>
@@ -833,6 +633,7 @@ export function StartProjectForm() {
                             setPhase(1)
                             setSelectedCategory(null)
                             setSelectedService(null)
+                            setSelectedMain(null)
                             setBudget(null)
                             setDetails("")
                             setName("")
@@ -842,10 +643,11 @@ export function StartProjectForm() {
                             setPreferredContact("WhatsApp")
                             setCustomService("")
                             setCustomBudget("")
+                            router.push('/start-project')
                           }}
                           className="w-full sm:w-auto px-4 py-2 rounded-lg border text-sm md:text-base"
                         >
-                          Request another
+                          Request another project
                         </button>
                         <button onClick={() => downloadSummary()} className="w-full sm:w-auto px-4 py-2 rounded-lg border bg-surface-alt text-sm md:text-base">
                           Download summary
@@ -854,7 +656,7 @@ export function StartProjectForm() {
                     </div>
                   </div>
 
-                  <div className="min-w-0 rounded-2xl bg-surface-alt border border-base p-4 md:p-5 shadow-sm">
+                  <div className="min-w-0 rounded-2xl bg-surface-alt border border-base p-4 md:p-5 shadow-sm overflow-y-auto custom-scrollbar">
                     {selectedService ? (
                       <>
                         <p className="text-xs md:text-sm font-semibold text-fg">Your request so far</p>

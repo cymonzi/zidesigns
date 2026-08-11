@@ -81,6 +81,13 @@ export function Navigation() {
   const isGetStartedActive = activeIndex === getStartedIndex
 
   useEffect(() => {
+    // Check if on package pages - show Services instead of Home
+    if (pathname?.includes('-packages')) {
+      const servicesIndex = navigation.findIndex((n) => n.name === "Services")
+      setActiveIndex(servicesIndex)
+      return
+    }
+
     if (pathname === "/start-project") {
       setActiveIndex(getStartedIndex)
       return

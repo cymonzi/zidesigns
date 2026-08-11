@@ -1,9 +1,9 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Check, ArrowRight, ArrowLeft } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { PageTitleTracker } from "@/components/page-title-tracker"
@@ -34,6 +34,11 @@ export default function GraphicDesignPackagesPage() {
   const [otherDescription, setOtherDescription] = useState("")
   const [otherPrice, setOtherPrice] = useState("")
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // Get the service name from URL to display contextual back button
+  const fromParam = searchParams.get('from')
+  const backLabel = fromParam === 'home' ? 'Home' : (fromParam || 'Services')
 
   const toggleService = (serviceId: string) => {
     setSelectedServices((prev) => {
@@ -106,10 +111,44 @@ export default function GraphicDesignPackagesPage() {
       serviceNames.push(`Other: ${otherDescription.trim()}`)
     }
 
-    // Navigate to start-project form with all selected services
+    // Calculate total and format price
+    const totalPrice = calculateTotal()
+    const formattedPrice = `UGX ${totalPrice.toLocaleString()}`
+
+    // Navigate to start-project form with all selected services and open contact step
+    // Pass fromPackage param so contact step knows where to return
     const servicesParam = serviceNames.join(", ")
-    router.push(`/start-project?service=${encodeURIComponent(servicesParam)}&category=Design`)
+    router.push(`/start-project?service=${encodeURIComponent(servicesParam)}&price=${encodeURIComponent(formattedPrice)}&category=Design&phase=2&fromPackage=graphic-design`)
   }
+
+  // Auto-select services from query param when present
+  useEffect(() => {
+    const svc = searchParams.get("service")
+    if (!svc) return
+
+    const parts = svc.split(",").map((p) => p.trim()).filter(Boolean)
+    if (parts.length === 0) return
+
+    const newSet = new Set<string>()
+    const newQtys: Record<string, number> = {}
+
+    parts.forEach((p) => {
+      const lower = p.toLowerCase()
+      const found = GRAPHIC_DESIGN_SERVICES.find((s) => s.name.toLowerCase() === lower)
+      if (found) {
+        newSet.add(found.id)
+        newQtys[found.id] = 1
+      } else if (lower.startsWith("other:")) {
+        setOtherSelected(true)
+        setOtherDescription(p.replace(/^[oO]ther:\s*/i, "").trim())
+      }
+    })
+
+    if (newSet.size > 0) {
+      setSelectedServices(newSet)
+      setServiceQuantities((prev) => ({ ...prev, ...newQtys }))
+    }
+  }, [searchParams])
 
   const selectedServicesArray = Array.from(selectedServices)
     .map((id) => GRAPHIC_DESIGN_SERVICES.find((s) => s.id === id))
@@ -155,21 +194,21 @@ export default function GraphicDesignPackagesPage() {
             </motion.p>
           </div>
 
+          {/* Back Button - Top Left (outside cards) */}
+          <button
+            onClick={() => fromParam === 'home' ? router.push('/') : router.push('/start-project')}
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to {backLabel}
+          </button>
+
           {/* 2-Column Layout with Fixed Heights */}
           <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8 flex-1 min-h-0">
             {/* Left Column - Services Container (Subtle background with scrollable content) */}
             <SectionReveal className="min-h-0 flex flex-col">
               {/* Container with subtle background and defined height */}
               <div className="rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-6 flex flex-col max-h-[500px]">
-                {/* Back Button */}
-                <button
-                  onClick={() => router.back()}
-                  className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
-                >
-                  <ArrowLeft className="h-4 w-4" />
-                  Back
-                </button>
-
                 <div className="overflow-y-auto pr-2 custom-scrollbar flex-1">
                   <div className="space-y-3 pb-4">
                 {GRAPHIC_DESIGN_SERVICES.map((service, index) => {
@@ -418,7 +457,7 @@ export default function GraphicDesignPackagesPage() {
                             <span className="text-sm font-semibold text-muted-foreground">
                               Estimated starting total
                             </span>
-                            <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(total)}+</span>
+                            <span className="text-2xl font-bold text-[var(--primary)]">{formatPrice(total)}</span>
                           </div>
                           <p className="text-xs text-muted-foreground leading-relaxed">
                             Final pricing may vary based on quantity, complexity and requirements.
