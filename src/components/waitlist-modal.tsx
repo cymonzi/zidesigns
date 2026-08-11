@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { X } from "lucide-react"
+import { X, ArrowLeft } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 interface WaitlistModalProps {
@@ -174,6 +174,16 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-background border border-base shadow-2xl z-10 flex flex-col max-h-[90vh]"
           >
+            {/* Back Button - Top Left */}
+            <button
+              onClick={onClose}
+              className="absolute left-4 top-4 z-20 rounded-full p-2 bg-background/40 backdrop-blur-md border border-base hover:bg-surface text-muted-foreground hover:text-foreground transition-colors shadow-sm"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+
+            {/* Close Button - Top Right */}
             <button
               onClick={onClose}
               className="absolute right-4 top-4 z-20 rounded-full p-2 bg-background/40 backdrop-blur-md border border-base hover:bg-surface text-muted-foreground hover:text-foreground transition-colors shadow-sm"
@@ -182,7 +192,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
               <X className="h-5 w-5" />
             </button>
 
-            <div className="p-6 md:p-10 overflow-y-auto w-full max-h-[90vh]">
+            <div className="p-6 md:p-10 pt-20 md:pt-16 overflow-y-auto w-full max-h-[90vh]">
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--primary)]">Join the Waitlist</p>
               <h2 className="mt-3 text-2xl font-bold text-fg">Be first to access the GMF launch.</h2>
 

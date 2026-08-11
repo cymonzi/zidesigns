@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Github, Linkedin, Mail } from "lucide-react"
+import { X, Github, Linkedin, Mail, ArrowLeft } from "lucide-react"
 import Image from "next/image"
 
 interface AboutModalProps {
@@ -54,7 +54,16 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="relative w-full max-w-4xl overflow-hidden rounded-2xl bg-background border border-base shadow-2xl z-10 flex flex-col max-h-[90vh]"
           >
-            {/* Close Button - Always visible regardless of scroll */}
+            {/* Back Button - Top Left */}
+            <button
+              onClick={onClose}
+              className="absolute left-4 top-4 z-20 rounded-full p-2 bg-background/40 backdrop-blur-md border border-base hover:bg-surface text-muted-foreground hover:text-foreground transition-colors shadow-sm"
+              aria-label="Go back"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </button>
+
+            {/* Close Button - Top Right */}
             <button
               onClick={onClose}
               className="absolute right-4 top-4 z-20 rounded-full p-2 bg-background/40 backdrop-blur-md border border-base hover:bg-surface text-muted-foreground hover:text-foreground transition-colors shadow-sm"
@@ -67,7 +76,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
             <div className="flex flex-col md:flex-row overflow-y-auto w-full max-h-[90vh]">
               
               {/* Profile Image Section */}
-              <div className="flex flex-col items-center justify-center pt-10 pb-6 px-6 md:p-10 md:w-2/5 shrink-0 bg-surface/30 border-b md:border-b-0 md:border-r border-base">
+              <div className="flex flex-col items-center justify-center pt-16 pb-6 px-6 md:pt-10 md:p-10 md:w-2/5 shrink-0 bg-surface/30 border-b md:border-b-0 md:border-r border-base">
                 <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-background shadow-lg mb-4 md:mb-0">
                   {/* Using 1.2.JPG based on terminal output */}
                   <Image
@@ -82,7 +91,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
               </div>
               
               {/* Content Section */}
-              <div className="p-6 md:p-10 md:w-3/5 space-y-8">
+              <div className="p-6 pt-8 md:p-10 md:w-3/5 space-y-8">
                 {/* Header & Bio */}
                 <div>
                   <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground mb-2">

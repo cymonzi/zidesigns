@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
 
-export default function InsightsToast() {
+export default function LearnToast() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const pathname = usePathname()
@@ -18,7 +18,7 @@ export default function InsightsToast() {
       setMessage(updated ? "Your GMF Waitlist details are updated!" : "You're on the GMF waitlist - we'll email you when the course launches.")
       setShow(true)
 
-      const clean = pathname || "/insights"
+      const clean = pathname || "/learn"
       try {
         router.replace(clean)
       } catch (err) {

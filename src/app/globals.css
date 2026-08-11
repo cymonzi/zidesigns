@@ -482,3 +482,47 @@ footer {
 
 /* Active pill stronger */
 .nav-pill-indicator.active { background: linear-gradient(135deg, var(--primary), rgba(64,224,208,0.18)); }
+
+/* Custom scrollbar styles */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #ffffff;
+  border-radius: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--muted-alt);
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Dark mode scrollbar */
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-track {
+  background: #0a1628;
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+}
+
+[data-theme="dark"] .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-alt);
+}
+
+/* Firefox scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted-alt) #ffffff;
+}
+
+[data-theme="dark"] .custom-scrollbar {
+  scrollbar-color: var(--border-strong) #0a1628;
+}

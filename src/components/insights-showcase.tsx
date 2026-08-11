@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import { Suspense, useEffect, useState, useRef } from "react"
 import WaitlistModal from "./waitlist-modal"
-import InsightsToast from "./insights-toast"
+import LearnToast from "./learn-toast"
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -118,7 +118,7 @@ export function InsightsShowcase() {
 
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
             <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-fg leading-[1.05]">
-              Insights
+              Learn
             </h2>
             <div className="sm:max-w-xs flex flex-col gap-3">
               <p className="text-base text-muted leading-relaxed order-1 sm:order-2">
@@ -126,7 +126,7 @@ export function InsightsShowcase() {
               </p>
               <div className="order-2 sm:order-1">
                 <Suspense fallback={null}>
-                  <InsightsToast />
+                  <LearnToast />
                 </Suspense>
               </div>
             </div>

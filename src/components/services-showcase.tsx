@@ -52,85 +52,9 @@ const services: Service[] = [
   {
     id: 1,
     number: "01",
-    slug: "website",
-    title: "Website Development",
-    description: "Professional websites designed to help businesses attract customers, build credibility, and grow online.",
-    pricing: {
-      startingFrom: "UGX 750,000",
-      perfectFor: [
-        "Small & Medium Businesses",
-        "Startups",
-        "Corporate Organizations",
-        "E-commerce Brands",
-      ],
-      whatsIncluded: ["Responsive design", "Custom UI", "Contact forms", "SEO-ready setup", "Performance optimization", "CMS (where applicable)"],
-      optionalAddons: ["Booking system", "Online payments", "Blog", "Live chat", "Analytics"],
-    },
-    webExamples: [
-      {
-        name: "Futureline Solutions",
-        url: "https://futureline-ten.vercel.app/",
-        image: "/images/futureline.png",
-        imageAlt: "Homepage preview for Futureline Solutions website designed and developed by Zi Designs",
-      },
-      {
-        name: "Workmasters Website",
-        url: "https://theworkmasters.vercel.app",
-        image: "/images/theworkmasters.png",
-        imageAlt: "Landing page preview for The Workmasters website built by Zi Designs",
-      },
-    ],
-  },
-  {
-    id: 2,
-    number: "02",
-    slug: "mobile-app",
-    title: "Mobile Application Development",
-    description: "Build custom Android and iOS applications that help your business engage customers, streamline operations, and scale with confidence.",
-    pricing: {
-      startingFrom: "UGX 5,000,000",
-      perfectFor: [
-        "Startups & MVPs",
-        "Customer-Facing Businesses",
-        "Service Providers",
-        "Organizations Building Digital Platforms",
-      ],
-      whatsIncluded: [
-        "Custom UI/UX Design",
-        "Android & iOS Development",
-        "Backend Integration",
-        "Testing & Deployment Support",
-      ],
-    },
-    subExamples: [
-      {
-        name: "Offscreen",
-        url: "/apps/offscreen.apk",
-        type: "embed",
-        thumbnail: "/images/Offscreen.png",
-        imageAlt: "Offscreen mobile app designed by Zi Designs",
-        downloadUrl: "/apps/offscreen.apk",
-      },
-      {
-        name: "Nfunayo App Wireframes",
-        url: "https://www.canva.com/design/DAGQoe1eN-k/pIxPEgpY0wcHTJE0dU5mbg/view?embed",
-        type: "embed",
-      },
-      {
-        name: "Litywise UI Prototype",
-        url: "https://embed.figma.com/proto/r5vxvEstbY70m6gKVKDYEk/Litywise-UI?scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=439-8&embed-host=share",
-        type: "embed",
-        thumbnail: "/images/Litywise-UI.png",
-        imageAlt: "Litywise mobile app UI prototype screens designed by Zi Designs",
-      },
-    ],
-  },
-  {
-    id: 3,
-    number: "03",
     slug: "graphic-design",
-    title: "Graphic Design",
-    description: "Create visually compelling designs that communicate your message, strengthen your brand, and leave a lasting impression across print and digital platforms.",
+    title: "Graphic & Brand Design",
+    description: "Visual identities and creative assets that make brands distinctive and consistent.",
     pricing: {
       startingFrom: "UGX 20,000",
       perfectFor: [
@@ -150,7 +74,7 @@ const services: Service[] = [
     webExamples: [
       {
         name: "GMF",
-        url: "/insights#preview",
+        url: "/learn#preview",
         image: "/images/GMF/1.png",
         imageAlt: "GMF Design by MUSINGUZI",
         disabled: true,
@@ -182,46 +106,45 @@ const services: Service[] = [
     ],
   },
   {
-    id: 4,
-    number: "04",
-    slug: "video-editing",
-    title: "Video Editing & Visual Effects",
-    description: "Transform raw footage into engaging videos that capture attention, tell compelling stories, and elevate your brand across digital platforms.",
+    id: 2,
+    number: "02",
+    slug: "website",
+    title: "Website Development",
+    description: "Professional websites designed to help businesses attract customers, build credibility, and grow online.",
     pricing: {
+      startingFrom: "UGX 750,000",
       perfectFor: [
-        "Marketing Campaigns",
-        "Social Media Content",
-        "Corporate Videos",
-        "Product Promotions",
+        "Small & Medium Businesses",
+        "Startups",
+        "Corporate Organizations",
+        "E-commerce Brands",
       ],
-      whatsIncluded: [
-        "Professional Video Editing",
-        "Motion Graphics",
-        "Visual Effects",
-        "Color Correction & Audio Enhancement",
-        "Export for Web & Social Media",
-      ],
+      whatsIncluded: ["Responsive design", "Custom UI", "Contact forms", "SEO-ready setup", "Performance optimization", "CMS (where applicable)"],
+      optionalAddons: ["Booking system", "Online payments", "Blog", "Live chat", "Analytics"],
     },
-    subExamples: [
+    webExamples: [
       {
-        name: "Cymon Zi Promo",
-        url: "https://www.canva.com/design/DAGqCS_xbwU/Les8qtK0EmSSqUodfD8y_A/watch?embed",
-        type: "embed",
+        name: "Futureline Solutions",
+        url: "https://futureline-ten.vercel.app/",
+        image: "/images/futureline.png",
+        imageAlt: "Homepage preview for Futureline Solutions website designed and developed by Zi Designs",
       },
       {
-        name: "CSHE Video Production",
-        url: "https://www.canva.com/design/DAG8aLd0yHw/reMb1Jbz9UmRbtpgVq2rOg/watch?embed",
-        type: "embed",
+        name: "Workmasters Website",
+        url: "https://theworkmasters.vercel.app",
+        image: "/images/theworkmasters.png",
+        imageAlt: "Landing page preview for The Workmasters website built by Zi Designs",
       },
     ],
   },
   {
-    id: 5,
-    number: "05",
+    id: 3,
+    number: "03",
     slug: "smart-tools",
-    title: "Smart Digital Tools",
+    title: "Web Apps & SaaS",
     description: "Empower your business with custom digital tools that automate workflows, improve productivity, and simplify everyday operations.",
     pricing: {
+      startingFrom: "UGX 5,000,000",
       perfectFor: [
         "Automating repetitive tasks",
         "Digitizing manual workflows",
@@ -263,6 +186,50 @@ const services: Service[] = [
       },
     ],
   },
+  {
+    id: 4,
+    number: "04",
+    slug: "mobile-app",
+    title: "Mobile App Development",
+    description: "Build custom Android and iOS applications that help your business engage customers, streamline operations, and scale with confidence.",
+    pricing: {
+      startingFrom: "UGX 5,000,000",
+      perfectFor: [
+        "Startups & MVPs",
+        "Customer-Facing Businesses",
+        "Service Providers",
+        "Organizations Building Digital Platforms",
+      ],
+      whatsIncluded: [
+        "Custom UI/UX Design",
+        "Android & iOS Development",
+        "Backend Integration",
+        "Testing & Deployment Support",
+      ],
+    },
+    subExamples: [
+      {
+        name: "Offscreen",
+        url: "/apps/offscreen.apk",
+        type: "embed",
+        thumbnail: "/images/Offscreen.png",
+        imageAlt: "Offscreen mobile app designed by Zi Designs",
+        downloadUrl: "/apps/offscreen.apk",
+      },
+      {
+        name: "Nfunayo App Wireframes",
+        url: "https://www.canva.com/design/DAGQoe1eN-k/pIxPEgpY0wcHTJE0dU5mbg/view?embed",
+        type: "embed",
+      },
+      {
+        name: "Litywise UI Prototype",
+        url: "https://embed.figma.com/proto/r5vxvEstbY70m6gKVKDYEk/Litywise-UI?scaling=scale-down&content-scaling=fixed&page-id=0%3A1&node-id=439-8&embed-host=share",
+        type: "embed",
+        thumbnail: "/images/Litywise-UI.png",
+        imageAlt: "Litywise mobile app UI prototype screens designed by Zi Designs",
+      },
+    ],
+  },
 ]
 
 const fadeUp = {
@@ -298,7 +265,7 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl overflow-hidden border border-base shadow-md relative h-80">
+      <div className="rounded-2xl overflow-hidden border border-base shadow-md relative h-80 group">
         {currentExample.thumbnail ? (
           <Link
             href={fullViewLink}
@@ -322,6 +289,29 @@ function EmbedSlideshow({ examples }: { examples: SubExample[] }) {
             allowFullScreen
             allow="fullscreen"
           />
+        )}
+        
+        {/* Circular Navigation Buttons */}
+        {examples.length > 1 && (
+          <>
+            {/* Previous Button - Left Side */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 backdrop-blur-sm border-2 border-white/20 hover:bg-black/90 active:scale-95 sm:hover:scale-110 transition-all shadow-2xl flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 z-10"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </button>
+            
+            {/* Next Button - Right Side */}
+            <button
+              onClick={handleNext}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 backdrop-blur-sm border-2 border-white/20 hover:bg-black/90 active:scale-95 sm:hover:scale-110 transition-all shadow-2xl flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 z-10"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </button>
+          </>
         )}
       </div>
 
@@ -415,62 +405,80 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
   const isInternalLink = currentExample.url.startsWith("/")
   const isGmfPreview = isGraphicDesign && currentExample.name === "GMF"
   const isUnavailablePreview = Boolean(isGraphicDesign && currentExample.disabled && !isGmfPreview)
-  const actionHref = isGmfPreview ? "/insights#preview" : currentExample.url
+  const actionHref = isGmfPreview ? "/learn#preview" : currentExample.url
   const actionLabel = isGmfPreview ? "Preview" : "View"
 
   return (
     <div className="space-y-4">
-      {isSmartTools ? (
-        <Link
-          href={currentExample.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
-        >
-          <div className="relative w-full h-[400px] overflow-hidden">
-            {examples.map((example, index) => (
-              <motion.div
-                key={example.name}
-                initial={false}
-                animate={{
-                  opacity: index === currentIndex ? 1 : 0,
-                }}
-                transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute inset-0"
-              >
+      <div className="relative group">
+        {isSmartTools ? (
+          <Link
+            href={currentExample.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
+          >
+            <div className="relative w-full h-[400px] overflow-hidden">
+              {examples.map((example, index) => (
+                <motion.div
+                  key={example.name}
+                  initial={false}
+                  animate={{
+                    opacity: index === currentIndex ? 1 : 0,
+                  }}
+                  transition={{ duration: 1.5, ease: [0.22, 1, 0.36, 1] }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={example.image}
+                    alt={example.imageAlt ?? example.name}
+                    fill
+                    className="object-contain bg-surface/50 p-2"
+                  />
+                </motion.div>
+              ))}
+            </div>
+          </Link>
+        ) : isGraphicDesign ? (
+          isUnavailablePreview ? (
+            <div className="block w-full rounded-2xl overflow-hidden border border-base shadow-md bg-surface text-left cursor-default">
+              <div className="relative w-full h-[400px]">
                 <Image
-                  src={example.image}
-                  alt={example.imageAlt ?? example.name}
+                  src={currentExample.image}
+                  alt={currentExample.imageAlt ?? currentExample.name}
                   fill
                   className="object-contain bg-surface/50 p-2"
                 />
-              </motion.div>
-            ))}
-          </div>
-        </Link>
-      ) : isGraphicDesign ? (
-        isUnavailablePreview ? (
-          <div className="block w-full rounded-2xl overflow-hidden border border-base shadow-md bg-surface text-left cursor-default">
-            <div className="relative w-full h-[400px]">
-              <Image
-                src={currentExample.image}
-                alt={currentExample.imageAlt ?? currentExample.name}
-                fill
-                className="object-contain bg-surface/50 p-2"
-              />
+              </div>
             </div>
-          </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => {
+                if (isInternalLink) {
+                  router.push(currentExample.url)
+                } else {
+                  window.open(currentExample.url, "_blank", "noopener,noreferrer")
+                }
+              }}
+              className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
+            >
+              <div className="relative w-full h-[400px]">
+                <Image
+                  src={currentExample.image}
+                  alt={currentExample.imageAlt ?? currentExample.name}
+                  fill
+                  className="object-contain bg-surface/50 p-2"
+                />
+              </div>
+            </button>
+          )
         ) : (
-          <button
-            type="button"
-            onClick={() => {
-              if (isInternalLink) {
-                router.push(currentExample.url)
-              } else {
-                window.open(currentExample.url, "_blank", "noopener,noreferrer")
-              }
-            }}
-            className="block w-full rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface text-left cursor-pointer"
+          <Link
+            href={currentExample.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
           >
             <div className="relative w-full h-[400px]">
               <Image
@@ -480,25 +488,32 @@ function LiveSlideshow({ examples, serviceSlug }: { examples: WebExample[]; serv
                 className="object-contain bg-surface/50 p-2"
               />
             </div>
-          </button>
-        )
-      ) : (
-        <Link
-          href={currentExample.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="block rounded-2xl overflow-hidden border border-base shadow-md hover:shadow-xl hover:scale-[1.015] transition-all duration-300 bg-surface"
-        >
-          <div className="relative w-full h-[400px]">
-            <Image
-              src={currentExample.image}
-              alt={currentExample.imageAlt ?? currentExample.name}
-              fill
-              className="object-contain bg-surface/50 p-2"
-            />
-          </div>
-        </Link>
-      )}
+          </Link>
+        )}
+        
+        {/* Circular Navigation Buttons */}
+        {examples.length > 1 && (
+          <>
+            {/* Previous Button - Left Side */}
+            <button
+              onClick={handlePrev}
+              className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 backdrop-blur-sm border-2 border-white/20 hover:bg-black/90 active:scale-95 sm:hover:scale-110 transition-all shadow-2xl flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 z-10"
+              aria-label="Previous"
+            >
+              <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </button>
+            
+            {/* Next Button - Right Side */}
+            <button
+              onClick={handleNext}
+              className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/70 backdrop-blur-sm border-2 border-white/20 hover:bg-black/90 active:scale-95 sm:hover:scale-110 transition-all shadow-2xl flex items-center justify-center opacity-100 sm:opacity-0 sm:group-hover:opacity-100 z-10"
+              aria-label="Next"
+            >
+              <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+            </button>
+          </>
+        )}
+      </div>
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-center gap-2">
@@ -672,20 +687,62 @@ export function ServicesShowcase() {
                     </a>
                   )}
 
-                  <Link
-                    href={`/start-project?service=${encodeURIComponent(service.title)}`}
-                    className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-base text-sm font-semibold text-fg hover:bg-surface-alt hover:text-[var(--primary)] hover:underline transition-all"
-                  >
-                    Request this service
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-
-
+                  {/* Special "View Packages" button for services with package pages */}
+                  {service.slug === "graphic-design" ? (
+                    <Link
+                      href="/graphic-design-packages?from=home"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
+                    >
+                      View Packages
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  ) : service.slug === "website" ? (
+                    <Link
+                      href="/website-packages?from=home"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
+                    >
+                      View Packages
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  ) : service.slug === "mobile-app" ? (
+                    <Link
+                      href="/mobile-app-packages?from=home"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
+                    >
+                      View Packages
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  ) : service.slug === "smart-tools" ? (
+                    <Link
+                      href="/saas-packages?from=home"
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 bg-[var(--primary)] text-black text-sm font-semibold rounded-lg hover:bg-[var(--primary)]/85 active:scale-[0.97] transition-all"
+                    >
+                      View Packages
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  ) : (
+                    <Link
+                      href={`/start-project?service=${encodeURIComponent(service.title)}`}
+                      className="inline-flex w-full sm:w-auto items-center justify-center gap-2 px-5 py-2.5 rounded-lg border border-base text-sm font-semibold text-fg hover:bg-surface-alt hover:text-[var(--primary)] hover:underline transition-all"
+                    >
+                      Request this service
+                      <ArrowUpRight className="h-4 w-4" />
+                    </Link>
+                  )}
                 </div>
               </div>
 
               {/* ── Right: Preview ── */}
               <div className={`${index % 2 === 1 ? "lg:order-1" : ""}`}>
+
+                {/* Section Label */}
+                {(service.webExamples || service.subExamples || service.example) && (
+                  <div className="mb-4">
+                    <h4 className="text-sm font-semibold text-muted uppercase tracking-wider">
+                      {service.slug === "graphic-design" ? "Recent Designs" : "Recent Projects"}
+                    </h4>
+                  </div>
+                )}
 
                 {/* Live websites slideshow */}
                 {service.webExamples && service.webExamples.length > 0 && (

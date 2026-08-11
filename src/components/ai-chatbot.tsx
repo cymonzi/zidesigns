@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import { RotateCcw, Send, X } from "lucide-react"
+import { RotateCcw, Send, X, ArrowLeft } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import lottie from "lottie-web"
 
@@ -30,14 +30,14 @@ const initialMessages: Message[] = [
 
 const defaultSuggestions = [
   "What services do you offer?",
-  "Tell me about Insights",
+  "Tell me about Learn",
   "How do I start a project?",
   "Show me recent projects",
 ]
 
 const responseSuggestions: Record<string, string[]> = {
   services: ["Tell me about website development", "Tell me about mobile app design", "Tell me about graphic design"],
-  // insights: ["What is the GMF framework?", "Tell me about Insights", "What frameworks do you have?"],
+  // learn: ["What is the GMF framework?", "Tell me about Learn", "What frameworks do you have?"],
   projects: ["Show me website work", "Show me design work", "How long do projects take?"],
   process: ["What is your process?", "How long does a website take?", "What do you need from me to start?"],
   contact: ["How can I contact you?", "Do you use WhatsApp?", "Can I send project details by email?"],
@@ -52,7 +52,7 @@ const keywordSectionLinks: Array<{ keywords: string[]; link: ChatLink }> = [
   { keywords: ["video", "video editing", "visual effects"], link: { label: "Video Editing Service", href: "#service-video-editing" } },
   { keywords: ["ai", "chatbot", "automation", "workflow"], link: { label: "Smart Digital Tools", href: "#service-smart-tools" } },
   { keywords: ["strategy", "consulting", "discovery"], link: { label: "View Services", href: "#services" } },
-  { keywords: ["insights", "knowledge hub", "frameworks", "gmf", "gift maturation"], link: { label: "View Insights", href: "/insights" } },
+  { keywords: ["learn", "knowledge hub", "frameworks", "gmf", "gift maturation"], link: { label: "View Learn", href: "/learn" } },
   { keywords: ["start a project", "start project", "how do i start", "how to start"], link: { label: "Start a Project", href: "/start-project" } },
   { keywords: ["deposit", "payment", "refund", "cost", "price", "budget"], link: { label: "Get Started", href: "/start-project" } },
   { keywords: ["work", "projects", "portfolio"], link: { label: "View Work", href: "#work" } },
@@ -133,16 +133,16 @@ const aiResponses: Record<string, string> = {
   "where are you located": "We're based in Kampala, Uganda - but we work with clients across East Africa and internationally. All communication and file delivery is handled digitally.",
   "outside uganda": "Yes! We work with clients across East Africa and internationally. Payments can be arranged in both USD and UGX.",
 
-  // Insights
-  "insights": "Our Insights page is a knowledge hub featuring practical frameworks, research, and resources designed to help people learn, build, and grow. It includes frameworks like the Gift Maturation Framework (GMF) and other tools for personal and professional development.",
-  "knowledge hub": "The Knowledge Hub is our Insights page where we share ideas, frameworks, research, and practical resources. It's designed to help individuals and organizations create lasting value through structured thinking and proven models.",
-  "gmf": "The Gift Maturation Framework (GMF) is a practical model for discovering your gifts, developing them with purpose, expressing them through service, validating their value, building sustainable systems, and multiplying their impact. You can view and download it from our Insights page.",
+  // Learn
+  "learn": "Our Learn page is a knowledge hub featuring practical frameworks, research, and resources designed to help people learn, build, and grow. It includes frameworks like the Gift Maturation Framework (GMF) and other tools for personal and professional development.",
+  "knowledge hub": "The Knowledge Hub is our Learn page where we share ideas, frameworks, research, and practical resources. It's designed to help individuals and organizations create lasting value through structured thinking and proven models.",
+  "gmf": "The Gift Maturation Framework (GMF) is a practical model for discovering your gifts, developing them with purpose, expressing them through service, validating their value, building sustainable systems, and multiplying their impact. You can view and download it from our Learn page.",
   "gift maturation": "The Gift Maturation Framework provides a practical pathway for personal and professional growth. It guides you through six stages: Discovery, Development, Expression, Validation, Structure, and Multiplication. Visit our Insights page to learn more.",
   "frameworks": "We develop practical frameworks to simplify complex ideas and guide decision-making. Our current frameworks include the Gift Maturation Framework (GMF) for personal growth, with more coming soon. Check our Insights page for the latest resources.",
 
   // Services
   "services": "We offer five service areas: Graphic Design, Logo & Branding, Website Development, Mobile Applications, and AI & Automation. We also offer Strategy & Consulting. What would you like to know more about?",
-  "graphic design": "We create compelling visual assets including Posters & Flyers (from UGX 20,000), CV Design (from UGX 50,000), Presentations (from UGX 100,000), Company Profiles (from UGX 100,000), and Certificates (from UGX 20,000). All files are delivered print-ready and web-optimised.",
+  "graphic design": "We create compelling visual assets including Posters & Flyers (from UGX 20,000), CV Design (from UGX 50,000), Presentations (UGX 100,000 - up to 10 slides), Company Profiles (UGX 100,000 - up to 10 pages), and Certificates (from UGX 20,000). All files are delivered print-ready and web-optimised.",
   "logo": "Our branding packages range from a Starter Logo (UGX 30,000 - 1 concept, 1 revision) all the way to a full Brand Identity Package (UGX 500,000 - full identity system, unlimited revisions, all assets). Every tier includes the source files.",
   "branding": "We build brand identities that are distinctive, scalable, and aligned with your business values. Packages start at UGX 30,000 for a Starter Logo up to UGX 500,000 for a full Brand Identity system with guidelines and all assets.",
   "website": "We build fast, responsive, SEO-optimised websites. Packages: Starter Website (UGX 750,000) for personal brands and landing pages, Business Website (UGX 1,500,000) for up to 5+ pages with blog, gallery and analytics, and E-Commerce Website (UGX 3,000,000) with unlimited products, payments, and an admin dashboard. All include mobile-first design, SSL, and 14 days post-launch support.",
@@ -225,6 +225,20 @@ function getBestKeywordMatch(message: string): { key: string | null; score: numb
   }
 
   return { key: bestKey, score: bestScore }
+}
+
+// Check if a question is likely about Zi Designs' domain
+function isRelevantToProject(message: string): boolean {
+  const relevantKeywords = [
+    "design", "website", "web", "mobile", "app", "graphic", "logo", "branding",
+    "video", "automation", "ai", "service", "price", "cost", "budget", "timeline",
+    "project", "work", "portfolio", "contact", "email", "whatsapp", "instagram",
+    "start", "process", "payment", "deposit", "refund", "learn", "framework",
+    "gmf", "kampala", "uganda", "zi designs", "zidesigns", "package", "revision"
+  ]
+  
+  const lower = message.toLowerCase()
+  return relevantKeywords.some(keyword => lower.includes(keyword))
 }
 
 function getSuggestionGroup(message: string): string[] {
@@ -395,6 +409,8 @@ export function AIChatbot() {
 
     if (isQuestion(normalizedMessage)) {
       const bestMatch = getBestKeywordMatch(normalizedMessage)
+      
+      // Good match found (50% or more keyword overlap)
       if (bestMatch.key && bestMatch.score >= 0.5) {
         const matchLinks = getLinksForText(bestMatch.key)
         let finalLinks = matchLinks.length > 0 ? matchLinks : contextualLinks
@@ -412,7 +428,19 @@ export function AIChatbot() {
         }
       }
 
-      // Low-confidence fallback: always include contact link
+      // Check if question is relevant to our domain at all
+      const isRelevant = isRelevantToProject(normalizedMessage)
+      
+      if (!isRelevant) {
+        // Off-topic question - be clear about boundaries
+        return {
+          text: "I'm specifically built to answer questions about Zi Designs - our services (websites, mobile apps, graphic design, video editing, AI tools), pricing, timelines, portfolio, and how to start a project. I don't have information outside of that scope. What would you like to know about Zi Designs?",
+          suggestions: defaultSuggestions,
+          links: [{ label: "View Services", href: "#services" }],
+        }
+      }
+
+      // Question is relevant but no strong match - help guide the user
       const fallbackLinks = contextualLinks.length > 0 
         ? contextualLinks 
         : [{ label: "Get Started", href: "/start-project" }]
@@ -421,13 +449,13 @@ export function AIChatbot() {
         fallbackLinks.push(contactLink)
       }
       return {
-        text: "Great question. I may not have a direct answer yet, but I can help you with services, timelines, projects, and contact options. What would you like to explore next?",
+        text: "I'm specifically designed to help with Zi Designs services, pricing, timelines, our portfolio, and how to start a project. I don't have information about that particular topic, but I can definitely help with anything related to our design and development work. What would you like to know?",
         suggestions: defaultSuggestions,
         links: fallbackLinks,
       }
     }
 
-    // Final fallback: always include contact link
+    // Final fallback: non-question inputs
     const finalFallbackLinks = contextualLinks.length > 0 
       ? contextualLinks 
       : [{ label: "Get Started", href: "/start-project" }]
@@ -436,7 +464,7 @@ export function AIChatbot() {
       finalFallbackLinks.push(contactLink)
     }
     return {
-      text: "I can help with services, timelines, project examples, and how to get started. Tap a suggestion below or ask anything in your own words.",
+      text: "I'm here to help with information about Zi Designs services, projects, pricing, and timelines. Feel free to ask a question or tap one of the suggestions below.",
       suggestions: defaultSuggestions,
       links: finalFallbackLinks,
     }
@@ -551,22 +579,34 @@ export function AIChatbot() {
               className="fixed bottom-24 right-6 z-[75] w-96 max-w-[calc(100vw-32px)] h-[600px] max-h-[80vh] rounded-2xl bg-surface border border-base shadow-2xl flex flex-col overflow-hidden"
             >
             {/* Header */}
-            <div className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/80 px-6 py-4">
-              <div className="flex items-start justify-between gap-3">
-                <div>
+            <div className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]/80 px-6 py-4 relative">
+              {/* Back Button - Top Left */}
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
+                className="absolute left-4 top-4 rounded-full p-2 bg-black/10 hover:bg-black/15 transition-colors"
+                aria-label="Go back"
+              >
+                <ArrowLeft className="h-4 w-4 text-black" />
+              </button>
+
+              <div className="flex items-start justify-center gap-3">
+                <div className="text-center">
                   <h3 style={{ color: '#000' }} className="text-lg font-semibold">Zi AI Assistant</h3>
                   <p className="text-sm text-black/70">Always here to help</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={handleClearChat}
-                  className="inline-flex items-center gap-1 rounded-full bg-black/10 px-2.5 py-1 text-[11px] font-semibold text-black hover:bg-black/15 transition-colors"
-                  aria-label="Clear chat"
-                >
-                  <RotateCcw className="h-3.5 w-3.5" />
-                  Clear
-                </button>
               </div>
+
+              {/* Clear Button - Top Right */}
+              <button
+                type="button"
+                onClick={handleClearChat}
+                className="absolute right-4 top-4 inline-flex items-center gap-1 rounded-full bg-black/10 px-2.5 py-1.5 text-[11px] font-semibold text-black hover:bg-black/15 transition-colors"
+                aria-label="Clear chat"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                Clear
+              </button>
             </div>
 
             {/* Messages Container */}
