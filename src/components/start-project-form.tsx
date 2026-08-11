@@ -466,14 +466,56 @@ export function StartProjectForm() {
     doc.setTextColor(120, 120, 120)
     doc.text(`Generated: ${new Date().toLocaleDateString("en-UG", { dateStyle: "long" })}`, 14, 52)
 
+    // Determine appropriate label based on service type
+    const getServiceTypeLabel = () => {
+      if (!selectedService) return "Service Type"
+      
+      // Check if it's a package-based service
+      const packagesServices = [
+        "Starter Website", "Business Website", "Web Platform",
+        "Mobile App Starter", "Business Mobile App", "Advanced Mobile App",
+        "SaaS MVP", "Business SaaS", "Enterprise SaaS"
+      ]
+      
+      if (packagesServices.some(pkg => selectedService?.toLowerCase().includes(pkg.toLowerCase()))) {
+        return "Package"
+      }
+      
+      // For design services with multiple items
+      if (selectedService?.includes(",")) {
+        return "Services"
+      }
+      
+      return "Service"
+    }
+
+    const getPriceLabel = () => {
+      // If service is a named package, call it "Package Price"
+      const packagesServices = [
+        "Starter Website", "Business Website", "Web Platform",
+        "Mobile App Starter", "Business Mobile App", "Advanced Mobile App",
+        "SaaS MVP", "Business SaaS", "Enterprise SaaS"
+      ]
+      
+      if (packagesServices.some(pkg => selectedService?.toLowerCase().includes(pkg.toLowerCase()))) {
+        return "Package Price"
+      }
+      
+      // For multiple services
+      if (selectedService?.includes(",")) {
+        return "Estimated Total"
+      }
+      
+      return "Price"
+    }
+
     autoTable(doc, {
       startY: 60,
       head: [["Field", "Details"]],
       body: [
-        ["Category", selectedCategory ?? "—"],
-        ["Service", selectedService ?? "—"],
-        ["Package", displayedBudget ?? "—"],
-        ["Additional Details", details || "—"],
+        ["Project Category", selectedCategory ?? "—"],
+        [getServiceTypeLabel(), displayedService ?? "—"],
+        [getPriceLabel(), displayedBudget ?? "—"],
       ],
       headStyles: { fillColor: primary, textColor: 255, fontStyle: "bold", font: "helvetica" },
       alternateRowStyles: { fillColor: [245, 253, 251] },
