@@ -298,25 +298,25 @@ export function StartProjectStepOne() {
       {/* Back Button - Top Left */}
       <button
         onClick={() => router.push(backNav.destination)}
-        className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
+        className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-3 sm:mb-4 w-fit"
       >
-        <ArrowLeft className="h-4 w-4" />
+        <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
         {backNav.label}
       </button>
 
-      {/* 2-Column Layout */}
-      <div className="grid lg:grid-cols-[1fr_400px] gap-6 flex-1 min-h-0">
+      {/* 2-Column Layout - Stacks on mobile */}
+      <div className="grid lg:grid-cols-[1fr_400px] gap-4 sm:gap-6 flex-1 min-h-0">
         {/* Left Panel - Service Selection */}
-        <div className="flex flex-col overflow-hidden max-h-[400px]">
-          <div className="mb-4 flex-shrink-0">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+        <div className="flex flex-col overflow-hidden max-h-[350px] sm:max-h-[400px]">
+          <div className="mb-3 sm:mb-4 flex-shrink-0">
+            <h3 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider">
               Our Services
             </h3>
           </div>
 
           <div className="flex-1 overflow-y-auto custom-scrollbar min-h-0">
             {/* Main Service Selection */}
-            <div className="space-y-3">
+            <div className="space-y-2 sm:space-y-3">
               {MAIN_SERVICES.map((service, index) => {
                 const isSelected = selectedMainService === service.id
                 return (
@@ -328,36 +328,36 @@ export function StartProjectStepOne() {
                     onClick={() => {
                       setSelectedMainService(service.id)
                     }}
-                    className={`w-full group rounded-2xl border transition-all p-5 text-left ${
+                    className={`w-full group rounded-xl sm:rounded-2xl border transition-all p-3 sm:p-4 md:p-5 text-left ${
                       isSelected
                         ? "border-[var(--primary)] bg-[var(--primary)]/5 shadow-sm"
                         : "border-base bg-surface hover:bg-surface-alt hover:border-[var(--primary)]/40"
                     }`}
                   >
-                    <div className="flex items-start gap-4">
+                    <div className="flex items-start gap-2.5 sm:gap-3 md:gap-4">
                       <div
-                        className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                        className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
                           isSelected
                             ? "bg-[var(--primary)] border-[var(--primary)]"
                             : "border-muted-foreground/40 group-hover:border-[var(--primary)]/60"
                         }`}
                       >
-                        {isSelected && <Check className="h-4 w-4 text-black" strokeWidth={3} />}
+                        {isSelected && <Check className="h-3 w-3 sm:h-4 sm:w-4 text-black" strokeWidth={3} />}
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-baseline gap-2 mb-2">
-                          <span className="text-xs font-bold text-muted-foreground opacity-60">
+                        <div className="flex items-baseline gap-1.5 sm:gap-2 mb-1.5 sm:mb-2">
+                          <span className="text-[10px] sm:text-xs font-bold text-muted-foreground opacity-60">
                             {service.number}
                           </span>
-                          <h4 className={`text-base font-bold transition-colors ${
+                          <h4 className={`text-sm sm:text-base font-bold transition-colors ${
                             isSelected ? "text-[var(--primary)]" : "text-foreground"
                           }`}>
                             {service.title}
                           </h4>
                         </div>
 
-                        <p className="text-sm text-muted-foreground leading-relaxed">
+                        <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                           {service.description}
                         </p>
                       </div>
@@ -369,15 +369,15 @@ export function StartProjectStepOne() {
           </div>
         </div>
 
-        {/* Right Panel - Service Info (Read-only) */}
-        <div className="rounded-2xl border border-base bg-surface flex flex-col overflow-hidden max-h-[400px]">
-          <div className="p-6 border-b border-base flex-shrink-0">
-            <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+        {/* Right Panel - Service Info (Read-only) - Hidden on mobile, shown on lg+ */}
+        <div className="hidden lg:flex rounded-2xl border border-base bg-surface flex-col overflow-hidden max-h-[400px]">
+          <div className="p-4 sm:p-6 border-b border-base flex-shrink-0">
+            <h3 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider">
               Service Details
             </h3>
           </div>
 
-          <div className="flex-1 overflow-y-auto custom-scrollbar p-6 min-h-0">
+          <div className="flex-1 overflow-y-auto custom-scrollbar p-4 sm:p-6 min-h-0">
             {!selectedMainService ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-6">
                 <div className="w-16 h-16 rounded-full bg-surface-alt border border-base flex items-center justify-center mb-4">
@@ -581,17 +581,31 @@ export function StartProjectStepOne() {
           </div>
 
           {/* Continue Button */}
-          <div className="p-6 border-t border-base flex-shrink-0">
+          <div className="p-4 sm:p-6 border-t border-base flex-shrink-0">
             <button
               onClick={handleContinue}
               disabled={!isValid()}
-              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--primary)] text-black text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+              className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
             >
               Continue
-              <ArrowRight className="h-5 w-5" />
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
             </button>
           </div>
         </div>
+
+        {/* Mobile Continue Button - Shows on mobile when service is selected */}
+        {selectedMainService && (
+          <div className="lg:hidden mt-4">
+            <button
+              onClick={handleContinue}
+              disabled={!isValid()}
+              className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg"
+            >
+              Continue
+              <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   )

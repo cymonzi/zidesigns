@@ -119,13 +119,13 @@ export default function MobileAppPackagesPage() {
       <PageTitleTracker />
       
       <main className="flex-1 pt-[var(--nav-height)] overflow-hidden">
-        <div className="h-full max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col">
+        <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex flex-col">
           {/* Header */}
-          <div className="relative pb-6 text-center flex-shrink-0">
+          <div className="relative pb-4 sm:pb-6 text-center flex-shrink-0">
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-3"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-2 sm:mb-3"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />
               Mobile App Development
@@ -135,7 +135,7 @@ export default function MobileAppPackagesPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight px-2"
             >
               Choose your <span className="text-gradient">package</span>
             </motion.h1>
@@ -144,7 +144,7 @@ export default function MobileAppPackagesPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-2 text-muted max-w-2xl mx-auto text-sm leading-relaxed"
+              className="mt-2 text-muted max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed px-4"
             >
               Select a package that best fits your needs. We'll refine the details together.
             </motion.p>
@@ -153,20 +153,20 @@ export default function MobileAppPackagesPage() {
           {/* Back Button - Top Left (outside cards) */}
           <button
             onClick={() => fromParam === 'home' ? router.push('/') : router.push('/start-project')}
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
+            className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-3 sm:mb-4 w-fit"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Back to {backLabel}
           </button>
 
-          {/* 2-Column Layout with Fixed Heights */}
-          <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8 flex-1 min-h-0">
+          {/* 2-Column Layout with Fixed Heights - Stacks on mobile */}
+          <div className="grid lg:grid-cols-[1fr_400px] gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0">
             {/* Left Column - Packages Container (Subtle background with scrollable content) */}
             <SectionReveal className="min-h-0 flex flex-col">
               {/* Container with subtle background and defined height */}
-              <div className="rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-6 flex flex-col max-h-[500px]">
-                <div className="overflow-y-auto pr-2 custom-scrollbar flex-1">
-                  <div className="space-y-4 pb-4">
+              <div className="rounded-xl sm:rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-3 sm:p-4 md:p-6 flex flex-col max-h-[450px] sm:max-h-[500px]">
+                <div className="overflow-y-auto pr-1 sm:pr-2 custom-scrollbar flex-1">
+                  <div className="space-y-2.5 sm:space-y-3 md:space-y-4 pb-4">
                     {MOBILE_APP_PACKAGES.map((pkg, index) => {
                       const isSelected = selectedPackage === pkg.id
                       return (
@@ -175,7 +175,7 @@ export default function MobileAppPackagesPage() {
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: index * 0.08, duration: 0.3 }}
-                          className={`w-full group rounded-2xl border transition-all ${
+                          className={`w-full group rounded-xl sm:rounded-2xl border transition-all ${
                             isSelected
                               ? "border-[var(--primary)] bg-[var(--primary)]/5"
                               : "border-base bg-surface hover:bg-surface-alt hover:border-[var(--primary)]/40"
@@ -183,27 +183,27 @@ export default function MobileAppPackagesPage() {
                         >
                           <button
                             onClick={() => setSelectedPackage(pkg.id)}
-                            className="w-full p-6 text-left"
+                            className="w-full p-3 sm:p-4 md:p-6 text-left"
                           >
-                            <div className="flex items-start gap-4">
+                            <div className="flex items-start gap-2.5 sm:gap-3 md:gap-4">
                               {/* Checkbox */}
                               <div
-                                className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                                className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
                                   isSelected
                                     ? "bg-[var(--primary)] border-[var(--primary)]"
                                     : "border-muted-foreground/40 group-hover:border-[var(--primary)]/60"
                                 }`}
                               >
-                                {isSelected && <Check className="h-4 w-4 text-black" strokeWidth={3} />}
+                                {isSelected && <Check className="h-3 w-3 sm:h-4 sm:w-4 text-black" strokeWidth={3} />}
                               </div>
 
                               <div className="flex-1 min-w-0">
                                 {/* Package Header */}
-                                <div className="flex items-baseline gap-3 mb-2">
-                                  <span className="text-sm font-bold text-muted-foreground opacity-60">
+                                <div className="flex items-baseline gap-1.5 sm:gap-2 md:gap-3 mb-1.5 sm:mb-2">
+                                  <span className="text-[10px] sm:text-xs md:text-sm font-bold text-muted-foreground opacity-60">
                                     {pkg.number}
                                   </span>
-                                  <h3 className={`text-xl font-bold transition-colors ${
+                                  <h3 className={`text-base sm:text-lg md:text-xl font-bold transition-colors ${
                                     isSelected ? "text-[var(--primary)]" : "text-foreground"
                                   }`}>
                                     {pkg.name}
@@ -211,8 +211,8 @@ export default function MobileAppPackagesPage() {
                                 </div>
 
                                 {/* Price */}
-                                <div className="mb-3">
-                                  <span className={`text-2xl font-bold transition-colors ${
+                                <div className="mb-2 sm:mb-3">
+                                  <span className={`text-lg sm:text-xl md:text-2xl font-bold transition-colors ${
                                     isSelected ? "text-[var(--primary)]" : "text-foreground"
                                   }`}>
                                     {pkg.displayPrice}
@@ -220,14 +220,14 @@ export default function MobileAppPackagesPage() {
                                 </div>
 
                                 {/* Description */}
-                                <p className="text-sm text-muted-foreground leading-relaxed">
+                                <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                                   {pkg.description}
                                 </p>
 
                                 {/* Note */}
                                 {pkg.note && (
-                                  <div className="mt-4 pt-4 border-t border-base/50">
-                                    <p className="text-xs text-muted-foreground italic leading-relaxed">
+                                  <div className="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-base/50">
+                                    <p className="text-[10px] sm:text-xs text-muted-foreground italic leading-relaxed">
                                       {pkg.note}
                                     </p>
                                   </div>
@@ -244,9 +244,9 @@ export default function MobileAppPackagesPage() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: MOBILE_APP_PACKAGES.length * 0.08, duration: 0.3 }}
-                      className="rounded-2xl border border-base/60 bg-surface/50 p-5"
+                      className="rounded-xl sm:rounded-2xl border border-base/60 bg-surface/50 p-3 sm:p-4 md:p-5"
                     >
-                      <p className="text-sm text-muted-foreground leading-relaxed">
+                      <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                         <span className="font-semibold text-foreground">Need something specific?</span>
                         <br />
                         Every mobile app is unique. We'll customize features and pricing based on your exact needs.
@@ -257,15 +257,15 @@ export default function MobileAppPackagesPage() {
               </div>
             </SectionReveal>
 
-            {/* Right Column - Summary (Fixed Height, Scrollable) */}
-            <SectionReveal delay={0.1} className="min-h-0 flex flex-col">
+            {/* Right Column - Summary (Fixed Height, Scrollable) - Hidden on mobile */}
+            <SectionReveal delay={0.1} className="hidden lg:flex min-h-0 flex-col">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="rounded-2xl border border-base bg-surface flex flex-col h-[500px]"
               >
-                <div className="p-6 border-b border-base flex-shrink-0">
-                  <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
+                <div className="p-4 sm:p-6 border-b border-base flex-shrink-0">
+                  <h3 className="text-xs sm:text-sm font-semibold text-foreground uppercase tracking-wider">
                     Your selection
                   </h3>
                 </div>
@@ -349,18 +349,45 @@ export default function MobileAppPackagesPage() {
                 </div>
 
                 {/* Continue Button - Fixed at Bottom */}
-                <div className="p-6 border-t border-base flex-shrink-0">
+                <div className="p-4 sm:p-6 border-t border-base flex-shrink-0">
                   <button
                     onClick={handleContinue}
                     disabled={!selectedPackage}
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--primary)] text-black text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
                   >
                     Continue
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                   </button>
                 </div>
               </motion.div>
             </SectionReveal>
+
+            {/* Mobile Summary Card - Shows on mobile when package is selected */}
+            {selectedPkg && (
+              <div className="lg:hidden mt-4">
+                <div className="rounded-xl border border-base bg-surface p-4 mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div>
+                      <p className="text-xs text-muted-foreground mb-1">Selected Package</p>
+                      <h4 className="text-base font-bold text-foreground">{selectedPkg.name}</h4>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-muted-foreground mb-1">Price</p>
+                      <p className="text-lg font-bold text-[var(--primary)]">{selectedPkg.displayPrice}</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{selectedPkg.description}</p>
+                </div>
+                <button
+                  onClick={handleContinue}
+                  disabled={!selectedPackage}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg"
+                >
+                  Continue
+                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>

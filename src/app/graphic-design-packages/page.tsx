@@ -163,13 +163,13 @@ export default function GraphicDesignPackagesPage() {
       <PageTitleTracker />
       
       <main className="flex-1 pt-[var(--nav-height)] overflow-hidden">
-        <div className="h-full max-w-7xl mx-auto px-6 lg:px-8 py-8 flex flex-col">
+        <div className="h-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 flex flex-col">
           {/* Header */}
-          <div className="relative pb-6 text-center flex-shrink-0">
+          <div className="relative pb-4 sm:pb-6 text-center flex-shrink-0">
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-3"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-base bg-surface text-xs font-medium text-muted tracking-widest uppercase mb-2 sm:mb-3"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />
               Graphic & Brand Design
@@ -179,7 +179,7 @@ export default function GraphicDesignPackagesPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.05 }}
-              className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight"
+              className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight px-2"
             >
               What do you <span className="text-gradient">need?</span>
             </motion.h1>
@@ -188,7 +188,7 @@ export default function GraphicDesignPackagesPage() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="mt-2 text-muted max-w-2xl mx-auto text-sm leading-relaxed"
+              className="mt-2 text-muted max-w-2xl mx-auto text-xs sm:text-sm leading-relaxed px-4"
             >
               Select one or more services. We'll estimate your starting cost.
             </motion.p>
@@ -197,20 +197,20 @@ export default function GraphicDesignPackagesPage() {
           {/* Back Button - Top Left (outside cards) */}
           <button
             onClick={() => fromParam === 'home' ? router.push('/') : router.push('/start-project')}
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
+            className="inline-flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-3 sm:mb-4 w-fit"
           >
-            <ArrowLeft className="h-4 w-4" />
+            <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Back to {backLabel}
           </button>
 
-          {/* 2-Column Layout with Fixed Heights */}
-          <div className="grid lg:grid-cols-[1fr_400px] gap-6 lg:gap-8 flex-1 min-h-0">
+          {/* 2-Column Layout with Fixed Heights - Stacks on mobile */}
+          <div className="grid lg:grid-cols-[1fr_400px] gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0">
             {/* Left Column - Services Container (Subtle background with scrollable content) */}
             <SectionReveal className="min-h-0 flex flex-col">
               {/* Container with subtle background and defined height */}
-              <div className="rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-6 flex flex-col max-h-[500px]">
-                <div className="overflow-y-auto pr-2 custom-scrollbar flex-1">
-                  <div className="space-y-3 pb-4">
+              <div className="rounded-xl sm:rounded-2xl border border-base/40 bg-surface/30 backdrop-blur-sm p-3 sm:p-4 md:p-6 flex flex-col max-h-[450px] sm:max-h-[500px]">
+                <div className="overflow-y-auto pr-1 sm:pr-2 custom-scrollbar flex-1">
+                  <div className="space-y-2 sm:space-y-3 pb-4">
                 {GRAPHIC_DESIGN_SERVICES.map((service, index) => {
                   const isSelected = selectedServices.has(service.id)
                   const quantity = serviceQuantities[service.id] || 1
@@ -314,31 +314,31 @@ export default function GraphicDesignPackagesPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: GRAPHIC_DESIGN_SERVICES.length * 0.04, duration: 0.3 }}
                   onClick={() => setOtherSelected(!otherSelected)}
-                  className={`w-full group rounded-2xl border transition-all p-5 text-left ${
+                  className={`w-full group rounded-xl sm:rounded-2xl border transition-all p-3 sm:p-4 md:p-5 text-left ${
                     otherSelected
                       ? "border-[var(--primary)] bg-[var(--primary)]/5"
                       : "border-base bg-surface hover:bg-surface-alt hover:border-[var(--primary)]/40"
                   }`}
                 >
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2.5 sm:gap-3 md:gap-4">
                     {/* Checkbox */}
                     <div
-                      className={`flex-shrink-0 w-6 h-6 rounded border-2 flex items-center justify-center transition-colors ${
+                      className={`flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded border-2 flex items-center justify-center transition-colors ${
                         otherSelected
                           ? "bg-[var(--primary)] border-[var(--primary)]"
                           : "border-muted-foreground/40 group-hover:border-[var(--primary)]/60"
                       }`}
                     >
-                      {otherSelected && <Check className="h-4 w-4 text-black" strokeWidth={3} />}
+                      {otherSelected && <Check className="h-3 w-3 sm:h-4 sm:w-4 text-black" strokeWidth={3} />}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className={`text-lg font-semibold transition-colors ${
+                      <div className={`text-sm sm:text-base md:text-lg font-semibold transition-colors ${
                         otherSelected ? "text-[var(--primary)]" : "text-foreground"
                       }`}>
                         Other
                       </div>
-                      <div className="mt-0.5 text-sm text-muted-foreground">Tell us what you need</div>
+                      <div className="mt-0.5 text-xs sm:text-sm text-muted-foreground">Tell us what you need</div>
                     </div>
                   </div>
                 </motion.button>
@@ -405,14 +405,14 @@ export default function GraphicDesignPackagesPage() {
               </div>
             </SectionReveal>
 
-            {/* Right Column - Summary (Fixed Height, Scrollable) */}
-            <SectionReveal delay={0.1} className="min-h-0 flex flex-col">
+            {/* Right Column - Summary (Fixed Height, Scrollable) - Hidden on mobile */}
+            <SectionReveal delay={0.1} className="hidden lg:flex min-h-0 flex-col">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="rounded-2xl border border-base bg-surface flex flex-col h-[500px]"
               >
-                <div className="p-6 border-b border-base flex-shrink-0">
+                <div className="p-4 sm:p-6 border-b border-base flex-shrink-0">
                   <h3 className="text-sm font-semibold text-foreground uppercase tracking-wider">
                     Your selection
                   </h3>
@@ -475,18 +475,61 @@ export default function GraphicDesignPackagesPage() {
                 </div>
 
                 {/* Continue Button - Fixed at Bottom */}
-                <div className="p-6 border-t border-base flex-shrink-0">
+                <div className="p-4 sm:p-6 border-t border-base flex-shrink-0">
                   <button
                     onClick={handleContinue}
                     disabled={!hasSelection}
-                    className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[var(--primary)] text-black text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
+                    className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]"
                   >
                     Continue
-                    <ArrowRight className="h-5 w-5" />
+                    <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
                   </button>
                 </div>
               </motion.div>
             </SectionReveal>
+
+            {/* Mobile Summary Card - Shows on mobile when services are selected */}
+            {hasSelection && (
+              <div className="lg:hidden mt-4">
+                <div className="rounded-xl border border-base bg-surface p-4 mb-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="flex-1">
+                      <p className="text-xs text-muted-foreground mb-2">Selected Services</p>
+                      <div className="space-y-1">
+                        {selectedServicesArray.map((service) => {
+                          const quantity = serviceQuantities[service.id] || 1
+                          return (
+                            <p key={service.id} className="text-xs font-medium text-foreground">
+                              {service.name} {quantity > 1 && `(×${quantity})`}
+                            </p>
+                          )
+                        })}
+                        {otherSelected && otherDescription && (
+                          <p className="text-xs font-medium text-foreground">
+                            Other: {otherDescription.slice(0, 30)}{otherDescription.length > 30 ? '...' : ''}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-right ml-4">
+                      <p className="text-xs text-muted-foreground mb-1">Est. Total</p>
+                      <p className="text-lg font-bold text-[var(--primary)]">{formatPrice(total)}</p>
+                    </div>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    Final pricing may vary based on requirements
+                  </p>
+                </div>
+                <button
+                  onClick={handleContinue}
+                  disabled={!hasSelection}
+                  className="w-full inline-flex items-center justify-center gap-2 px-4 sm:px-6 py-2.5 sm:py-3 rounded-full bg-[var(--primary)] text-black text-xs sm:text-sm font-semibold transition hover:bg-[var(--primary)]/90 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98] shadow-lg"
+                >
+                  Continue
+                  <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </main>

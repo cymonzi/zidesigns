@@ -287,6 +287,7 @@ export function StartProjectForm() {
   const [emailTouched, setEmailTouched] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [hasSubmitted, setHasSubmitted] = useState(false)
 
   const servicesForCategory = useMemo(() => (selectedCategory ? SERVICES[selectedCategory] ?? [] : []), [selectedCategory])
 
@@ -313,6 +314,14 @@ export function StartProjectForm() {
 
   const submit = async () => {
     setSubmitError(null)
+    
+    // Prevent duplicate submissions
+    if (hasSubmitted) {
+      console.log("Form already submitted, skipping duplicate submission")
+      setPhase(3) // Just navigate to confirmation page
+      return
+    }
+    
     if (!isPhase2Valid) {
       setNameTouched(true)
       setPhoneTouched(true)
@@ -382,6 +391,7 @@ export function StartProjectForm() {
         console.warn("EmailJS notification failed:", await emailRes.text())
       }
 
+      setHasSubmitted(true) // Mark as submitted
       setPhase(3)
     } catch (err: any) {
       console.error("Form submission error:", err)
@@ -506,9 +516,9 @@ export function StartProjectForm() {
   return (
     <>
       <div className="flex-1 min-h-0 flex flex-col">
-        <div className="bg-surface rounded-2xl border border-base shadow-sm p-4 md:p-6 flex-1 flex flex-col min-h-0">
+        <div className="bg-surface rounded-xl sm:rounded-2xl border border-base shadow-sm p-3 sm:p-4 md:p-6 flex-1 flex flex-col min-h-0">
           <div className="flex flex-col flex-1 min-h-0">
-            <div className="flex border-b border-base mb-6 -mx-4 md:-mx-6 px-4 md:px-6 overflow-x-auto flex-shrink-0">
+            <div className="flex border-b border-base mb-4 sm:mb-6 -mx-3 sm:-mx-4 md:-mx-6 px-3 sm:px-4 md:px-6 overflow-x-auto flex-shrink-0">
               {[
                 { n: 1, label: 'Services' },
                 { n: 2, label: 'Contact' },
@@ -524,7 +534,7 @@ export function StartProjectForm() {
                       if (n < 3) setPhase(n as Phase)
                       else if (reachable) setPhase(n as Phase)
                     }}
-                    className={`flex items-center gap-2 px-4 py-3 text-sm border-b-2 transition-colors
+                    className={`flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 md:px-4 py-2 sm:py-3 text-xs sm:text-sm border-b-2 transition-colors whitespace-nowrap
                       ${active
                         ? 'border-[var(--primary)] text-fg font-semibold'
                         : done
@@ -533,14 +543,14 @@ export function StartProjectForm() {
                       } ${!reachable ? 'opacity-40 cursor-not-allowed' : ''}`}
                   >
                     {done ? (
-                      <span className="w-5 h-5 rounded-full bg-[var(--primary)] flex items-center justify-center text-black text-xs">✓</span>
+                      <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-[var(--primary)] flex items-center justify-center text-black text-[10px] sm:text-xs">✓</span>
                     ) : (
-                      <span className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs
+                      <span className={`w-4 h-4 sm:w-5 sm:h-5 rounded-full border flex items-center justify-center text-[10px] sm:text-xs
                         ${active ? 'border-[var(--primary)] text-fg' : 'border-base text-muted'}`}>
                         {n}
                       </span>
                     )}
-                    <span className="hidden sm:inline">{label}</span>
+                    <span className="hidden xs:inline sm:inline">{label}</span>
                   </button>
                 )
               })}
@@ -628,6 +638,7 @@ export function StartProjectForm() {
                   setPreferredContact("WhatsApp")
                   setCustomService("")
                   setCustomBudget("")
+                  setHasSubmitted(false) // Reset submission flag
                   router.push('/start-project')
                 }}
                 onDownload={downloadSummary}

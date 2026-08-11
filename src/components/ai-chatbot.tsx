@@ -227,6 +227,20 @@ function getBestKeywordMatch(message: string): { key: string | null; score: numb
   return { key: bestKey, score: bestScore }
 }
 
+// Check if a question is likely about Zi Designs' domain
+function isRelevantToProject(message: string): boolean {
+  const relevantKeywords = [
+    "design", "website", "web", "mobile", "app", "graphic", "logo", "branding",
+    "video", "automation", "ai", "service", "price", "cost", "budget", "timeline",
+    "project", "work", "portfolio", "contact", "email", "whatsapp", "instagram",
+    "start", "process", "payment", "deposit", "refund", "learn", "framework",
+    "gmf", "kampala", "uganda", "zi designs", "zidesigns", "package", "revision"
+  ]
+  
+  const lower = message.toLowerCase()
+  return relevantKeywords.some(keyword => lower.includes(keyword))
+}
+
 function getSuggestionGroup(message: string): string[] {
   const lower = message.toLowerCase()
   if (lower.includes("service") || lower.includes("website") || lower.includes("mobile") || lower.includes("graphic")) return responseSuggestions.services
@@ -395,6 +409,8 @@ export function AIChatbot() {
 
     if (isQuestion(normalizedMessage)) {
       const bestMatch = getBestKeywordMatch(normalizedMessage)
+      
+      // Good match found (50% or more keyword overlap)
       if (bestMatch.key && bestMatch.score >= 0.5) {
         const matchLinks = getLinksForText(bestMatch.key)
         let finalLinks = matchLinks.length > 0 ? matchLinks : contextualLinks
@@ -412,7 +428,19 @@ export function AIChatbot() {
         }
       }
 
-      // Low-confidence fallback: always include contact link
+      // Check if question is relevant to our domain at all
+      const isRelevant = isRelevantToProject(normalizedMessage)
+      
+      if (!isRelevant) {
+        // Off-topic question - be clear about boundaries
+        return {
+          text: "I'm specifically built to answer questions about Zi Designs - our services (websites, mobile apps, graphic design, video editing, AI tools), pricing, timelines, portfolio, and how to start a project. I don't have information outside of that scope. What would you like to know about Zi Designs?",
+          suggestions: defaultSuggestions,
+          links: [{ label: "View Services", href: "#services" }],
+        }
+      }
+
+      // Question is relevant but no strong match - help guide the user
       const fallbackLinks = contextualLinks.length > 0 
         ? contextualLinks 
         : [{ label: "Get Started", href: "/start-project" }]
@@ -421,13 +449,13 @@ export function AIChatbot() {
         fallbackLinks.push(contactLink)
       }
       return {
-        text: "Great question. I may not have a direct answer yet, but I can help you with services, timelines, projects, and contact options. What would you like to explore next?",
+        text: "I'm specifically designed to help with Zi Designs services, pricing, timelines, our portfolio, and how to start a project. I don't have information about that particular topic, but I can definitely help with anything related to our design and development work. What would you like to know?",
         suggestions: defaultSuggestions,
         links: fallbackLinks,
       }
     }
 
-    // Final fallback: always include contact link
+    // Final fallback: non-question inputs
     const finalFallbackLinks = contextualLinks.length > 0 
       ? contextualLinks 
       : [{ label: "Get Started", href: "/start-project" }]
@@ -436,7 +464,7 @@ export function AIChatbot() {
       finalFallbackLinks.push(contactLink)
     }
     return {
-      text: "I can help with services, timelines, project examples, and how to get started. Tap a suggestion below or ask anything in your own words.",
+      text: "I'm here to help with information about Zi Designs services, projects, pricing, and timelines. Feel free to ask a question or tap one of the suggestions below.",
       suggestions: defaultSuggestions,
       links: finalFallbackLinks,
     }
