@@ -7,6 +7,7 @@ import autoTable from "jspdf-autotable"
 import { useSearchParams, useRouter } from "next/navigation"
 import { StartProjectStepOne } from "@/components/start-project-step-one"
 import { StartProjectContactStep } from "@/components/start-project-contact-step"
+import { StartProjectConfirmStep } from "@/components/start-project-confirm-step"
 
 type Phase = 1 | 2 | 3
 
@@ -257,6 +258,7 @@ export function StartProjectForm() {
 
     if (priceParam) {
       setSelectedPrice(priceParam)
+      setBudget(priceParam) // Set budget to match the price from URL
     }
 
     const phaseParam = searchParams.get("phase")
@@ -601,84 +603,35 @@ export function StartProjectForm() {
             )}
 
             {phase === 3 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 min-h-0">
-                <div className="grid md:grid-cols-[1fr_280px] gap-4 md:gap-6 items-start pb-4 h-full">
-                  <div className="space-y-5 overflow-y-auto pr-2 custom-scrollbar">
-                    <div>
-                      <h3 className="text-lg font-bold sm:text-xl">Project Request Submitted</h3>
-                      <p className="mt-2 text-sm md:text-base text-muted">We've received your request and will be in touch within 24 hours to discuss next steps.</p>
-                    </div>
-
-                    <div className="bg-surface rounded-2xl border border-base p-4 md:p-6 shadow-sm">
-                      <div className="flex items-start gap-3">
-                        <div className="font-semibold">What happens next</div>
-                      </div>
-                      <ol className="mt-3 list-inside list-decimal text-sm space-y-1">
-                        <li className="font-semibold">We review your request</li>
-                        <li className="font-semibold">We reach out within 24 hours</li>
-                        <li className="font-semibold">Plan, quote & start</li>
-                      </ol>
-
-                      <div className="mt-4">
-                        <div className="text-sm font-semibold">Quick contact options</div>
-                        <div className="mt-2 flex flex-col gap-1 md:gap-2">
-                          <a href="https://wa.me/256782062673" className="text-xs md:text-sm text-[var(--primary)] break-all">WhatsApp: +256 782 062673</a>
-                          <a href="mailto:zidesigns001@gmail.com" className="text-xs md:text-sm text-fg break-all">Email: zidesigns001@gmail.com</a>
-                        </div>
-                      </div>
-
-                      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-start">
-                        <button
-                          onClick={() => {
-                            setPhase(1)
-                            setSelectedCategory(null)
-                            setSelectedService(null)
-                            setSelectedMain(null)
-                            setBudget(null)
-                            setDetails("")
-                            setName("")
-                            setPhone("")
-                            setEmail("")
-                            setCompany("")
-                            setPreferredContact("WhatsApp")
-                            setCustomService("")
-                            setCustomBudget("")
-                            router.push('/start-project')
-                          }}
-                          className="w-full sm:w-auto px-4 py-2 rounded-lg border text-sm md:text-base"
-                        >
-                          Request another project
-                        </button>
-                        <button onClick={() => downloadSummary()} className="w-full sm:w-auto px-4 py-2 rounded-lg border bg-surface-alt text-sm md:text-base">
-                          Download summary
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="min-w-0 rounded-2xl bg-surface-alt border border-base p-4 md:p-5 shadow-sm overflow-y-auto custom-scrollbar">
-                    {selectedService ? (
-                      <>
-                        <p className="text-xs md:text-sm font-semibold text-fg">Your request so far</p>
-                        <div className="mt-4 space-y-2 md:space-y-3">
-                          {selectedCategory && <SummaryRow label="Category" value={selectedCategory} />}
-                          {selectedService && <SummaryRow label="Service" value={displayedService ?? selectedService} />}
-                          {budget && <SummaryRow label="Package" value={displayedBudget ?? budget} />}
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <p className="text-xs md:text-sm font-semibold text-fg">Quick tips</p>
-                        <ul className="mt-4 space-y-1 md:space-y-2 text-xs md:text-sm text-muted list-disc list-inside">
-                          <li>Pick the service closest to your idea.</li>
-                          <li>Select the package that best matches your scope.</li>
-                          <li>Detail your goal clearly for the fastest reply.</li>
-                        </ul>
-                      </>
-                    )}
-                  </div>
-                </div>
-              </motion.div>
+              <StartProjectConfirmStep
+                selectedCategory={selectedCategory}
+                selectedService={selectedService}
+                displayedService={displayedService}
+                budget={budget}
+                displayedBudget={displayedBudget}
+                name={name}
+                phone={phone}
+                email={email}
+                company={company}
+                preferredContact={preferredContact}
+                onNewRequest={() => {
+                  setPhase(1)
+                  setSelectedCategory(null)
+                  setSelectedService(null)
+                  setSelectedMain(null)
+                  setBudget(null)
+                  setDetails("")
+                  setName("")
+                  setPhone("")
+                  setEmail("")
+                  setCompany("")
+                  setPreferredContact("WhatsApp")
+                  setCustomService("")
+                  setCustomBudget("")
+                  router.push('/start-project')
+                }}
+                onDownload={downloadSummary}
+              />
             )}
           </div>
         </div>

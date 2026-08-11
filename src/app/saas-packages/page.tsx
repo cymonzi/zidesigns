@@ -87,7 +87,8 @@ export default function SaasPackagesPage() {
   const searchParams = useSearchParams()
 
   // Get the service name from URL to display contextual back button
-  const fromService = searchParams.get('from') || 'Services'
+  const fromParam = searchParams.get('from')
+  const backLabel = fromParam === 'home' ? 'Home' : (fromParam || 'Services')
 
   const handleContinue = () => {
     if (!selectedPackage) return
@@ -146,11 +147,11 @@ export default function SaasPackagesPage() {
 
           {/* Back Button - Top Left (outside cards) */}
           <button
-            onClick={() => router.push('/start-project')}
+            onClick={() => fromParam === 'home' ? router.push('/') : router.push('/start-project')}
             className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-[var(--primary)] transition-colors mb-4 w-fit"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to {fromService}
+            Back to {backLabel}
           </button>
 
           {/* 2-Column Layout with Fixed Heights */}
