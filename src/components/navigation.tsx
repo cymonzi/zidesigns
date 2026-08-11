@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 import Link from "next/link"
-import { Menu, X, ArrowUpRight } from "lucide-react"
+import { Menu, X, ArrowUpRight, ArrowLeft } from "lucide-react"
 import { ThemeToggle } from "./theme-toggle"
 import { AboutModal } from "./about-modal"
 import { cn } from "@/lib/utils"
@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils"
 const navigation = [
   { name: "Home", href: "#home" },
   { name: "Services", href: "#services" },
-  { name: "Insights", href: "/insights" },
+  { name: "Learn", href: "/learn" },
   { name: "About", href: "#", action: "about" },
   { name: "Get Started", href: "/start-project" },
 ]
@@ -76,7 +76,7 @@ export function Navigation() {
     }
   }, [mobileMenuOpen])
 
-  const insightsIndex = navigation.findIndex((n) => n.name === "Insights")
+  const learnIndex = navigation.findIndex((n) => n.name === "Learn")
   const getStartedIndex = navigation.findIndex((n) => n.name === "Get Started")
   const isGetStartedActive = activeIndex === getStartedIndex
 
@@ -86,8 +86,8 @@ export function Navigation() {
       return
     }
 
-    if (pathname === "/insights") {
-      setActiveIndex(insightsIndex)
+    if (pathname === "/learn") {
+      setActiveIndex(learnIndex)
       return
     }
 
@@ -95,7 +95,7 @@ export function Navigation() {
       setActiveIndex(0)
       return
     }
-  }, [pathname, getStartedIndex, insightsIndex])
+  }, [pathname, getStartedIndex, learnIndex])
 
   const handleGoHome = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()

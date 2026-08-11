@@ -21,25 +21,41 @@ export function HeroSection() {
       >
         <motion.h1
           style={{ transformStyle: "preserve-3d" }}
-          className="text-3xl font-bold tracking-tight text-fg sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl layer-front mx-auto max-w-3xl sm:max-w-4xl md:max-w-5xl leading-tight text-center break-words"
+          className="text-3xl font-bold tracking-tight text-fg sm:text-5xl md:text-6xl lg:text-6xl xl:text-7xl layer-front mx-auto max-w-3xl sm:max-w-4xl md:max-w-5xl leading-[1.1] sm:leading-[1.15] text-center break-words"
         >
-          Turn concepts
-          <span className="block">
+          {/* Line 1: "Turn concepts into" - Regular */}
+          <span className="block mb-1 sm:mb-2">
+            <motion.span
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+              className="inline-block"
+            >
+              Turn concepts into
+            </motion.span>
+          </span>
+
+          {/* Line 2: "digital experiences" gradient */}
+          <span className="block mb-1 sm:mb-2">
             <motion.span
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.12, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
               className="text-gradient inline-block"
             >
-              into clickable
-            </motion.span>{" "}
+              digital experiences
+            </motion.span>
+          </span>
+
+          {/* Line 3: "that work" - Regular with different accent */}
+          <span className="block">
             <motion.span
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.28, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
-              className="text-gradient inline-block"
+              transition={{ delay: 0.18, duration: 0.7, ease: [0.16, 0.84, 0.44, 1] }}
+              className="inline-block text-muted"
             >
-              products
+              that work
             </motion.span>
           </span>
         </motion.h1>

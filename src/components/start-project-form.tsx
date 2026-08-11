@@ -11,20 +11,21 @@ type Phase = 1 | 2 | 3 | 4
 const CATEGORIES = ["Design", "Branding", "Development"]
 
 const SERVICES: Record<string, string[]> = {
-  Design: ["Posters & Flyers", "CV Design", "Presentations", "Company Profiles", "Certificates"],
+  Design: ["Posters & Flyers", "CV Design", "Presentations", "Company Profiles", "Certificates", "Magazine Design"],
   Branding: ["Logo"],
   Development: ["Website", "Mobile Application"],
 }
 
 const STARTING_PRICES: Record<string, string> = {
-  "Posters & Flyers": "UGX 20,000+",
-  "Certificates": "UGX 20,000+",
-  "CV Design": "UGX 50,000+",
-  "Presentations": "UGX 100,000+",
-  "Company Profiles": "UGX 100,000+",
-  "Logo": "UGX 50,000+",
-  "Website": "UGX 750,000+",
-  "Mobile Application": "UGX 5,000,000+",
+  "Posters & Flyers": "UGX 20,000",
+  "Certificates": "UGX 20,000",
+  "CV Design": "UGX 150,000",
+  "Presentations": "UGX 100,000 (up to 10 slides)",
+  "Company Profiles": "UGX 100,000 (up to 10 pages)",
+  "Magazine Design": "UGX 100,000 (up to 10 pages)",
+  "Logo": "UGX 200,000",
+  "Website": "UGX 750,000",
+  "Mobile Application": "UGX 5,000,000",
 }
 
 type PackageOption = {
@@ -107,6 +108,21 @@ const CERTIFICATE_PACKAGE_OPTIONS: PackageOption[] = [
   },
 ]
 
+const MAGAZINE_DESIGN_PACKAGE_OPTIONS: PackageOption[] = [
+  {
+    label: "UGX 100,000",
+    details: ["Up to 8-page magazine layout", "1 revision", "Print-ready PDF"],
+  },
+  {
+    label: "UGX 250,000",
+    details: ["Up to 20-page magazine", "2 revisions", "Professional typography and imagery"],
+  },
+  {
+    label: "UGX 500,000+",
+    details: ["Full magazine design (40+ pages)", "Brand-aligned layout system", "Multiple revisions and print support"],
+  },
+]
+
 const BRANDING_PACKAGE_OPTIONS: PackageOption[] = [
   {
     label: "UGX 50,000",
@@ -171,6 +187,9 @@ function getPackageOptions(service: string | null | undefined, category: string 
   if (["company profiles"].includes(normalized)) {
     return COMPANY_PROFILE_PACKAGE_OPTIONS
   }
+  if (["magazine design"].includes(normalized)) {
+    return MAGAZINE_DESIGN_PACKAGE_OPTIONS
+  }
   if (["logo"].includes(normalized)) {
     return BRANDING_PACKAGE_OPTIONS
   }
@@ -205,9 +224,28 @@ export function StartProjectForm() {
 
   useEffect(() => {
     const serviceParam = searchParams.get("service")
+    const categoryParam = searchParams.get("category")
+    
     if (serviceParam) {
-      if (serviceParam.includes("Website") || serviceParam.includes("Mobile")) {
-        setSelectedCategory("Development")
+      // Map service to category and auto-select
+      const serviceToCategory: Record<string, string> = {
+        "Posters & Flyers": "Design",
+        "Certificates": "Design",
+        "CV Design": "Design",
+        "Presentations": "Design",
+        "Company Profiles": "Design",
+        "Magazine Design": "Design",
+        "Logo": "Branding",
+        "Logo Design": "Branding",
+        "Website": "Development",
+        "Mobile Application": "Development",
+      }
+      
+      // If category is explicitly provided, use it
+      const category = categoryParam || serviceToCategory[serviceParam]
+      if (category) {
+        setSelectedCategory(category)
+        setSelectedService(serviceParam)
       }
     }
   }, [searchParams])
@@ -450,10 +488,10 @@ export function StartProjectForm() {
 
   return (
     <>
-      <div className="grid gap-6 min-h-[calc(100vh_-_var(--nav-height)_-20rem)]">
-        <div className="bg-surface rounded-2xl border border-base shadow-sm p-4 md:p-6 min-h-full">
-          <div className="flex flex-col">
-            <div className="flex border-b border-base mb-6 -mx-4 md:-mx-6 px-4 md:px-6 overflow-x-auto">
+      <div className="grid gap-6">
+        <div className="bg-surface rounded-2xl border border-base shadow-sm p-4 md:p-6 h-[500px] flex flex-col">
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex border-b border-base mb-6 -mx-4 md:-mx-6 px-4 md:px-6 overflow-x-auto flex-shrink-0">
               {[
                 { n: 1, label: 'Service' },
                 { n: 2, label: 'Details' },
@@ -493,10 +531,10 @@ export function StartProjectForm() {
             </div>
 
             {phase === 1 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
                 <h3 className="text-lg font-semibold">What do you need?</h3>
 
-                <div className="mt-4">
+                <div className="mt-4 pb-4">
                   <div className="flex flex-wrap gap-2 md:gap-3">
                     {CATEGORIES.map((c) => (
                       <button
@@ -547,7 +585,7 @@ export function StartProjectForm() {
                               value={customService}
                               onChange={(e) => setCustomService(e.target.value)}
                               placeholder="Describe your service (e.g. custom app, AI workflow, or brand system)"
-                              className="w-full mt-2 rounded-md border px-3 py-2 text-sm"
+                              className="w-full mt-2 rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                             />
                           </div>
                         )}
@@ -569,13 +607,14 @@ export function StartProjectForm() {
             )}
 
             {phase === 2 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
                 <h3 className="text-lg font-semibold">Choose a package</h3>
                 <p className="mt-2 text-sm text-muted">These package options are tailored to {displayedService || "your selected service"} and show what you get at each investment level.</p>
 
-                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-                  <div className="space-y-3">
-                    {packageOptions.slice(0, 3).map((option) => (
+                <div className="mt-4 grid gap-4 lg:grid-cols-[1.1fr_0.9fr] pb-4">
+                  <div className="rounded-2xl border border-base/50 bg-surface-alt/30 p-3 flex flex-col">
+                    <div className="space-y-3 overflow-y-auto pr-2 custom-scrollbar" style={{ maxHeight: '300px' }}>
+                    {packageOptions.map((option) => (
                       <button
                         key={option.label}
                         type="button"
@@ -583,7 +622,7 @@ export function StartProjectForm() {
                           setBudget(option.label)
                           setCustomBudget("")
                         }}
-                        className={`w-full rounded-2xl border p-4 text-left transition ${budget === option.label ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface-alt hover:border-[var(--primary)]/60'}`}
+                        className={`w-full rounded-2xl border p-4 text-left transition ${budget === option.label ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface hover:border-[var(--primary)]/60'}`}
                       >
                         <div className="flex items-start justify-between gap-3">
                           <div>
@@ -603,14 +642,15 @@ export function StartProjectForm() {
                         setBudget("Other / Custom")
                         setCustomBudget("")
                       }}
-                      className={`w-full rounded-2xl border p-4 text-left transition ${budget === "Other / Custom" ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface-alt hover:border-[var(--primary)]/60'}`}
+                      className={`w-full rounded-2xl border p-4 text-left transition ${budget === "Other / Custom" ? 'border-[var(--primary)] bg-[rgba(64,224,208,0.14)] shadow-sm' : 'border-base bg-surface hover:border-[var(--primary)]/60'}`}
                     >
                       <div className="text-sm font-semibold">Other / Custom</div>
                       <p className="mt-1 text-sm text-muted">Tell us your scope and we’ll tailor a package around it.</p>
                     </button>
+                    </div>
                   </div>
 
-                  <div className="rounded-2xl border border-base bg-surface p-4 md:p-5">
+                  <div className="rounded-2xl border border-base bg-surface p-4 md:p-5 overflow-y-auto custom-scrollbar" style={{ maxHeight: '300px' }}>
                     <div className="text-sm font-semibold">Package details</div>
                     {budget ? (
                       <div className="mt-3 rounded-xl border border-base bg-surface-alt p-4">
@@ -642,14 +682,14 @@ export function StartProjectForm() {
                       value={customBudget}
                       onChange={(e) => setCustomBudget(e.target.value)}
                       placeholder="e.g. UGX 800,000 or open to discussion"
-                      className="w-full rounded-md border px-3 py-2 text-sm"
+                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     />
                   </div>
                 )}
 
                 <div className="mt-4">
                   <div className="text-sm font-semibold">More details (optional)</div>
-                  <textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Optional: wider context, audience, constraints..." className="w-full mt-2 rounded-md border px-3 py-2 min-h-[80px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
+                  <textarea value={details} onChange={(e) => setDetails(e.target.value)} placeholder="Optional: wider context, audience, constraints..." className="w-full mt-2 rounded-md border px-3 py-2 min-h-[80px] bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background" />
                 </div>
 
                 <div className="mt-8 pt-4 border-t border-base flex justify-end gap-3">
@@ -671,10 +711,10 @@ export function StartProjectForm() {
             )}
 
             {phase === 3 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
                 <h3 className="text-lg font-semibold">Your details</h3>
 
-                <div className="mt-4 grid sm:grid-cols-2 gap-3 md:gap-4">
+                <div className="mt-4 grid sm:grid-cols-2 gap-3 md:gap-4 pb-4">
                   <div>
                     <input
                       value={name}
@@ -682,7 +722,7 @@ export function StartProjectForm() {
                       onBlur={() => setNameTouched(true)}
                       placeholder="Your name (first or preferred)"
                       aria-invalid={!nameValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     />
                     {nameTouched && !nameValid && (
                       <p className="text-xs text-red-500 mt-1">Please enter your name (first or preferred name is fine).</p>
@@ -697,7 +737,7 @@ export function StartProjectForm() {
                       onBlur={() => setPhoneTouched(true)}
                       placeholder="Phone Number (e.g., +2567...)"
                       aria-invalid={!phoneValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     />
                     {phoneTouched && !phoneValid && (
                       <p className="text-xs text-red-500 mt-1">Enter a valid phone number (7–15 digits).</p>
@@ -712,7 +752,7 @@ export function StartProjectForm() {
                       onBlur={() => setEmailTouched(true)}
                       placeholder="Email Address"
                       aria-invalid={!emailValid}
-                      className="w-full rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="w-full rounded-md border px-3 py-2 text-sm bg-white dark:bg-[#0a1628] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     />
                     {emailTouched && !emailValid && (
                       <p className="text-xs text-red-500 mt-1">Please enter a valid email address.</p>
@@ -761,8 +801,8 @@ export function StartProjectForm() {
             )}
 
             {phase === 4 && (
-              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="grid md:grid-cols-[1fr_280px] gap-4 md:gap-6 items-start">
+              <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex-1 overflow-y-auto custom-scrollbar pr-2 min-h-0">
+                <div className="grid md:grid-cols-[1fr_280px] gap-4 md:gap-6 items-start pb-4">
                   <div className="space-y-5">
                     <div>
                       <h3 className="text-lg font-bold sm:text-xl">Project Request Submitted</h3>
