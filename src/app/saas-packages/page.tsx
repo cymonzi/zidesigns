@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { motion } from "framer-motion"
 import { Check, ArrowRight, ArrowLeft } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
@@ -81,7 +81,7 @@ const SAAS_PACKAGES: SaasPackage[] = [
   }
 ]
 
-export default function SaasPackagesPage() {
+function SaasPackagesContent() {
   const [selectedPackage, setSelectedPackage] = useState<string | null>(null)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -374,5 +374,24 @@ export default function SaasPackagesPage() {
 
       <AIChatbot />
     </div>
+  )
+}
+
+export default function SaasPackagesPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex flex-col bg-page">
+        <Navigation />
+        <PageTitleTracker />
+        <main className="flex-1 pt-[var(--nav-height)] flex items-center justify-center">
+          <div className="text-center">
+            <div className="w-8 h-8 border-4 border-[var(--primary)] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+            <p className="text-muted">Loading...</p>
+          </div>
+        </main>
+      </div>
+    }>
+      <SaasPackagesContent />
+    </Suspense>
   )
 }
