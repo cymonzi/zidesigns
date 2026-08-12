@@ -104,6 +104,42 @@ export function Navigation() {
     }
   }, [pathname, getStartedIndex, learnIndex])
 
+  // Scroll tracking for homepage sections
+  useEffect(() => {
+    if (!isHome) return
+
+    const sections = ['home', 'services']
+    const sectionElements = sections.map(id => document.getElementById(id))
+    
+    const observerOptions = {
+      root: null,
+      rootMargin: '-50% 0px -50% 0px', // Trigger when section is in middle of viewport
+      threshold: 0
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id
+          const index = sections.indexOf(sectionId)
+          if (index !== -1) {
+            setActiveIndex(index)
+          }
+        }
+      })
+    }, observerOptions)
+
+    sectionElements.forEach(el => {
+      if (el) observer.observe(el)
+    })
+
+    return () => {
+      sectionElements.forEach(el => {
+        if (el) observer.unobserve(el)
+      })
+    }
+  }, [isHome])
+
   const handleGoHome = (event: React.MouseEvent<HTMLAnchorElement>) => {
     event.preventDefault()
     if (!isHome) {
