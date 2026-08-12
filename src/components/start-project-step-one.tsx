@@ -401,7 +401,7 @@ export function StartProjectStepOne() {
                 </div>
 
                 <div className="space-y-3">
-                  <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
+                  <h5 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider !mb-5">
                     Available Services
                   </h5>
                   <div className="space-y-2">
