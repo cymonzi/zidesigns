@@ -219,7 +219,7 @@ function SummaryRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-export function StartProjectForm() {
+export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Phase) => void }) {
   const searchParams = useSearchParams()
   const router = useRouter()
   const [phase, setPhase] = useState<Phase>(1)
@@ -227,6 +227,11 @@ export function StartProjectForm() {
   const [selectedService, setSelectedService] = useState<string | null>(null)
   const [selectedMain, setSelectedMain] = useState<string | null>(null)
   const [selectedPrice, setSelectedPrice] = useState<string | null>(null)
+
+  // Notify parent of phase changes
+  useEffect(() => {
+    onPhaseChange?.(phase)
+  }, [phase, onPhaseChange])
 
   useEffect(() => {
     const serviceParam = searchParams.get("service")
