@@ -66,26 +66,10 @@ export function HeroSection() {
             transition={{ delay: 0.25, duration: 0.7, ease: [0.16,0.84,0.44,1] }}
           className="mt-6 text-base sm:text-lg leading-7 sm:leading-8 text-muted max-w-2xl mx-auto px-4 sm:px-0"
         >
-          Zi Designs is a creative-tech studio crafting websites, mobile apps, and visual systems for startups, creators, and organizations.
+          We combine design, development and AI to turn your ideas into digital products that solve problems, deliver value and help you move from idea to execution faster
         </motion.p>
 
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.35, duration: 0.7, ease: [0.16,0.84,0.44,1] }}
-          className="mt-4 text-base sm:text-lg leading-7 sm:leading-8 text-muted max-w-2xl mx-auto px-4 sm:px-0"
-        >
-          Using design, development, and AI tools, we help you go from concept to functional, beautiful digital products.
-        </motion.p>
-
-        <motion.p
-          initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.45, duration: 0.7, ease: [0.16,0.84,0.44,1] }}
-          className="mt-4 text-base sm:text-lg font-semibold text-fg max-w-2xl mx-auto px-4 sm:px-0"
-        >
-          Simple. Clean. Functional. 
-        </motion.p>
+       
 
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -96,10 +80,9 @@ export function HeroSection() {
         >
           <Link
             href="/start-project"
-            className="w-full sm:w-auto focus-ring relative rounded-lg bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-black shadow-lg shadow-[rgba(64,224,208,0.35)] ring-0 transition-all duration-300 hover:shadow-[rgba(64,224,208,0.55)] text-center"
+            className="w-full sm:w-auto focus-ring relative rounded-lg bg-[var(--primary)] px-7 py-3.5 text-sm font-semibold text-black transition-all duration-200 hover:bg-[#0F9B8E] text-center"
           >
             <span className="relative z-10 inline-flex items-center gap-2 justify-center">Request a Service <ArrowRight className="h-4 w-4" /></span>
-            <span className="pointer-events-none absolute inset-0 rounded-lg bg-gradient-to-br from-white/10 to-white/0 opacity-0 transition-opacity group-hover:opacity-100" />
           </Link>
           <Link
             href="#services"

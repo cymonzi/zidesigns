@@ -9,6 +9,7 @@ import { Footer } from "@/components/footer"
 import { PageTitleTracker } from "@/components/page-title-tracker"
 import { AIChatbot } from "@/components/ai-chatbot"
 import { SectionReveal } from "@/components/section-reveal"
+import { PackageBonusBanner } from "@/components/package-bonus-banner"
 
 interface SaasPackage {
   id: string
@@ -153,6 +154,9 @@ function SaasPackagesContent() {
             <ArrowLeft className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
             Back to {backLabel}
           </button>
+
+          {/* First-Time Client Bonus Banner */}
+          <PackageBonusBanner />
 
           {/* 2-Column Layout with Fixed Heights - Stacks on mobile */}
           <div className="grid lg:grid-cols-[1fr_400px] gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0">
