@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Orbitron, Montserrat, Nunito } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { PromoStrip } from "@/components/promo-strip";
 
 const siteUrl = "https://zidesigns.vercel.app";
 const homeUrl = `${siteUrl}/`;
@@ -203,6 +204,7 @@ export default function RootLayout({
           defaultTheme="system"
           storageKey="zi-designs-theme"
         >
+          <PromoStrip />
           {children}
         </ThemeProvider>
       </body>

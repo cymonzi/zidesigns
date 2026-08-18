@@ -415,6 +415,49 @@ footer {
   100% { background-position: 200% 0; }
 }
 
+/* Moving line animation for border (left to right) */
+@keyframes moveLine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(400%); }
+}
+
+/* Moving line animation for border (right to left) */
+@keyframes moveLineReverse {
+  0% { transform: translateX(400%); }
+  100% { transform: translateX(-100%); }
+}
+
+/* Border line animation for promo strip - runs around all 4 edges */
+@keyframes border-shimmer {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Individual edge animations */
+@keyframes move-top {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+@keyframes move-right {
+  0% { top: -100%; }
+  100% { top: 100%; }
+}
+
+@keyframes move-bottom {
+  0% { right: -100%; }
+  100% { right: 100%; }
+}
+
+@keyframes move-left {
+  0% { bottom: -100%; }
+  100% { bottom: 100%; }
+}
+
 .btn-contact {
   position: relative;
   display: inline-flex;

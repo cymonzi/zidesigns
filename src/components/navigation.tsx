@@ -159,7 +159,7 @@ export function Navigation() {
 
   return (
     <>
-      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 bg-page/80 backdrop-blur-lg border-b border-base">
+      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50 bg-page/80 backdrop-blur-lg">
         <nav className="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto" aria-label="Global">
         <div className="flex lg:flex-1">
           <Link href="#home" className="-m-1.5 p-1.5" onClick={handleGoHome}>

@@ -14,12 +14,13 @@ type Phase = 1 | 2 | 3
 const CATEGORIES = ["Design", "Branding", "Development"]
 
 const SERVICES: Record<string, string[]> = {
-  Design: ["Posters & Flyers", "CV Design", "Presentations", "Company Profiles", "Certificates", "Magazine Design"],
+  Design: ["Free Poster (First-Time Offer)", "Posters & Flyers", "CV Design", "Presentations", "Company Profiles", "Certificates", "Magazine Design"],
   Branding: ["Logo"],
   Development: ["Website", "Mobile Application"],
 }
 
 const STARTING_PRICES: Record<string, string> = {
+  "Free Poster (First-Time Offer)": "FREE",
   "Posters & Flyers": "UGX 20,000",
   "Certificates": "UGX 20,000",
   "CV Design": "UGX 150,000",
@@ -178,6 +179,10 @@ function getPackageOptions(service: string | null | undefined, category: string 
   if (["posters & flyers"].includes(normalized)) {
     return POSTERS_FLYERS_PACKAGE_OPTIONS
   }
+  if (["free poster (first-time offer)", "free poster"].includes(normalized)) {
+    // Return empty array for free poster - no package options needed
+    return []
+  }
   if (["certificates"].includes(normalized)) {
     return CERTIFICATE_PACKAGE_OPTIONS
   }
@@ -241,6 +246,8 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
     if (serviceParam) {
       // Map service to category and auto-select
       const serviceToCategory: Record<string, string> = {
+        "Free Poster": "Design",
+        "Free Poster (First-Time Offer)": "Design",
         "Posters & Flyers": "Design",
         "Certificates": "Design",
         "CV Design": "Design",
@@ -257,7 +264,9 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
       const category = categoryParam || serviceToCategory[serviceParam]
       if (category) {
         setSelectedCategory(category)
-        setSelectedService(serviceParam)
+        // Map "Free Poster" URL param to the display name
+        const displayService = serviceParam === "Free Poster" ? "Free Poster (First-Time Offer)" : serviceParam
+        setSelectedService(displayService)
       }
     }
 
@@ -271,6 +280,11 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
       const n = parseInt(phaseParam, 10)
       if (n >= 1 && n <= 3) setPhase(n as Phase)
     }
+
+    // Check if user came from promo strip (has bonus) and hasn't redeemed it yet
+    const redeemed = localStorage.getItem("promo-redeemed") === "true"
+    const hasBonus = !redeemed && (searchParams.get("bonus") === "true" || localStorage.getItem("promo-claimed") === "true")
+    setHasFreePosterBonus(hasBonus)
   }, [searchParams])
 
   const [currency, setCurrency] = useState<"UGX" | "USD">("UGX")
@@ -293,6 +307,7 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [hasSubmitted, setHasSubmitted] = useState(false)
+  const [hasFreePosterBonus, setHasFreePosterBonus] = useState(false)
 
   const servicesForCategory = useMemo(() => (selectedCategory ? SERVICES[selectedCategory] ?? [] : []), [selectedCategory])
 
@@ -397,6 +412,12 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
       }
 
       setHasSubmitted(true) // Mark as submitted
+      
+      // If they claimed the bonus, mark it as fully redeemed
+      if (hasFreePosterBonus) {
+        localStorage.setItem("promo-redeemed", "true")
+      }
+      
       setPhase(3)
     } catch (err: any) {
       console.error("Form submission error:", err)
@@ -521,6 +542,7 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
         ["Project Category", selectedCategory ?? "—"],
         [getServiceTypeLabel(), displayedService ?? "—"],
         [getPriceLabel(), displayedBudget ?? "—"],
+        ...(hasFreePosterBonus ? [["First-Time Offer", "FREE Poster/Flyer Design"]] : []),
       ],
       headStyles: { fillColor: primary, textColor: 255, fontStyle: "bold", font: "helvetica" },
       alternateRowStyles: { fillColor: [245, 253, 251] },
@@ -629,6 +651,7 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
                 selectedService={selectedService}
                 displayedService={displayedService}
                 selectedPrice={selectedPrice}
+                hasFreePosterBonus={hasFreePosterBonus}
                 isPhase2Valid={isPhase2Valid}
                 submitting={submitting}
                 submitError={submitError}
@@ -671,6 +694,7 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
                 email={email}
                 company={company}
                 preferredContact={preferredContact}
+                hasFreePosterBonus={hasFreePosterBonus}
                 onNewRequest={() => {
                   setPhase(1)
                   setSelectedCategory(null)
