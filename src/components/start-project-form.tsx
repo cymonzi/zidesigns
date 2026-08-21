@@ -412,11 +412,10 @@ export function StartProjectForm({ onPhaseChange }: { onPhaseChange?: (phase: Ph
       }
 
       setHasSubmitted(true) // Mark as submitted
-      
-      // If they claimed the bonus, mark it as fully redeemed
-      if (hasFreePosterBonus) {
-        localStorage.setItem("promo-redeemed", "true")
-      }
+
+      // Always mark promo as redeemed once the form is submitted successfully —
+      // this hides the promo strip from all pages permanently for this user.
+      localStorage.setItem("promo-redeemed", "true")
       
       setPhase(3)
     } catch (err: any) {

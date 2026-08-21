@@ -20,6 +20,14 @@ export function PromoStrip() {
     const redeemed = localStorage.getItem("promo-redeemed")
     setIsDismissed(dismissed === "true")
     setIsRedeemed(redeemed === "true")
+
+    // Listen for changes from other tabs (e.g. form submitted in another tab)
+    const onStorage = (e: StorageEvent) => {
+      if (e.key === "promo-redeemed" && e.newValue === "true") setIsRedeemed(true)
+      if (e.key === "promo-strip-dismissed" && e.newValue === "true") setIsDismissed(true)
+    }
+    window.addEventListener("storage", onStorage)
+    return () => window.removeEventListener("storage", onStorage)
   }, [])
 
   const handleDismiss = () => {
