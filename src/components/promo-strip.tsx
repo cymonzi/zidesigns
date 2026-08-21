@@ -12,19 +12,23 @@ export function PromoStrip() {
 
   // Hide promo strip on package pages only
   const isPackagePage = pathname?.includes('-packages')
-  const isStartProjectPage = pathname === '/start-project'
+
+  const [isClaimed, setIsClaimed] = useState(false)
 
   useEffect(() => {
     // Check localStorage on mount
     const dismissed = localStorage.getItem("promo-strip-dismissed")
     const redeemed = localStorage.getItem("promo-redeemed")
+    const claimed = localStorage.getItem("promo-claimed")
     setIsDismissed(dismissed === "true")
     setIsRedeemed(redeemed === "true")
+    setIsClaimed(claimed === "true")
 
     // Listen for changes from other tabs (e.g. form submitted in another tab)
     const onStorage = (e: StorageEvent) => {
       if (e.key === "promo-redeemed" && e.newValue === "true") setIsRedeemed(true)
       if (e.key === "promo-strip-dismissed" && e.newValue === "true") setIsDismissed(true)
+      if (e.key === "promo-claimed" && e.newValue === "true") setIsClaimed(true)
     }
     window.addEventListener("storage", onStorage)
     return () => window.removeEventListener("storage", onStorage)
@@ -63,7 +67,7 @@ export function PromoStrip() {
 
           {/* Right side - CTA Button and Close */}
           <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
-            {isStartProjectPage ? (
+            {isClaimed ? (
               <button
                 disabled
                 className="inline-flex items-center gap-1.5 rounded-lg bg-slate-300 dark:bg-slate-700 px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-500 dark:text-slate-400 cursor-not-allowed whitespace-nowrap opacity-60"
@@ -73,7 +77,10 @@ export function PromoStrip() {
             ) : (
               <Link
                 href="/start-project?bonus=true"
-                onClick={() => localStorage.setItem("promo-claimed", "true")}
+                onClick={() => {
+                  localStorage.setItem("promo-claimed", "true")
+                  setIsClaimed(true)
+                }}
                 className="inline-flex items-center gap-1.5 rounded-lg bg-[#40e0d0] px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-[#063c36] transition-all duration-200 hover:bg-[#35c9ba] hover:shadow-lg hover:shadow-[#40e0d0]/20 hover:scale-105 whitespace-nowrap"
               >
                 Claim <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
