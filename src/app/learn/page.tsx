@@ -7,19 +7,19 @@ import { SectionReveal } from "@/components/section-reveal";
 import { InsightsShowcase } from "@/components/insights-showcase";
 
 export const metadata: Metadata = {
-  title: "Learn - Zi Designs",
-  description: "Share ideas, frameworks, research, and practical resources designed to help people learn, build and grow.",
+  title: "Programs - Zi Designs",
+  description: "Practical programs designed to help people discover their potential, develop valuable capabilities, and turn what they have into meaningful opportunities.",
   alternates: {
     canonical: "https://zidesigns.vercel.app/learn",
   },
   openGraph: {
-    title: "Learn - Zi Designs",
-    description: "Share ideas, frameworks, research, and practical resources designed to help people learn, build and grow.",
+    title: "Programs - Zi Designs",
+    description: "Practical programs designed to help people discover their potential, develop valuable capabilities, and turn what they have into meaningful opportunities.",
     url: "https://zidesigns.vercel.app/learn",
   },
   twitter: {
-    title: "Learn - Zi Designs",
-    description: "Share ideas, frameworks, research, and practical resources designed to help people learn, build and grow.",
+    title: "Programs - Zi Designs",
+    description: "Practical programs designed to help people discover their potential, develop valuable capabilities, and turn what they have into meaningful opportunities.",
   },
 };
 

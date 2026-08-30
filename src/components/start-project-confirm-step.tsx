@@ -27,7 +27,6 @@ interface StartProjectConfirmStepProps {
   email: string
   company: string
   preferredContact: string | null
-  hasFreePosterBonus?: boolean
   onNewRequest: () => void
   onDownload: () => void
 }
@@ -43,7 +42,6 @@ export function StartProjectConfirmStep({
   email,
   company,
   preferredContact,
-  hasFreePosterBonus = false,
   onNewRequest,
   onDownload,
 }: StartProjectConfirmStepProps) {
@@ -112,15 +110,6 @@ export function StartProjectConfirmStep({
                 {preferredContact && <SummaryRow label="Preferred" value={preferredContact} />}
                 {selectedService && <SummaryRow label="Service" value={displayedService ?? selectedService} />}
                 {budget && <SummaryRow label="Total Price" value={displayedBudget ?? budget} />}
-                {hasFreePosterBonus && (
-                  <div className="flex items-start justify-between gap-4 rounded-2xl bg-[var(--primary)]/10 border border-[var(--primary)]/30 p-4">
-                    <span className="text-sm text-fg flex items-center gap-2">
-                      <span className="text-lg">🎁</span>
-                      First-Time Bonus
-                    </span>
-                    <span className="text-sm font-semibold text-[var(--primary)] text-right">FREE Poster/Flyer</span>
-                  </div>
-                )}
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center h-full text-center p-6">
@@ -170,19 +159,10 @@ export function StartProjectConfirmStep({
                     <span className="text-base font-bold text-[var(--primary)] text-right">{displayedBudget}</span>
                   </div>
                 )}
-                {hasFreePosterBonus && (
-                  <div className="flex items-start justify-between gap-4 pt-2 mt-2 border-t border-[var(--primary)]/30 bg-[var(--primary)]/5 -mx-4 -mb-4 px-4 pb-4 rounded-b-xl">
-                    <span className="text-xs text-fg flex items-center gap-2">
-                      <span>🎁</span>
-                      Bonus
-                    </span>
-                    <span className="text-xs font-semibold text-[var(--primary)] text-right">FREE Poster/Flyer</span>
-                  </div>
-                )}
               </div>
             </div>
           )}
-          
+
           {/* Download Button */}
           <button
             onClick={onDownload}

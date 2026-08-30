@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react"
 import { usePathname } from "next/navigation"
-import Link from "next/link"
 import { X, Gift, ArrowRight } from "lucide-react"
+
+const CLAIM_OFFER_WHATSAPP_URL = "https://wa.me/256782062673?text=Hi%20Zi%20Designs%2C%20I%27d%20like%20to%20claim%20the%20free%20poster%2Fflyer%20offer%20from%20your%20website."
 
 export function PromoStrip() {
   const [isDismissed, setIsDismissed] = useState(false)
@@ -75,16 +76,18 @@ export function PromoStrip() {
                 Claimed <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </button>
             ) : (
-              <Link
-                href="/start-project?bonus=true"
+              <a
+                href={CLAIM_OFFER_WHATSAPP_URL}
+                target="_blank"
+                rel="noreferrer"
                 onClick={() => {
                   localStorage.setItem("promo-claimed", "true")
                   setIsClaimed(true)
                 }}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-[#40e0d0] px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-[#063c36] transition-all duration-200 hover:bg-[#35c9ba] hover:shadow-lg hover:shadow-[#40e0d0]/20 hover:scale-105 whitespace-nowrap"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-[#40e0d0] px-2.5 sm:px-3 md:px-4 py-1.5 sm:py-2 text-[10px] sm:text-xs md:text-sm font-bold text-[#063c36] uppercase tracking-wide transition-all duration-200 hover:bg-[#35c9ba] hover:shadow-lg hover:shadow-[#40e0d0]/20 hover:scale-105 whitespace-nowrap"
               >
-                Claim <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
-              </Link>
+                CLAIM NOW <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
+              </a>
             )}
             
             {/* Close button */}

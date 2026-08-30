@@ -44,7 +44,6 @@ interface StartProjectContactStepProps {
   selectedService: string | null
   displayedService: string | null
   selectedPrice: string | null
-  hasFreePosterBonus?: boolean
   
   // Form submission
   isPhase2Valid: boolean
@@ -77,7 +76,6 @@ export function StartProjectContactStep({
   selectedService,
   displayedService,
   selectedPrice,
-  hasFreePosterBonus = false,
   isPhase2Valid,
   submitting,
   submitError,
@@ -201,15 +199,6 @@ export function StartProjectContactStep({
             <div className="space-y-3">
               {selectedService && <SummaryRow label="Service" value={displayedService ?? selectedService} />}
               {selectedPrice && <SummaryRow label="Price" value={selectedPrice} />}
-              {hasFreePosterBonus && (
-                <div className="flex items-start justify-between gap-4 rounded-2xl bg-[var(--primary)]/10 border border-[var(--primary)]/30 p-4">
-                  <span className="text-sm text-fg flex items-center gap-2">
-                    <span className="text-lg">🎁</span>
-                    Bonus
-                  </span>
-                  <span className="text-sm font-semibold text-[var(--primary)] text-right">FREE Poster</span>
-                </div>
-              )}
             </div>
           </div>
 
@@ -219,6 +208,7 @@ export function StartProjectContactStep({
               {submitError && (
                 <p className="text-xs text-red-500">{submitError}</p>
               )}
+
               <button
                 disabled={!isPhase2Valid || submitting}
                 onClick={onSubmit}
@@ -252,24 +242,12 @@ export function StartProjectContactStep({
                     <span className="text-base font-bold text-[var(--primary)] text-right">{selectedPrice}</span>
                   </div>
                 )}
-                {hasFreePosterBonus && (
-                  <div className="flex items-start justify-between gap-4 pt-2 mt-2 border-t border-[var(--primary)]/30 bg-[var(--primary)]/5 -mx-4 -mb-4 px-4 pb-4 rounded-b-xl">
-                    <span className="text-xs text-fg flex items-center gap-2">
-                      <span>🎁</span>
-                      Bonus
-                    </span>
-                    <span className="text-xs font-semibold text-[var(--primary)] text-right">FREE Poster</span>
-                  </div>
-                )}
               </div>
             </div>
           )}
-          
+
           {/* Submit Button */}
           <div className="flex flex-col gap-3">
-            {submitError && (
-              <p className="text-xs text-red-500">{submitError}</p>
-            )}
             <button
               disabled={!isPhase2Valid || submitting}
               onClick={onSubmit}
