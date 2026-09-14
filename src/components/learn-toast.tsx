@@ -15,7 +15,7 @@ export default function LearnToast() {
     const joined = searchParams.get("joined")
     const updated = searchParams.get("updated")
     if (joined || updated) {
-      setMessage(updated ? "Your GMF Waitlist details are updated!" : "You're on the GMF waitlist - we'll email you when the course launches.")
+      setMessage(updated ? "Your registration details have been updated!" : "You're registered for the program. We'll email you the details soon.")
       setShow(true)
 
       const clean = pathname || "/learn"

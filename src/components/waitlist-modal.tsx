@@ -193,8 +193,8 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
             </button>
 
             <div className="p-6 md:p-10 pt-20 md:pt-16 overflow-y-auto w-full max-h-[90vh]">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--primary)]">Join the Waitlist</p>
-              <h2 className="mt-3 text-2xl font-bold text-fg">Be first to access the GMF launch.</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[var(--primary)]">Get Started</p>
+              <h2 className="mt-3 text-2xl font-bold text-fg">Join From Gift to Income</h2>
 
               {mode === "loading" ? (
                 <div className="mt-8 space-y-4">
@@ -204,7 +204,7 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                 </div>
               ) : mode === "view" ? (
                 <div className="mt-8 space-y-6">
-                  <div className="text-sm text-muted">You joined the GMF waitlist with the details below.</div>
+                  <div className="text-sm text-muted">You&apos;ve registered for the From Gift to Income program.</div>
                   <div className="rounded-xl bg-surface px-4 py-3">
                     <div className="text-sm text-fg font-medium">{waitlistName || "—"}</div>
                     <div className="text-sm text-muted">{waitlistEmail || "—"}</div>
@@ -258,14 +258,14 @@ export default function WaitlistModal({ isOpen, onClose }: WaitlistModalProps) {
                     </label>
                   </div>
 
-                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="text-sm text-muted">Sign up now and we&apos;ll notify you when the full course is ready.</div>
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                    <div className="text-sm text-muted">Register now to secure your spot. We&apos;ll send you the details.</div>
                     <button
                       type="submit"
                       disabled={!emailValid || waitlistSubmitting}
                       className="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-6 py-3 text-sm font-semibold text-black transition hover:bg-[var(--primary)]/90 disabled:cursor-not-allowed disabled:opacity-60"
                     >
-                      {waitlistSubmitting ? "Joining..." : mode === "edit" ? "Update" : "Submit"}
+                      {waitlistSubmitting ? "Submitting..." : mode === "edit" ? "Update" : "Submit"}
                     </button>
                   </div>
 

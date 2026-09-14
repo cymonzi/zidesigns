@@ -37,13 +37,13 @@ const frameworks: Framework[] = [
     number: "01",
     title: "From Gift to Income",
     description:
-      "A 6-week online program designed to help fresh graduates discover their gifts, develop them with purpose, and start turning capability into opportunity.",
-    latestRelease: "This September",
+      "A 4-week practical program powered by the Gift Maturation Framework, designed to help you discover your gifts, develop them with purpose, leverage technology, and turn your capabilities into real opportunities and income.",
+    latestRelease: "October 2026",
     latestFramework: "The Gift Maturation Framework",
     frameworkDescription:
-      "Your gift is only the beginning. This program helps you understand what you have, develop it into something valuable, put it to work in the real world, and explore how it can generate income.",
-    audience: ["Fresh Graduates", "Early Career Builders", "Aspiring Creators", "Career Switchers"],
-    tags: ["Discover", "Develop", "Deploy", "Earn"],
+      "Your gift is only the beginning. From discovering what you have, to developing it, putting it to work and learning how to create value from it, From Gift to Income gives you a practical path to move from potential to opportunity.",
+    audience: ["Fresh Graduates", "Young Professionals", "Aspiring Entrepreneurs", "Freelancers & Creators", "Early-Stage Business Owners"],
+    tags: ["Gift", "Product", "Brand", "Technology", "Offers", "Income", "Wealth"],
     images: [
       "/images/GMF/1.png",
       "/images/GMF/2.png",
@@ -161,7 +161,8 @@ export function InsightsShowcase() {
                   <div className="flex flex-col gap-1">
                     <p className="text-xs font-medium text-muted uppercase tracking-wider">Starting</p>
                     <p className="text-xl font-bold text-fg">{framework.latestRelease}</p>
-                    <p className="text-sm font-semibold text-[var(--primary)]">The Gift Maturation Framework</p>
+                    <p className="text-sm font-medium text-muted">4 Weeks · Saturdays · 3:00 PM</p>
+                    <p className="text-sm font-semibold text-[var(--primary)]">Hybrid | Physical + Online</p>
                   </div>
 
                   <div>
@@ -228,16 +229,20 @@ export function InsightsShowcase() {
                   </div>
 
                   <div className="mt-6 flex flex-wrap gap-3">
-                    <span className="rounded-full bg-surface-alt px-4 py-2 text-xs text-muted">Ready To Get Started?</span>
+                    <span className="rounded-full bg-surface-alt px-4 py-2 text-xs text-muted">Ready To Turn Your Gift Into Income?</span>
                   </div>
 
-                  <div className="mt-6 flex justify-end">
+                  <div className="mt-6 flex items-center justify-between gap-4">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-xs font-medium text-muted uppercase tracking-wider">Investment</span>
+                      <span className="text-xl font-bold text-fg">UGX 250,000</span>
+                    </div>
                     <button
                       type="button"
                       onClick={() => setWaitlistOpen(true)}
                       className="inline-flex items-center justify-center rounded-full bg-[var(--primary)] px-7 py-3 text-sm font-semibold text-black transition hover:bg-[var(--primary)]/90"
                     >
-                      Join the Waitlist
+                      Apply
                     </button>
                   </div>
                 </div>
