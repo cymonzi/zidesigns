@@ -44,7 +44,7 @@ export function PromoStrip() {
   if (isDismissed || isRedeemed || isPackagePage) return null
 
   return (
-    <div className="fixed top-[var(--nav-height)] left-0 right-0 z-40 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 dark:from-[#0f172a] dark:via-[#1e293b] dark:to-[#0f172a] border-b border-[#40e0d0]/30 dark:border-b-[#40e0d0]/20 backdrop-blur-sm relative overflow-hidden">
+    <div className="fixed top-[var(--nav-height)] left-0 right-0 z-40 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 dark:from-[#0f172a] dark:via-[#1e293b] dark:to-[#0f172a] border-b border-[#40e0d0]/30 dark:border-b-[#40e0d0]/20 backdrop-blur-sm overflow-hidden">
       {/* Animated line running along the top border */}
       <div className="absolute top-0 left-0 right-0 h-[1px] overflow-hidden">
         <div className="h-full w-1/4 bg-[#40e0d0] shadow-[0_0_10px_#40e0d0] animate-[moveLine_4s_linear_infinite]" />
