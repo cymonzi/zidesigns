@@ -38,7 +38,7 @@ const frameworks: Framework[] = [
     title: "From Gift to Income",
     description:
       "A 4-week practical program powered by the Gift Maturation Framework, designed to help you discover your gifts, develop them with purpose, leverage technology, and turn your capabilities into real opportunities and income.",
-    latestRelease: "October 2026",
+    latestRelease: "Happening in 2027",
     latestFramework: "The Gift Maturation Framework",
     frameworkDescription:
       "Your gift is only the beginning. From discovering what you have, to developing it, putting it to work and learning how to create value from it, From Gift to Income gives you a practical path to move from potential to opportunity.",
