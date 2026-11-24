@@ -6,6 +6,9 @@ import { X, Gift, ArrowRight } from "lucide-react"
 
 const CLAIM_OFFER_WHATSAPP_URL = "https://wa.me/256782062673?text=Hi%20Zi%20Designs%2C%20I%27d%20like%20to%20claim%20the%20free%20poster%2Fflyer%20offer%20from%20your%20website."
 
+// Soft-disabled promo strip. Flip to true (and uncomment <PromoStrip /> in layout.tsx) to re-enable.
+const PROMO_STRIP_ENABLED = false
+
 export function PromoStrip() {
   const [isDismissed, setIsDismissed] = useState(false)
   const [isRedeemed, setIsRedeemed] = useState(false)
@@ -40,8 +43,8 @@ export function PromoStrip() {
     localStorage.setItem("promo-strip-dismissed", "true")
   }
 
-  // Don't show if dismissed, redeemed, or on package pages
-  if (isDismissed || isRedeemed || isPackagePage) return null
+  // Don't show if soft-disabled, dismissed, redeemed, or on package pages
+  if (!PROMO_STRIP_ENABLED || isDismissed || isRedeemed || isPackagePage) return null
 
   return (
     <div className="fixed top-[var(--nav-height)] left-0 right-0 z-40 bg-gradient-to-r from-slate-100 via-slate-200 to-slate-100 dark:from-[#0f172a] dark:via-[#1e293b] dark:to-[#0f172a] border-b border-[#40e0d0]/30 dark:border-b-[#40e0d0]/20 backdrop-blur-sm overflow-hidden">

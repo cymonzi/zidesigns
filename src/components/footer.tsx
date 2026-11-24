@@ -3,7 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { Instagram, Mail } from "lucide-react"
+import { Instagram, Mail, ArrowUpRight } from "lucide-react"
 import { AboutModal } from "./about-modal"
 
 const navigation = {
@@ -13,6 +13,7 @@ const navigation = {
     { name: "Learn", href: "/learn" },
     { name: "About", href: "#", action: "about" },
     { name: "Get Started", href: "/start-project" },
+    { name: "Music: Cymonzi", href: "https://cymonzi-site.vercel.app/", external: true },
   ],
   social: [
     {
@@ -52,7 +53,7 @@ export function Footer() {
           <div className="lg:mx-auto">
             <h3 className="text-sm font-semibold text-fg">Navigation</h3>
 
-            <ul role="list" className="mt-6 space-y-4">
+            <ul role="list" className="mt-6 grid grid-cols-2 gap-x-8 gap-y-4">
               {navigation.main.map((item) => (
                 <li key={item.name}>
                   {item.action === "about" ? (
@@ -65,6 +66,16 @@ export function Footer() {
                     >
                       {item.name}
                     </button>
+                  ) : "external" in item && item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-sm leading-6 text-muted hover:text-[var(--primary)] hover:underline transition-colors"
+                    >
+                      {item.name}
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </a>
                   ) : (
                     <Link
                       href={navHref(item.href)}

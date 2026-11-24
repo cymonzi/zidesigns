@@ -10,7 +10,7 @@ import { Footer } from "@/components/footer"
 import { PageTitleTracker } from "@/components/page-title-tracker"
 import { AIChatbot } from "@/components/ai-chatbot"
 import { SectionReveal } from "@/components/section-reveal"
-import { PackageBonusBanner } from "@/components/package-bonus-banner"
+// import { PackageBonusBanner } from "@/components/package-bonus-banner"
 
 interface DesignService {
   id: string
@@ -205,8 +205,8 @@ function GraphicDesignPackagesContent() {
             Back to {backLabel}
           </button>
 
-          {/* First-Time Client Bonus Banner */}
-          <PackageBonusBanner />
+          {/* First-Time Client Bonus Banner (soft-disabled) */}
+          {/* <PackageBonusBanner /> */}
 
           {/* 2-Column Layout with Fixed Heights - Stacks on mobile */}
           <div className="grid lg:grid-cols-[1fr_400px] gap-4 sm:gap-6 lg:gap-8 flex-1 min-h-0">

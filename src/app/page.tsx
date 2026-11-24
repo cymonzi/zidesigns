@@ -2,11 +2,13 @@ import type { Metadata } from "next";
 import { Navigation } from "@/components/navigation";
 import { HeroSection } from "@/components/hero-section";
 import { ServicesShowcase } from "@/components/services-showcase";
+import { CymonziSpotlight } from "@/components/cymonzi-spotlight";
 // Contact section removed; contact handled in footer and /start-project
 import { Footer } from "@/components/footer";
 import { AIChatbot } from "@/components/ai-chatbot";
 import { PageTitleTracker } from "@/components/page-title-tracker";
 import { SectionReveal } from "@/components/section-reveal";
+import { SectionRail } from "@/components/section-rail";
 
 export const metadata: Metadata = {
   title: "Zi Designs - Creative Tech Studio",
@@ -32,6 +34,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-page">
       <Navigation />
+      <SectionRail />
       <PageTitleTracker />
       <main>
         <SectionReveal>
@@ -39,6 +42,9 @@ export default function Home() {
         </SectionReveal>
         <SectionReveal delay={0.05}>
           <ServicesShowcase />
+        </SectionReveal>
+        <SectionReveal delay={0.08}>
+          <CymonziSpotlight />
         </SectionReveal>
         {/* ContactSection removed — contact links moved to the footer and Start Project flow */}
       </main>
