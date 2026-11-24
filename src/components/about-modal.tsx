@@ -107,6 +107,18 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                     <p>
                       My approach combines design, technology, and business thinking to create experiences that are both functional and impactful.
                     </p>
+                    <p>
+                      Outside of client systems, I also create New Wave UG music, sonic architecture, and visual direction under the moniker{" "}
+                      <a
+                        href="https://cymonzi-site.vercel.app/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-medium text-[var(--primary)] hover:underline"
+                      >
+                        Cymonzi ↗
+                      </a>
+                      .
+                    </p>
                   </div>
                 </div>
 

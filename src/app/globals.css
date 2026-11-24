@@ -569,3 +569,19 @@ footer {
 [data-theme="dark"] .custom-scrollbar {
   scrollbar-color: var(--border-strong) #0a1628;
 }
+
+/* Reactive minimalist CSS waveform animation (from cymonzi_site) */
+@keyframes wave-pulse {
+  0%,
+  100% {
+    transform: scaleY(0.3);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.waveform-bar {
+  transform-origin: bottom;
+  animation: wave-pulse 1.4s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
